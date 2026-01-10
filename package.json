@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "node dist/senior-et/server/main.server.mjs",
-    "build": "ng build",
+    "build:ssr": "ng build --configuration production && ng run senior-et:server:production",
+    "serve:ssr": "node dist/senior-et/server/main.server.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "heroku-postbuild": "ng build --configuration production && npm install express"
