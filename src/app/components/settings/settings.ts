@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-colin',
+  selector: 'app-settings',
   imports: [RouterOutlet],
-  templateUrl: './colin.html',
-  styleUrl: './colin.css',
+  templateUrl: './settings.html',
+  styleUrl: './settings.css',
 })
-export class Colin {
+export class Settings {
 
 }

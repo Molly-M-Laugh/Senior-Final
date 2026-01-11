@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-dani',
+  selector: 'app-login',
   imports: [RouterOutlet],
-  templateUrl: './dani.html',
-  styleUrl: './dani.css',
+  templateUrl: './login.html',
+  styleUrl: './login.css',
 })
-export class Dani {
+export class Login {
 
 }

@@ -1,10 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { Dashboard } from './components/dashboard/dashboard';
-import { Colin } from './components/colin/colin';
-import { Molly } from './components/molly/molly';
-import { Trevor } from './components/trevor/trevor';
-import { Dani } from './components/dani/dani';
+import { Home } from './components/home/home';
+import { Login } from './components/login/login';
+import { Settings } from './components/settings/settings';
 
 @Component({
   selector: 'app-root',

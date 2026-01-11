@@ -1,17 +1,13 @@
 import { Routes } from '@angular/router';
-import { Dashboard } from './components/dashboard/dashboard';
-import { Colin } from './components/colin/colin';
-import { Molly } from './components/molly/molly';
-import { Trevor } from './components/trevor/trevor';
-import { Dani } from './components/dani/dani';
+import { Home } from './components/home/home';
+import { Login } from './components/login/login';
+import { Settings } from './components/settings/settings';
 
 
 // export const routes: Routes = []
 export const routes: Routes = [
-    {path:'dashboard',component: Dashboard},
-    {path: '', component: Dashboard},
-    {path:'colin', component:Colin},
-    {path:'molly',component:Molly},
-    {path:'trevor',component:Trevor},
-    {path:'dani',component:Dani}
+    {path:'home',component: Home},
+    {path: '', component: Home},
+    {path:'login', component:Login},
+    {path:'settings',component:Settings}
 ];
