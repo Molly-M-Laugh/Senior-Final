@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "team_14_portfolios": {
+    "senior-et": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -65,10 +65,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "team_14_portfolios:build:production"
+              "buildTarget": "senior-et:build:production"
             },
             "development": {
-              "buildTarget": "team_14_portfolios:build:development"
+              "buildTarget": "senior-et:build:development"
             }
           },
           "defaultConfiguration": "development"

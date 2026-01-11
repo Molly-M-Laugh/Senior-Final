@@ -13,6 +13,6 @@ import { Dani } from './components/dani/dani';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('team_14_portfolios');
-  //protected title = "team_14_portfolios";
+  protected readonly title = signal('senior-et');
+  //protected title = "senior-et";
 }
