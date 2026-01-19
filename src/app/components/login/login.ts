@@ -10,5 +10,12 @@ import { RouterOutlet } from '@angular/router';
 })
 export class Login {
   loginForm:FormGroup;
+
+  constructor(private fb:FormBuilder){
+    this.loginForm=this.fb.group({
+      password:["",[Validators.required,Validators.minLength(3)]]
+    });
+  }
+
   login(){}
 }
