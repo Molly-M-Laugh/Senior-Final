@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,FormsModule,ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

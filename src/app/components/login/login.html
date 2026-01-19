@@ -1,2 +1,7 @@
-<p>login works!</p>
+<body>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <input type="text" formControlName="password" placeholder="password"/>
+        <button type="submit">Login</button>
+    </form>
+</body>
 <router-outlet></router-outlet>
