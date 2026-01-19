@@ -9,5 +9,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
+  loginForm:FormGroup;
   login(){}
 }
