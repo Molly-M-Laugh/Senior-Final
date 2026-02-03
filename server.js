@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static(path.join(__dirname,'dist/senior-et/browser')));
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/senior-et/browser/index.html'));
+  res.sendFile(path.join(__dirname, 'dist/senior-et/browser/index.csr.html'));
 });
 //app.get('/:path*', (req, res) =>
 //    res.sendFile(path.join(__dirname,'dist/senior-et/browser/index.html'))
