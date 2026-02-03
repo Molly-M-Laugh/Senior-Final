@@ -1,7 +1,17 @@
-<p>home works!</p>
-<body>
-    <form [formGroup]="optionsForm" (ngSubmit)="settings()">
-        <button type="submit">Settings</button>
-    </form>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Make compatibile for phone display -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <p>home works!</p>
+        <div class="form-container">
+            <form [formGroup]="optionsForm" (ngSubmit)="settings()">
+                <button type="submit">Settings</button>
+            </form>
+        </div>
+    </body>
+</html>
 <router-outlet></router-outlet>
