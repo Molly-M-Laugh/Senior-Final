@@ -6,7 +6,7 @@ import { Settings } from './components/settings/settings';
 
 // export const routes: Routes = []
 export const routes: Routes = [
-    {path:'', component:Settings},
+    {path:'', component:Login},
     {path:'home',component: Home},
     {path:'login', component:Login},
     {path:'settings',component:Settings},
