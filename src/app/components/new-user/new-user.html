@@ -1,0 +1,28 @@
+<!-- Denote is the most modern html, and in english -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Make compatibile for phone display -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <div class="form-container">
+            <form [formGroup]="userForm" (ngSubmit)="createUser()">
+                <div class="input-container">
+                    <input type="text" formControlName="username" placeholder="username"/>
+                    <input type="password" formControlName="password" placeholder="password"/>
+                    <button type="submit">Create Account</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-container">
+            <form [formGroup]="returnForm" (ngSubmit)="cancelNewUser()">
+                <div class="input-container">
+                    <button type="submit">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
+<router-outlet></router-outlet>

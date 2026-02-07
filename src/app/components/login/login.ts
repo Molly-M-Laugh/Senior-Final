@@ -10,6 +10,7 @@ import { Router, RouterOutlet } from '@angular/router';
 })
 export class Login {
   loginForm:FormGroup;
+  creationForm:FormGroup;
   router = inject(Router);
 
   constructor(private fb:FormBuilder){
@@ -17,6 +18,7 @@ export class Login {
       username:["",[Validators.required,Validators.minLength(3)]],
       password:["",[Validators.required,Validators.minLength(3)]]
     });
+    this.creationForm=this.fb.group({});
   }
 
   // No auth yet, so running easy (not actual password) for testing routing on press
@@ -28,5 +30,9 @@ export class Login {
     {
       alert("Invalid login")
     }
+  }
+
+  toCreate() {
+    this.router.navigateByUrl("/new_user")
   }
 }

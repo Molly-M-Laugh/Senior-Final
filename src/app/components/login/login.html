@@ -16,6 +16,13 @@
                 </div>
             </form>
         </div>
+        <div class="form-container">
+            <form [formGroup]="creationForm" (ngSubmit)="toCreate()">
+                <div class="input-container">
+                    <button type="submit">Create New User</button>
+                </div>
+            </form>
+        </div>
     </body>
 </html>
 <router-outlet></router-outlet>
