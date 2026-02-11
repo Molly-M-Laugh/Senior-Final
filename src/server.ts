@@ -6,11 +6,17 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { Pool } from 'pg';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+const pool = new Pool({
+  connectionString : process.env['DATABASE_URL'],
+  ssl: { rejectUnauthorized: false }
+});
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -23,6 +29,17 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+app.post('/api/data', async (req, res) => {
+  const { name } = req.body;
+  const result = await pool.query('INSERT INTO table (name) VALUES ($1) RETURNING *', [name]);
+  res.json(result.rows[0]);
+});
+app.put('/api/data/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  await pool.query('UPDATE table SET name = $1 WHERE id = $2', [name, id]);
+  res.send('Updated');
+});
 
 /**
  * Serve static files from /browser
