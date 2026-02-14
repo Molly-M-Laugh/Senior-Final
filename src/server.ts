@@ -20,13 +20,13 @@ const angularApp = new AngularNodeAppEngine();
 
 const pool = new Pool({
   connectionString : process.env['DATABASE_URL'],
-  user: 'postgres',
-  database: 'postgres',
-  password : process.env['DATABASE_PASSWORD'],
-  port: 5432
+  //user: 'postgres',
+  //database: 'postgres',
+  //password : process.env['DATABASE_PASSWORD'],
+  //port: 5432
   //ssl: { rejectUnauthorized: false }
 });
-
+const cors = require('cors');
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -44,12 +44,16 @@ const pool = new Pool({
 
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
-  const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, password]);
+  try {
+  const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING *', [username, password]);
   res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+  }
 });
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const result = await pool.query('SELECT (username, password) FROM users VALUES ($1, $2) RETURNING *', [username, password]);
+  const result = await pool.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING *', [username, password]);
 });
 app.put('/api/update/:id', async (req, res) => {
   const { id } = req.params;

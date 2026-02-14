@@ -24,8 +24,8 @@ export class NewUser {
 
   // No auth yet, so running easy (not actual password) for testing routing on press
   createUser(){
-    this.http.post('http://localhost:3000/api/', this.userForm.value)
-      .subscribe(response => console.log('Saved', response));
+    this.http.post('http://localhost:8080/api/register', this.userForm.value)
+      .subscribe(response => console.log('Saved User', response));
     /*
     if (this.userForm.value.username == "example@ece.com" 
         && this.userForm.value.password == "passed") {
