@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,10 @@ export class Login {
   creationForm:FormGroup;
   router = inject(Router);
 
-  constructor(private fb:FormBuilder){
+  constructor(private fb:FormBuilder, private http: HttpClient){
     this.loginForm=this.fb.group({
-      username:["",[Validators.required,Validators.minLength(3)]],
-      password:["",[Validators.required,Validators.minLength(3)]]
+      username:["",[Validators.required,Validators.minLength(3), Validators.maxLength(30)]],
+      password:["",[Validators.required,Validators.minLength(3), Validators.maxLength(30)]]
     });
     this.creationForm=this.fb.group({});
   }
