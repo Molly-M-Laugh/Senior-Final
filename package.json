@@ -38,11 +38,13 @@
     "cors": "^2.8.6",
     "express": "^5.1.0",
     "jquery": "^4.0.0",
+    "jsdom": "^28.1.0",
     "path": "^0.12.7",
     "pg": "^8.18.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
+    "undici": "^7.22.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -52,6 +54,7 @@
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/jquery": "^3.5.33",
+    "@types/jsdom": "^27.0.0",
     "@types/node": "^20.17.19",
     "@types/pg": "^8.16.0",
     "jasmine-core": "~5.9.0",

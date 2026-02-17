@@ -16,10 +16,10 @@ const data = [
 ];
 
 const plot = Plot.plot({
-  document: new JSDOM("").window.document,
+  document: new JSDOM("").window.document, // const {document} = new JSDOM("<!DOCTYPE html").window.document
   marks: [
     Plot.lineY(data, {x: "time (s)", y: "random value"})
   ]
 });
 
-process.stdout.write(plot.outerHTML);
+process.stdout.write(plot.outerHTML); // return only plot.outHTML for angular imple.
