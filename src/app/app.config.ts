@@ -5,9 +5,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-
-import { AnalyticsService} from './services/analytics-service';
-import { BrowserGraph } from './services/browser-graph';
+import { provideHighcharts } from 'highcharts-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes), provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
-    {provide: AnalyticsService, useClass: BrowserGraph}
+    provideHighcharts()
   ]
 };

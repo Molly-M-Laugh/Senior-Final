@@ -1,8 +1,0 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
-export abstract class AnalyticsService {
-  abstract trackEvent(name: string): void;
-}
