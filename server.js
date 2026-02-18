@@ -15,10 +15,10 @@ app.use((req, res) => {
 //    res.sendFile(path.join(__dirname,'dist/senior-et/browser/index.html'))
 //);
 
-app.use(cors({
-    origin: ['http://localhost:4200',
-            'https://senior-t-fd5496756068.herokuapp.com']// Allow only app's origin
-}));
+//app.use(cors({
+//    origin: ['http://localhost:4200',
+//            'https://senior-t-fd5496756068.herokuapp.com']// Allow only app's origin
+//}));
 
 // Start the app by listening on the default Heroku port
 app.listen(PORT, () => {
