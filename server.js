@@ -16,7 +16,8 @@ app.use((req, res) => {
 //);
 
 app.use(cors({
-    origin: 'http://localhost:4200' // Allow only app's origin
+    origin: ['http://localhost:4200',
+            'https://senior-t-fd5496756068.herokuapp.com']// Allow only app's origin
 }));
 
 // Start the app by listening on the default Heroku port
