@@ -1,0 +1,44 @@
+# STM32CubeIDE / Eclipse project metadata (local)
+.project
+.cproject
+.settings/
+.metadata/
+
+# Build output
+Debug/
+Release/
+build/
+cmake-build-*/
+
+# Generated binaries / reports
+*.elf
+*.axf
+*.map
+*.hex
+*.bin
+*.srec
+*.list
+
+# Object / dependency files
+*.o
+*.obj
+*.d
+*.su
+
+# Libraries
+*.a
+*.lib
+
+# Temp / logs
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CubeMX backup files
+*.ioc.bak
