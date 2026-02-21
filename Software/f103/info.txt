@@ -1,0 +1,1 @@
+Items in this folder are related to the STMF103C6T6 MCU's used for the cell supervisor, the F-ROM offload, etc.
