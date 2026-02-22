@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-new-user',
@@ -11,9 +11,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class NewUser {
   userForm:FormGroup;
+  unactiveRegistration = false; // No double register submissions
   returnForm:FormGroup;
   router = inject(Router);
-  httpHeaders : HttpHeaders = new HttpHeaders({'Access-Control-Allow-Origin':'true'});
 
   constructor(private fb:FormBuilder, private http: HttpClient){
     this.userForm=this.fb.group({
@@ -25,17 +25,23 @@ export class NewUser {
 
   // No auth yet, so running easy (not actual password) for testing routing on press
   createUser(){
-    this.http.post('http://localhost:8080/api/register', this.userForm.value, {headers: this.httpHeaders})
-      .subscribe(response => console.log('Saved User', response));
-    /*
-    if (this.userForm.value.username == "example@ece.com" 
-        && this.userForm.value.password == "passed") {
-      this.router.navigateByUrl("/home")
-    } else 
-    {
-      alert("Invalid credentials")
-    }
-      */
+    if (this.userForm.invalid || this.unactiveRegistration) return;
+
+    this.unactiveRegistration = true; // disable until response
+
+    this.http.post('http://localhost:8080/api/register', this.userForm.value)
+      .subscribe({
+        next: response => {
+        //console.log('Saved User', response) // Only for testing purposes have this
+        this.router.navigateByUrl("/home")
+        },
+        error: (err) => {
+          alert("Registration failed on invalid credentials or unable to link")
+        },
+        complete: () => {
+          this.unactiveRegistration = false; // re-enable after request finishes
+        }
+  });
   }
   cancelNewUser() {
     this.router.navigateByUrl("/login")

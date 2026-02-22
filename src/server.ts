@@ -17,16 +17,17 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 // From 1st DB SSR attempt
-
+/*
 const pool = new Pool({
   connectionString : process.env['DATABASE_URL'],
   //user: 'postgres',
   //database: 'postgres',
   //password : process.env['DATABASE_PASSWORD'],
-  //port: 5432
+  //port: 5432,
   //host: 'postgres'
   //ssl: { rejectUnauthorized: false }
 });
+*/
 const cors = require('cors');
 
 /**
@@ -42,7 +43,16 @@ const cors = require('cors');
  */
 
 // Added Attempt for DATABASE via SSR
-
+app.use(express.json()); // For correct form parsing for db
+app.use(cors({
+    origin: ['http://localhost:4200',
+            'https://senior-t-fd5496756068.herokuapp.com'],// Allow only app's origin
+    methods: ['GET', 'POST'],//Allow designated RESTful methods
+    allowedHeaders: ['Content-Type','Authorization'], // Allow only these headers
+    optionsSuccessStatus: 200
+    //credentials: true // Later for auth. found may be part of that
+}));
+/*
 app.post('/api/register', async (req, res) => {
   console.log('Starting Register');
   const { username, password } = req.body;
@@ -66,7 +76,7 @@ app.put('/api/update/:id', async (req, res) => {
   await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id]);
   res.send('Updated');
 });
-
+*/
 
 // Heroku DB
 /*

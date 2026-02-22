@@ -12,7 +12,7 @@
                 <div class="input-container">
                     <input type="text" formControlName="username" placeholder="username"/>
                     <input type="password" formControlName="password" placeholder="password"/>
-                    <button type="submit">Create Account</button>
+                    <button type="submit" [disabled]="unactiveRegistration">Create Account</button>
                 </div>
             </form>
         </div>
