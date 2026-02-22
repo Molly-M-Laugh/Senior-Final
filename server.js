@@ -48,7 +48,7 @@ app.put('/api/update/:id', async (req, res) => {
 */
 
 // Heroku DB, use client rather than pool
-const Client = require('pg');
+const Client = require('pg').Client;
 const client = new Client({
   connectionString: process.env['DATABASE_URL'],
   ssl: {
