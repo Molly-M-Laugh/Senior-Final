@@ -62,10 +62,10 @@ app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
+    //const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
     //const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password]);
     // Later, have check if no value returned
-    res.json(result.rows[0]);
+    //res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
   }
@@ -73,7 +73,7 @@ app.post('/api/register', async (req, res) => {
 });
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const result = await client.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password])
+  //const result = await client.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password])
   //const result = await pool.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password]);
   // Later, have check if no value returned
   client.end();
@@ -81,7 +81,7 @@ app.post('/api/login', async (req, res) => {
 app.put('/api/update/:id', async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
-  await client.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id])
+  //await client.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id])
   //await pool.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id]);
   // Later, have check if no value returned?
   res.send('Updated');
