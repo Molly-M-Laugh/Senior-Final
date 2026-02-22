@@ -58,6 +58,7 @@ const client = new Client({
 
 client.connect();
 
+app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
