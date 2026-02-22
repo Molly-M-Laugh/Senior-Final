@@ -61,7 +61,7 @@ client.connect();
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
+    client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\')))', [username, password])
     //const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password]);
     res.json(result.rows[0]);
   } catch (err) {
