@@ -24,6 +24,7 @@ const pool = new Pool({
   //database: 'postgres',
   //password : process.env['DATABASE_PASSWORD'],
   //port: 5432
+  //host: 'postgres'
   //ssl: { rejectUnauthorized: false }
 });
 const cors = require('cors');
@@ -43,13 +44,17 @@ const cors = require('cors');
 // Added Attempt for DATABASE via SSR
 
 app.post('/api/register', async (req, res) => {
+  console.log('Starting Register');
   const { username, password } = req.body;
   try {
+  console.log('Obtaining result');
   const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING *', [username, password]);
+  console.log('Got a result');
   res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
   }
+  console.log('Ending registration');
 });
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;

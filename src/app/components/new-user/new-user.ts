@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-new-user',
@@ -13,6 +13,7 @@ export class NewUser {
   userForm:FormGroup;
   returnForm:FormGroup;
   router = inject(Router);
+  httpHeaders : HttpHeaders = new HttpHeaders({'Access-Control-Allow-Origin':'true'});
 
   constructor(private fb:FormBuilder, private http: HttpClient){
     this.userForm=this.fb.group({
@@ -24,7 +25,7 @@ export class NewUser {
 
   // No auth yet, so running easy (not actual password) for testing routing on press
   createUser(){
-    this.http.post('http://localhost:8080/api/register', this.userForm.value)
+    this.http.post('http://localhost:8080/api/register', this.userForm.value, {headers: this.httpHeaders})
       .subscribe(response => console.log('Saved User', response));
     /*
     if (this.userForm.value.username == "example@ece.com" 
