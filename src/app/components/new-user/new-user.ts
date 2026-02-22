@@ -29,7 +29,8 @@ export class NewUser {
 
     this.unactiveRegistration = true; // disable until response
 
-    this.http.post('http://localhost:8080/api/register', this.userForm.value)
+    //this.http.post('http://localhost:8080/api/register', this.userForm.value)
+    this.http.post('api/register', this.userForm.value)
       .subscribe({
         next: response => {
         //console.log('Saved User', response) // Only for testing purposes have this

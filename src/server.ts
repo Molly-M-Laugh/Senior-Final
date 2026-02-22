@@ -52,52 +52,6 @@ app.use(cors({
     optionsSuccessStatus: 200
     //credentials: true // Later for auth. found may be part of that
 }));
-/*
-app.post('/api/register', async (req, res) => {
-  console.log('Starting Register');
-  const { username, password } = req.body;
-  try {
-  console.log('Obtaining result');
-  const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING *', [username, password]);
-  console.log('Got a result');
-  res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-  }
-  console.log('Ending registration');
-});
-app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
-  const result = await pool.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING *', [username, password]);
-});
-app.put('/api/update/:id', async (req, res) => {
-  const { id } = req.params;
-  const { username, password } = req.body;
-  await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id]);
-  res.send('Updated');
-});
-*/
-
-// Heroku DB
-/*
-const Client = require('pg');
-const client = new Client({
-  connectionString: process.env['DATABASE_URL'],
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-
-client.connect();
-
-client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err:HttpErrorResponse, res:Response) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-  client.end();
-});
-*/
 
 /**
  * Serve static files from /browser

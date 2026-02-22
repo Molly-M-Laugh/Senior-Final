@@ -4,17 +4,14 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+// For local connections/runs, use Pool
+/*
 const {Pool} = require('pg');
 require('dotenv').config(); // Need for inserting .env variables
 
 const pool = new Pool({
-  connectionString : process.env['DATABASE_URL'],
-  //user: 'postgres',
-  //database: 'postgres',
-  //password : process.env['DATABASE_PASSWORD'],
-  //port: 5432,
-  //host: 'postgres'
-  //ssl: { rejectUnauthorized: false }
+  connectionString : process.env['DATABASE_URL']
 });
 const cors = require('cors'); // Link Angular, NodeJS
 
@@ -28,6 +25,7 @@ app.use(cors({
     optionsSuccessStatus: 200
     //credentials: true // Later for auth. found may be part of that
 }));
+
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -47,6 +45,46 @@ app.put('/api/update/:id', async (req, res) => {
   await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id]);
   res.send('Updated');
 });
+*/
+
+// Heroku DB, use client rather than pool
+const Client = require('pg');
+const client = new Client({
+  connectionString: process.env['DATABASE_URL'],
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
+
+app.post('/api/register', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const result = client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
+    //const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+  }
+  client.end();
+});
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  const result = client.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password])
+  //const result = await pool.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password]);
+  client.end();
+});
+app.put('/api/update/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, password } = req.body;
+  client.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id])
+  //await pool.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id]);
+  res.send('Updated');
+  client.end();
+});
+
+// Regular remainder of paths, but less specific -> below specific routes
 
 // Serve only the static files form the dist directory
 app.use(express.static(path.join(__dirname,'dist/senior-et/browser')));
