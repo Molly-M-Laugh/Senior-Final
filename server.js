@@ -62,7 +62,7 @@ app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-    client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\')))', [username, password])
+    const result = client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
     //const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password]);
     res.json(result.rows[0]);
   } catch (err) {
