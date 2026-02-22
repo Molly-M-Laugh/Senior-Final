@@ -68,7 +68,6 @@ class MyCommandCallbacks: public BLECharacteristicCallbacks
   // Future changes: Need to implement actual commands that interact with the system.
   void onWrite(BLECharacteristic* BtCommand){
     String input;
-    Serial.println("Received command input");
     input = BtCommand->getValue();
     commandValue = input.toFloat();
     if(input.toFloat() == 0){
@@ -76,7 +75,13 @@ class MyCommandCallbacks: public BLECharacteristicCallbacks
     }
     else{
       //insert command value effects
-      commandValue = 1;
+      if(commandValue == 12){
+        Serial.println("Resetting number");
+        testingValue = 12;
+      }
+      else{
+        testingValue += 1;
+      }
     }
   }
 };
@@ -121,9 +126,6 @@ void loop() {
     BtTemp->setValue(messenger);
     BtTemp->notify();
     delay(500);
-    BtCommand->setValue(command);
-    BtCommand->notify();
-    delay(5000);
   }
   delay(100);
 }
