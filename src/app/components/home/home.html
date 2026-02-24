@@ -7,11 +7,9 @@
     </head>
     <body>
         <p>home works!</p>
-        <highcharts-chart
-          [constructorType]="chartConstructor"
-          [options]="chartOptions"
-          class="chart"
-        />
+        <div>
+            <canvasjs-stockchart [options]="chartOptions"></canvasjs-stockchart>
+        </div>
         <!--<div #chart></div>-->
         <div class="form-container">
             <form [formGroup]="optionsForm" (ngSubmit)="settings()">
