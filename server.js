@@ -37,17 +37,39 @@ app.post('/api/register', async (req, res) => {
 });
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const result = await pool.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING *', [username, password]);
+  try {
+    const result = await pool.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username]);
+    const isMatch = result.rows[0]?.is_match || false;
+    res.json({is_match : isMatch});
+  } catch (err) {
+    console.error(err);
+  }
 });
-app.put('/api/update/:id', async (req, res) => {
+// Wait until cookies to implement
+app.put('/api/update-username/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, username_new } = req.body;
+  try {
+    await pool.query('UPDATE users SET username = $1 WHERE username = $2', [username_new, username]);
+    res.send('Updated username');
+  } catch (err) {
+    console.error(err);
+  }
+});
+app.put('/api/update-password', async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
-  await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id]);
-  res.send('Updated');
+  try {
+    await pool.query('UPDATE users SET password = $1 WHERE username = $2', [password, username]);
+    res.send('Updated password');
+  } catch (err) {
+    console.error(err);
+  }
 });
 */
 
 // Heroku DB, use client rather than pool
+
 const Client = require('pg').Client;
 const client = new Client({
   connectionString: process.env['DATABASE_URL'],
@@ -62,10 +84,9 @@ app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-    //const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
-    //const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password]);
+    const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
     // Later, have check if no value returned
-    //res.json(result.rows[0]);
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
   }
@@ -73,16 +94,20 @@ app.post('/api/register', async (req, res) => {
 });
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  //const result = await client.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password])
-  //const result = await pool.query('SELECT (crypt($1,gen_salt(\'bf\')) = password) As is_match FROM users WHERE (username = $2) RETURNING username', [username, password]);
-  // Later, have check if no value returned
+  try {
+    const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
+    // Later, have check if no value returned
+    const isMatch = result.rows[0]?.is_match || false;
+    res.json({is_match : isMatch});
+  } catch (err) {
+    console.error(err);
+  }
   client.end();
 });
 app.put('/api/update/:id', async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
   //await client.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id])
-  //await pool.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id]);
   // Later, have check if no value returned?
   res.send('Updated');
   client.end();
