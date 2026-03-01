@@ -42,3 +42,6 @@ Thumbs.db
 
 # CubeMX backup files
 *.ioc.bak
+# KiCad temp/lock files
+*.lck
+

@@ -1,0 +1,10 @@
+# Keep KiCad files consistent across OSes
+*.kicad_pcb text eol=lf
+*.kicad_sch text eol=lf
+*.kicad_pro text eol=lf
+*.kicad_prl text eol=lf
+*.kicad_dru text eol=lf
+# Keep repo config files LF
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
