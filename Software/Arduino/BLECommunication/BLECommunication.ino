@@ -3,6 +3,7 @@
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
 #include <time.h>
+#include <SPI.h>
 
 
 //These are our Universal Unique Identifiers (UUID).
@@ -11,8 +12,17 @@
 #define CHAR1_UUID "05ac146f-aee8-4659-aba5-882c1f7e0372"
 #define CHAR2_UUID "58bb99f3-75cb-48cb-81e4-346cc4f0687d"
 
+// Notes for SPI communication
+// Pins are set to default and have corresponding preset variables from Arduino
+// MOSI = 23
+// MISO = 19
+// SCK = 18
+// SS = 5
+
 // Variable to track state of connection
 bool connection = false;
+//bool sync = false;
+
 
 // BLE Server, Service, and Characteristic setup. 
 BLEServer *BtServer;
@@ -27,6 +37,7 @@ static char messenger[6]; // Message buffer for temp values
 static char command[6]; // Message buffer for command values
 static int pastValues[10]; // Small storage in case of delay in sending out values
 int counter=0; // generic counter for loops, used later
+
 
 
 
@@ -54,7 +65,7 @@ class MyTempCallbacks: public BLECharacteristicCallbacks
 {
   // Need to add event handling for when the phone reads a value from this characteristic.
   void onRead(BLECharacteristic* BtTemp){
-    
+    // Create decision tree on sync vs standard read
   }
 
 };
@@ -79,6 +90,22 @@ class MyCommandCallbacks: public BLECharacteristicCallbacks
         Serial.println("Resetting number");
         testingValue = 12;
       }
+      else if(commandValue == 1){
+        testingValue = random() * 10;
+        Serial.println("Random number");
+      }
+      /*
+      //Not used yet
+      else if(commandValue == 2){
+        // Begin Sync Process
+        sync = true;
+        // Set up read process.
+      }
+      else if(commandValue == 20){
+        // ACK for sync process
+        sync = false;
+      }
+      */
       else{
         testingValue += 1;
       }
@@ -115,6 +142,8 @@ void setup() {
   // Device actually starts advertising.
   BLEDevice::startAdvertising();
   Serial.println("All set up. Please test.");
+  //SPI setup, using default pins
+  SPI.begin();
 }
 
 // General loop to constantly run.
