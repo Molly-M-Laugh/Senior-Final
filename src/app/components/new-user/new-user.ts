@@ -34,10 +34,10 @@ export class NewUser {
       .subscribe({
         next: response => {
         //console.log('Saved User', response) // Only for testing purposes have this
-        this.router.navigateByUrl("/home")
+        this.router.navigateByUrl("/home");
         },
         error: (err) => {
-          alert("Registration failed on invalid credentials or unable to link")
+          alert("Registration failed on invalid credentials or unable to link");
         },
         complete: () => {
           this.unactiveRegistration = false; // re-enable after request finishes
@@ -45,6 +45,6 @@ export class NewUser {
   });
   }
   cancelNewUser() {
-    this.router.navigateByUrl("/login")
+    this.router.navigateByUrl("/login");
   }
 }

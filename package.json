@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node server.js",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -35,6 +35,7 @@
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.10",
     "@canvasjs/angular-charts": "^1.2.0",
+    "@manekinekko/angular-web-bluetooth": "^20.0.0",
     "@observablehq/plot": "^0.6.17",
     "bootstrap": "^5.3.8",
     "cors": "^2.8.6",

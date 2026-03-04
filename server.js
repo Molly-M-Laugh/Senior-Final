@@ -5,8 +5,20 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// BLE setup
+const Bluetooth = require('webbluetooth').Bluetooth;
+const deviceFound = (device, selectFn) => {
+    // If device can be automatically selected, do so by returning true
+    if (device.name === 'MyESP32') return true; // Get device name for here
+
+    // Otherwise store the selectFn somewhere and execute it later to select this device
+};
+const bluetooth = new Bluetooth({ deviceFound });
+
+// Await for Bluetooth API calls
+
 // For local connections/runs, use Pool
-/*
+
 const {Pool} = require('pg');
 require('dotenv').config(); // Need for inserting .env variables
 
@@ -66,10 +78,10 @@ app.put('/api/update-password', async (req, res) => {
     console.error(err);
   }
 });
-*/
+
 
 // Heroku DB, use client rather than pool
-
+/*
 const Client = require('pg').Client;
 const client = new Client({
   connectionString: process.env['DATABASE_URL'],
@@ -112,8 +124,25 @@ app.put('/api/update/:id', async (req, res) => {
   res.send('Updated');
   client.end();
 });
+*/
+// BLE API calls (ie. update data)
+// Data should be in form of [{x:__,y:__},...{x:__,y:__}]
+app.get('/api/data', async (req, res) => {
+  const {device} = await bluetooth.requestDevice({
+    filters:[{ services:[ 'ab2d02b4-ad53-400f-bf7e-d603a657d07d' ] }] 
+  });
+  const {server} = await device.gatt.connect();
+  server.getPrimaryService('ab2d02b4-ad53-400f-bf7e-d603a657d07d').then(
+    service => 
+    {
+      // Note: Ask what service/characteristic for time versus data (or how combined)
+      const data = service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372').readValue()
+      res.json(data.rows[0]);
+    }
+  );
+});
 
-// Regular remainder of paths, but less specific -> below specific routes
+// Regular remainder of paths, but less specific -> below specific routes-----------
 
 // Serve only the static files form the dist directory
 app.use(express.static(path.join(__dirname,'dist/senior-et/browser')));

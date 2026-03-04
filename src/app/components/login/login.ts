@@ -34,13 +34,13 @@ export class Login {
       .subscribe({
         next: response => {
         if (response.is_match) {
-          this.router.navigateByUrl("/home")
+          this.router.navigateByUrl("/home");
         } else {
-          alert("Invalid login")
+          alert("Invalid login");
         }
         },
         error: (err) => {
-          alert("Login failed on invalid credentials or unable to link")
+          alert("Login failed on invalid credentials or unable to link");
         },
         complete: () => {
           this.unactiveLogin = false; // re-enable after request finishes
@@ -59,6 +59,6 @@ export class Login {
   }
 
   toCreate() {
-    this.router.navigateByUrl("/new_user")
+    this.router.navigateByUrl("/new_user");
   }
 }
