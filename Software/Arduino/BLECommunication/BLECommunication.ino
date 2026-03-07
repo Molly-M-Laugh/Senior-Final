@@ -91,7 +91,7 @@ class MyCommandCallbacks: public BLECharacteristicCallbacks
         testingValue = 12;
       }
       else if(commandValue == 1){
-        testingValue = random() * 10;
+        testingValue = random(1,20);
         Serial.println("Random number");
       }
       /*

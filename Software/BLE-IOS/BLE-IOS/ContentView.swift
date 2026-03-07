@@ -45,13 +45,17 @@ struct ContentView: View {
             Text("Debug Variable: \(manager.debugVariable)")
             Text("Our current reading: \(manager.lastValue)")
             Text("Last command sent: \(manager.lastCommandValue)")
-            Button("Reset value",action: {
-                manager.sendCommand("12")
-            })
-            Button("increase value",action: {
-                manager.sendCommand("1")
-            })
-
+            HStack{
+                Button("Reset value",action: {
+                    manager.sendCommand("12")
+                })
+                Button("increase value",action: {
+                    manager.sendCommand("5")
+                })
+                Button("Random value",action: {
+                    manager.sendCommand("1")
+                })
+            }.buttonStyle(.bordered)
         }
     }
 }

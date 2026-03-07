@@ -38,7 +38,10 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var devices: [BLEDevice] = []
     var lastValue : Any
     var lastCommandValue = "Nothing yet"
+    var values: [String] = []
 
+    
+    
     override init(){
         lastValue = 0
         super.init()
@@ -66,6 +69,7 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func sendCommand(_ command: String){
         let data = Data(command.utf8)
         debugVariable = "trying to send command"
+        values.append(lastValue as! String)
         esp32Peripheral?.writeValue(data, for: commandCharacteristic!, type: .withResponse)
     }
     
