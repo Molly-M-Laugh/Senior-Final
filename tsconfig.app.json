@@ -5,9 +5,12 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [
-      "node"
+      "node", "web-bluetooth"
     ]
   },
+  "files": [
+    "src/main.ts"
+  ],
   "include": [
     "src/**/*.ts"
   ],

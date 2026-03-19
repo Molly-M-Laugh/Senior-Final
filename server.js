@@ -9,8 +9,14 @@ const PORT = process.env.PORT || 8080;
 const Bluetooth = require('webbluetooth').Bluetooth;
 const deviceFound = (device, selectFn) => {
     // If device can be automatically selected, do so by returning true
-    if (device.name === 'MyESP32') return true; // Get device name for here
-
+    if (device.name === 'MyESP32') {
+      console.log([device.name]); // Get device name for here
+      return true;
+      }
+    else { 
+      console.log("Device not found"); 
+      return false
+    }
     // Otherwise store the selectFn somewhere and execute it later to select this device
 };
 const bluetooth = new Bluetooth({ deviceFound });
@@ -26,6 +32,11 @@ const pool = new Pool({
   connectionString : process.env['DATABASE_URL']
 });
 const cors = require('cors'); // Link Angular, NodeJS
+
+// Bluetooth variables
+const service = 'ab2d02b4-ad53-400f-bf7e-d603a657d07d';
+const dataChar = '05ac146f-aee8-4659-aba5-882c1f7e0372';
+const commandChar = '58bb99f3-75cb-48cb-81e4-346cc4f0687d';
 
 // Put most specific link here
 app.use(express.json()); // For correct form parsing for db
@@ -128,18 +139,48 @@ app.put('/api/update/:id', async (req, res) => {
 // BLE API calls (ie. update data)
 // Data should be in form of [{x:__,y:__},...{x:__,y:__}]
 app.get('/api/data', async (req, res) => {
+  try {
+        const device = await bluetooth.requestDevice({
+            filters: [{ name: 'MyESP32' }],
+            optionalServices: [service]
+        });
+        const server = await device.gatt.connect();
+        const bleService = await server.getPrimaryService(service);
+        const characteristic = await bleService.getCharacteristic(dataChar);
+        
+        const value = await characteristic.readValue();
+        // Convert the DataView to a string (assuming messenger is a string)
+        const decoder = new TextDecoder('utf-8');
+        const decodedString = decoder.decode(value);
+
+        res.json({ value: decodedString });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+
+  /*
+  console.log("Requesting device for service");
   const {device} = await bluetooth.requestDevice({
-    filters:[{ services:[ 'ab2d02b4-ad53-400f-bf7e-d603a657d07d' ] }] 
+    filters:[{ 
+      acceptAllDevices: true,
+      optionalServices: [ service ]
+     }] 
   });
+  console.log("Found device: ", device.name)
+  console.log("Requesting server");
   const {server} = await device.gatt.connect();
-  server.getPrimaryService('ab2d02b4-ad53-400f-bf7e-d603a657d07d').then(
+  console.log("Requesting device data");
+  server.getPrimaryService(service).then(
     service => 
     {
       // Note: Ask what service/characteristic for time versus data (or how combined)
       const data = service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372').readValue()
+      console.log("Data retreived");
       res.json(data.rows[0]);
     }
   );
+  */
 });
 
 // Regular remainder of paths, but less specific -> below specific routes-----------

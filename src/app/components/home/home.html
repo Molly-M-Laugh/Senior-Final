@@ -6,9 +6,40 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
+        <!--
+        <div class="connection-panel">
+            <button type="button" (click)="initBluetooth()" class="btn-connect">
+                Connect ESP32
+            </button>
+            <p>Status: <strong>{{ isConnected ? 'Connected' : 'Disconnected' }}</strong></p>
+        </div>
+        -->
+
+        <hr />
+
+        <div class="data-display">
+            <pre>Raw Data: {{ items | json }}</pre>
+            <div class="value-card">
+                <h3>Current Value: {{ items.y }}</h3>
+                <p>Last Updated: {{ items.x | date:'mediumTime' }}</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button (click)="initBluetooth()" [disabled]="isConnected">
+                1. Pair ESP32
+            </button>
+    
+            <button (click)="requestNewData()" [disabled]="!isConnected">
+                2. Query New Data
+            </button>
+        </div>
+        <!--<pre>{{ items | json }}</pre>-->
+        <!--
         <div>
             <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}" (chartInstance)="getChartInstance($event)"></canvasjs-chart>    
         </div>
+        -->
         <!--<div #chart></div>-->
         <div class="form-container">
             <form [formGroup]="optionsForm" (ngSubmit)="settings()">
