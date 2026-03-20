@@ -12,6 +12,7 @@ import Foundation
 import CoreBluetooth
 import Observation
 
+
 @Observable
 class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
@@ -21,6 +22,11 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         let rssi: Int
     }
     
+    struct ChartData: Identifiable{
+        let id = UUID()
+        let x : Int
+        let y : Float
+    }
     
     
     private var centralManager: CBCentralManager!
@@ -36,14 +42,15 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var isConnected = false
     var isScanning = false
     var devices: [BLEDevice] = []
-    var lastValue : Any
+    var lastValue : String
     var lastCommandValue = "Nothing yet"
-    var values: [String] = []
-
-    
+    var lastX = 0
+    var values = [ChartData(x: 0, y: 0)]
+    var int1 : Float = 0.0
+    var cleanValue = ""
     
     override init(){
-        lastValue = 0
+        lastValue = "0"
         super.init()
         centralManager = CBCentralManager(delegate: self, queue:nil)
     }
@@ -69,8 +76,11 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func sendCommand(_ command: String){
         let data = Data(command.utf8)
         debugVariable = "trying to send command"
-        values.append(lastValue as! String)
         esp32Peripheral?.writeValue(data, for: commandCharacteristic!, type: .withResponse)
+    }
+    
+    func resetGraph(){
+        values = [ChartData(x: 0, y: 0)]
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -124,6 +134,10 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
          if(characteristic == dataCharacteristic){
              lastValue = String(decoding: data, as: UTF8.self)
              debugVariable = "Hey we read a variable"
+             cleanValue = lastValue.trimmingCharacters(in: .whitespacesAndNewlines)
+             int1 = (Float(cleanValue) ?? -1)
+             lastX += 1
+             values.append(ChartData(x: lastX, y: int1))
          }
          else{
              lastCommandValue = String(decoding: data, as: UTF8.self)
