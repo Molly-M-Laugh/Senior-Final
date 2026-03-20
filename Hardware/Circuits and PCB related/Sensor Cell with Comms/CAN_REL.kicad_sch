@@ -4,6 +4,11 @@
 	(generator_version "9.0")
 	(uuid "00282b9d-b477-4bae-a0ef-cbaf3ebb4813")
 	(paper "A4")
+	(title_block
+		(title "CAN Controller and Transciever")
+		(date "2026-03-20")
+		(rev "1")
+	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
 			(pin_numbers
@@ -729,7 +734,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Diode:SMAJ36CA"
+		(symbol "Diode:SMAJ12CA"
 			(pin_numbers
 				(hide yes)
 			)
@@ -748,7 +753,7 @@
 					)
 				)
 			)
-			(property "Value" "SMAJ36CA"
+			(property "Value" "SMAJ12CA"
 				(at 0 -2.54 0)
 				(effects
 					(font
@@ -774,7 +779,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "400W bidirectional Transient Voltage Suppressor, 36.0Vr, SMA(DO-214AC)"
+			(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -801,7 +806,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "SMAJ36CA_0_1"
+			(symbol "SMAJ12CA_0_1"
 				(polyline
 					(pts
 						(xy -2.54 -1.27) (xy 0 0) (xy -2.54 1.27) (xy -2.54 -1.27)
@@ -851,7 +856,7 @@
 					)
 				)
 			)
-			(symbol "SMAJ36CA_1_1"
+			(symbol "SMAJ12CA_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
@@ -1705,6 +1710,12 @@
 		)
 	)
 	(junction
+		(at 110.49 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "00fe6c44-2ed7-4d40-8884-d97f644f516c")
+	)
+	(junction
 		(at 101.6 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1727,12 +1738,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "22c430a7-080a-47c2-a9fe-f99f3fea1513")
-	)
-	(junction
-		(at 110.49 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "27a14ece-5332-422b-bc05-e21b588ab0b1")
 	)
 	(junction
 		(at 93.98 124.46)
@@ -1762,7 +1767,7 @@
 		(at 110.49 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "68b847f2-ae6c-4c3c-a2e9-3933016a9121")
+		(uuid "6b34ed45-b8b2-4e38-b5a5-514082806216")
 	)
 	(junction
 		(at 101.6 41.91)
@@ -1854,7 +1859,7 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 33.02) (xy 125.73 33.02)
+			(xy 101.6 33.02) (xy 110.49 33.02)
 		)
 		(stroke
 			(width 0)
@@ -2041,16 +2046,6 @@
 			(type default)
 		)
 		(uuid "2a54c92f-f495-4c27-b5be-811705ed5047")
-	)
-	(wire
-		(pts
-			(xy 110.49 50.8) (xy 125.73 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2b008656-1bd4-4c92-904c-4f51b13db3d0")
 	)
 	(wire
 		(pts
@@ -2251,6 +2246,16 @@
 			(type default)
 		)
 		(uuid "60dc4c1b-5aa9-409c-8aa6-2e3406791e68")
+	)
+	(wire
+		(pts
+			(xy 110.49 33.02) (xy 125.73 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "662879ec-254d-44f4-95cd-94dcc102b083")
 	)
 	(wire
 		(pts
@@ -2464,16 +2469,6 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 33.02) (xy 110.49 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab2ab48f-97b0-49ee-9dbd-b59cd107a5cf")
-	)
-	(wire
-		(pts
 			(xy 110.49 41.91) (xy 110.49 43.18)
 		)
 		(stroke
@@ -2521,6 +2516,16 @@
 			(type default)
 		)
 		(uuid "b1f979a9-8334-46db-b3f6-d8d8a94d0c1e")
+	)
+	(wire
+		(pts
+			(xy 110.49 50.8) (xy 125.73 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b209b7d6-7f25-41aa-a790-12494d8c3a9e")
 	)
 	(wire
 		(pts
@@ -2933,7 +2938,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0f24566a-85ca-4b25-8131-320bc067eaff")
 		(property "Reference" "R15"
 			(at 86.36 36.8299 0)
@@ -3359,7 +3363,6 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
@@ -3741,76 +3744,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Diode:SMAJ36CA")
-		(at 110.49 36.83 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "510ef8f4-e5f5-4d60-a4c8-610839bc20b4")
-		(property "Reference" "D1"
-			(at 113.03 35.5599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "SMAJ36CA"
-			(at 113.03 38.0999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 115.57 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
-			(at 110.49 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "400W bidirectional Transient Voltage Suppressor, 36.0Vr, SMA(DO-214AC)"
-			(at 110.49 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "0267125d-2ed5-4d65-83a7-909766988d37")
-		)
-		(pin "1"
-			(uuid "25a121d4-be0e-4e93-84a6-28f8763eaa7a")
-		)
-		(instances
-			(project "Sensor Cell with Comms"
-				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
-					(reference "D1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_US")
 		(at 104.14 118.11 0)
 		(mirror x)
@@ -3875,6 +3808,76 @@
 			(project "Sensor Cell with Comms"
 				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
 					(reference "R19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:SMAJ12CA")
+		(at 110.49 36.83 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5c8ce88f-c3b6-4c7c-b6ba-655efe2085e2")
+		(property "Reference" "D1"
+			(at 113.03 35.5599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "SMAJ12CA"
+			(at 113.03 38.0999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 115.57 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
+			(at 110.49 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
+			(at 110.49 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5549de9e-d4f7-48ad-b874-d56adeaa34e2")
+		)
+		(pin "1"
+			(uuid "7856f281-ff34-4ca7-9030-b144e1e5f2c8")
+		)
+		(instances
+			(project "Sensor Cell with Comms"
+				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
+					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -4413,6 +4416,76 @@
 			(project "Sensor Cell with Comms"
 				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
 					(reference "#PWR048")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:SMAJ12CA")
+		(at 110.49 46.99 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7dbddef1-5ab9-47e1-af0b-ed0273448425")
+		(property "Reference" "D2"
+			(at 113.03 45.7199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "SMAJ12CA"
+			(at 113.03 48.2599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_SMA"
+			(at 115.57 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
+			(at 110.49 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
+			(at 110.49 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ffbc3c37-5ac1-47e7-92e9-77d2eaac4b5c")
+		)
+		(pin "1"
+			(uuid "2065f362-8405-496e-b83f-16c5a83e26a4")
+		)
+		(instances
+			(project "Sensor Cell with Comms"
+				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
+					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -6076,76 +6149,6 @@
 			(project ""
 				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
 					(reference "TP2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:SMAJ36CA")
-		(at 110.49 46.99 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f641457e-12c0-49ee-b3b7-262d90b52aa1")
-		(property "Reference" "D2"
-			(at 113.03 45.7199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "SMAJ36CA"
-			(at 113.03 48.2599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 115.57 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
-			(at 110.49 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "400W bidirectional Transient Voltage Suppressor, 36.0Vr, SMA(DO-214AC)"
-			(at 110.49 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "c9082f7b-51bb-4842-9927-d4b23373e1c1")
-		)
-		(pin "1"
-			(uuid "0da15678-b845-4e28-b223-186f958b2fd5")
-		)
-		(instances
-			(project "Sensor Cell with Comms"
-				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
-					(reference "D2")
 					(unit 1)
 				)
 			)
