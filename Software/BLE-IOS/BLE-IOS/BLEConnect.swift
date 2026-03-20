@@ -24,7 +24,7 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     struct ChartData: Identifiable{
         let id = UUID()
-        let x : Int
+        let x : Date
         let y : Float
     }
     
@@ -44,13 +44,17 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var devices: [BLEDevice] = []
     var lastValue : String
     var lastCommandValue = "Nothing yet"
-    var lastX = 0
-    var values = [ChartData(x: 0, y: 0)]
+    var lastDate : Date = Date()
+    var values : [ChartData] = []
     var int1 : Float = 0.0
     var cleanValue = ""
     
+
+    
+    
     override init(){
         lastValue = "0"
+        
         super.init()
         centralManager = CBCentralManager(delegate: self, queue:nil)
     }
@@ -80,7 +84,7 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func resetGraph(){
-        values = [ChartData(x: 0, y: 0)]
+        values = []
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -90,6 +94,10 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
+    func getDate() -> Date {
+        let date = Date()
+        return date
+    }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber){
         debugVariable = "Attempting to connect to something"
@@ -136,8 +144,8 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
              debugVariable = "Hey we read a variable"
              cleanValue = lastValue.trimmingCharacters(in: .whitespacesAndNewlines)
              int1 = (Float(cleanValue) ?? -1)
-             lastX += 1
-             values.append(ChartData(x: lastX, y: int1))
+             lastDate = getDate()
+             values.append(ChartData(x: lastDate, y: int1))
          }
          else{
              lastCommandValue = String(decoding: data, as: UTF8.self)

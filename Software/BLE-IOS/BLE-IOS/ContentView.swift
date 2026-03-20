@@ -13,7 +13,7 @@ import Charts
 
 struct ChartData: Identifiable {
     let id = UUID()
-    let x : Int
+    let x : Date
     let y : Float
 }
 
