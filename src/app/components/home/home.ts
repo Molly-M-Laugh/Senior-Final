@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, afterNextRender, DOCUMENT, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, PLATFORM_ID, afterNextRender, DOCUMENT, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 //import * as Plot from "@observablehq/plot";
@@ -9,7 +9,7 @@ import { isPlatformBrowser, JsonPipe, DatePipe } from '@angular/common';
 //import { HighchartsChartComponent, ChartConstructorType } from 'highcharts-angular';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 //import { BluetoothCore } from '@manekinekko/angular-web-bluetooth';
-//import { map } from 'rxjs/operators';
+import { interval, Subscription } from 'rxjs';
 import { HttpClient} from '@angular/common/http';
 import { BleService } from '../../services/ble-service';
 
@@ -19,9 +19,12 @@ import { BleService } from '../../services/ble-service';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home{
+export class Home implements OnInit, OnDestroy {
   //private readonly platform = inject(PLATFORM_ID);
   //private readonly document = inject(DOCUMENT);
+  private statusSub?: Subscription;
+  private dataIntervalSub?: Subscription;
+  hasAttemptedConnection = false;
   optionsForm:FormGroup;
   router = inject(Router);
   // dps = initial values
@@ -43,12 +46,17 @@ export class Home{
 	  }]
 	}
   ngOnInit () {
+    // 1. Existing data subscriber
     this.ble.deviceValue$.subscribe((val: string) => {
+    //const numericValue = parseFloat(val);
+    //if (isNaN(numericValue)) return;
+    if (val == '-0.01' || val == '0.00') return;
+
     const numericValue = parseFloat(val);
     if (isNaN(numericValue)) return;
 
     // Update the local items object for the HTML 
-    this.items = { x: new Date(), y: numericValue };
+    this.items = { x: new Date(), y: val };
 
     // Update the DataPoints array for the chart
     this.dps.push({ x: this.dps.length + 1, y: numericValue });
@@ -59,41 +67,35 @@ export class Home{
     }
 
     // Re-render the chart if the instance exists
-    //if (this.chart) {
-    //  this.chart.render();
-    //}
+    if (this.chart) {
+      this.chart.render();
+    }
   });
-    /*
-    this.ble.deviceValue$.subscribe((val: string) => {
-      this.items = { x: new Date(), y: parseFloat(val) };
-      this.isConnected = true; // If we're getting data, we're connected
-      
-      // Update your chart data points array
-      this.dps.push({ x: this.dps.length + 1, y: parseFloat(val) });
-      if (this.dps.length > 20) this.dps.shift();
-      //this.updateChart();
-    });
-    */
 
-    /*
-    this.http.get('http://localhost:8080/api/data')
-    //this.http.get<{x : Date, y : number}>('api/data')
-      .subscribe({
-        next: response => { 
-          this.items = response;
-        },
-        error: (err) => {
-          alert("Unable to link");
-        }
-      });
-    */
+  // 2. Monitor connection status automatically
+    this.statusSub = this.ble.isConnected$.subscribe(status => {
+      this.isConnected = status;
+      if (!status) {
+        console.log("Polling paused - waiting for reconnection.");
+      } else {
+        console.log("Polling active.");
+      }
+    });
   }
 
   async initBluetooth() {
-    alert("Button clicked!");
+    //alert("Button clicked!");
+    this.hasAttemptedConnection = true;
     try {
       await this.ble.connect();
-      this.isConnected = true; // Set this here so buttons enable immediately
+      //this.isConnected = true; // Set this here so buttons enable immediately
+
+      // Start the automatic polling once connected
+      //this.startAutomaticPolling();
+      if (!this.dataIntervalSub) {
+        this.startAutomaticPolling();
+      }
+
       console.log("Status updated to connected");
     } catch (err) {
       console.error("Pairing failed", err);
@@ -101,9 +103,23 @@ export class Home{
     }
   }
 
+  startAutomaticPolling() {
+    // interval(1000) emits every 1 second
+    this.dataIntervalSub = interval(1000).subscribe(async () => {
+      if (this.isConnected) {
+        await this.requestNewData();
+        // With returned string, now has -0.01 for disconnect when not recognized yet for the 3-5 polls before recognizes
+      }
+    });
+  }
+
   async requestNewData() {
-    // Sending "1" triggers the 'Random number' logic in your ESP32 onWrite callback
-    await this.ble.sendCommand("1"); 
+    if (!this.isConnected) return;
+
+    // Sending "5" triggers the 'Increment number' logic in your ESP32 onWrite callback
+    await this.ble.sendCommand("5"); 
+    const latestValue = await this.ble.read();
+    this.items = { x: new Date(),y: latestValue};
   
     // The ESP32 will then run BtTemp->notify(), which 
     // automatically updates this.items via the subscription in ngOnInit.
@@ -156,6 +172,15 @@ export class Home{
     */
 	}
 
+  // CRITICAL: Clean up the timer when the component is destroyed
+  ngOnDestroy() {
+    this.statusSub?.unsubscribe();
+    this.dataIntervalSub?.unsubscribe();
+    //if (this.dataIntervalSub) {
+    //  this.dataIntervalSub.unsubscribe();
+    //}
+  }
+
   constructor(private fb:FormBuilder, private http: HttpClient){
     this.optionsForm=this.fb.group({});
   }
@@ -163,36 +188,4 @@ export class Home{
   settings(){
     this.router.navigateByUrl("/settings");
   }
-
-
-  // BLE code (example from official documentation)
-  // IF WAS NON-SSR
-  /*
-  getDevice() {
-    // call this method to get the connected device
-    return this.ble.getDevice$();
-  }
-
-  stream() {
-    // call this method to get a stream of values emitted by the device for a given characteristic
-    return this.ble.streamValues$().pipe(
-      map((value: DataView) => value.getInt8(0))
-    );
-  }
-
-  disconnectDevice() {
-    // call this method to disconnect from the device. This method will also stop clear all subscribed notifications
-    this.ble.disconnectDevice();
-  }
-
-  value() {
-    console.log('Getting Battery level...');
-
-    return this.ble
-      .value$({
-        service: 'battery_service',
-        characteristic: 'battery_level'
-      });
-  }
-	  */
 }

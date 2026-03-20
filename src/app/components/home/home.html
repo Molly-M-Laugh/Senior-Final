@@ -5,18 +5,37 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
-    <body>
-        <!--
-        <div class="connection-panel">
-            <button type="button" (click)="initBluetooth()" class="btn-connect">
-                Connect ESP32
-            </button>
-            <p>Status: <strong>{{ isConnected ? 'Connected' : 'Disconnected' }}</strong></p>
+    @if (!isConnected && hasAttemptedConnection) {
+        <div class="connection-overlay">
+            <div class="overlay-content">
+                <h2>📡 Connection Lost</h2>
+                <p>The ESP32 has disconnected. Check power or range.</p>
+                <button (click)="initBluetooth()" class="btn-reconnect">
+                    Reconnect Now
+                </button>
+            </div>
         </div>
-        -->
+    }
+    <div [class.blurred]="!isConnected && hasAttemptedConnection">
+        <body>
+            <div class="status-bar">
+                <span class="status-pill" [class.online]="isConnected">
+                    {{ isConnected ? '● Online' : '○ Offline' }}
+                </span>
+    
+                @if (isConnected) {
+                    <span class="battery-info">🔋 100%</span>
+                }
+            </div>
 
-        <hr />
-
+            <div class="data-display">
+                <pre>Raw Data: {{ items | json }}</pre>
+                <div class="value-card">
+                    <h3>Current Value: {{ items.y }}</h3>
+                    <p>Last Updated: {{ items.x | date:'mediumTime' }}</p>
+                </div>
+            </div>
+        <!--
         <div class="data-display">
             <pre>Raw Data: {{ items | json }}</pre>
             <div class="value-card">
@@ -24,6 +43,7 @@
                 <p>Last Updated: {{ items.x | date:'mediumTime' }}</p>
             </div>
         </div>
+    -->
 
         <div class="controls">
             <button (click)="initBluetooth()" [disabled]="isConnected">
@@ -41,11 +61,12 @@
         </div>
         -->
         <!--<div #chart></div>-->
-        <div class="form-container">
-            <form [formGroup]="optionsForm" (ngSubmit)="settings()">
-                <button type="submit">Settings</button>
-            </form>
-        </div>
-    </body>
+            <div class="form-container">
+                <form [formGroup]="optionsForm" (ngSubmit)="settings()">
+                    <button type="submit">Settings</button>
+                </form>
+            </div>
+        </body>
+    </div>
 </html>
 <router-outlet></router-outlet>

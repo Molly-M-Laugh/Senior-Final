@@ -11,7 +11,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'home',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Client // To access browser
   },
   {
     path: 'settings',
