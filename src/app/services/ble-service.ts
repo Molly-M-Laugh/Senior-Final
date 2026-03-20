@@ -14,6 +14,7 @@ export class BleService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: object, private ngZone: NgZone) {}
 
+  // This handles the BLE ESP32 connection logic
   async connect() {
     if (!isPlatformBrowser(this.platformId)) return;
 
@@ -33,34 +34,19 @@ export class BleService {
         this.dataCharacteristic = null;
         this.commandChar = null;
       });
-
       console.log("Added disconnect");
 
       this.gattServer = await device.gatt!.connect();
       const service = await this.gattServer.getPrimaryService('ab2d02b4-ad53-400f-bf7e-d603a657d07d');
       console.log("Retreived service");
 
-      // 1. Setup the Data Characteristic (to receive values)
-      /*
-      const characteristic = await service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372');
-      this.dataCharacteristic = characteristic;
+      const dataChar = await service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372');
+      this.dataCharacteristic = dataChar;
+      console.log("Retreived characteristic");
 
-      // Start notifications so we don't have to poll manually
-      await characteristic.startNotifications();
-      characteristic.addEventListener('characteristicvaluechanged', (event: any) => {
-        const value = new TextDecoder().decode(event.target.value);
-        this.deviceValue$.next(value);
-      });
-
-      console.log("Connected to ESP32 via Browser");
-      */
-    const dataChar = await service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372');
-    this.dataCharacteristic = dataChar;
-    console.log("Retreived characteristic");
-    await dataChar.startNotifications();
-    dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
+      await dataChar.startNotifications();
+      dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
       const value = new TextDecoder().decode(event.target.value);
-      //this.deviceValue$.next(value);
 
       // Force Angular to recognize this asynchronous Bluetooth event
       this.ngZone.run(() => {
@@ -70,9 +56,9 @@ export class BleService {
     });
     console.log("Added event listener");
 
+
     // 2. Setup the Command Characteristic (to send triggers)
     this.commandChar = await service.getCharacteristic('58bb99f3-75cb-48cb-81e4-346cc4f0687d');
-
     console.log("Connected and Command Char ready.");
 
     // If we got this far, we are connected
@@ -83,6 +69,7 @@ export class BleService {
       throw error;
     }
   }
+
 
   async sendCommand(cmdValue: string) {
     if (!this.commandChar) {
@@ -101,6 +88,7 @@ export class BleService {
     }
   }
 
+
   async read(): Promise<string> {
     if (!this.dataCharacteristic) {
       console.error("Not connected to a characteristic yet.");
@@ -117,8 +105,7 @@ export class BleService {
       this.ngZone.run(() => {
         this.deviceValue$.next(decoded);
       });
-      return decoded;
-      //this.deviceValue$.next(decoded); // Update the stream
+      return decoded; // Update the stream
     } catch (error) {
       console.error("Manual read failed:", error, ", assuming disconnect - please re-pair.");
 

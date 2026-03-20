@@ -22,10 +22,6 @@
                 <span class="status-pill" [class.online]="isConnected">
                     {{ isConnected ? '● Online' : '○ Offline' }}
                 </span>
-    
-                @if (isConnected) {
-                    <span class="battery-info">🔋 100%</span>
-                }
             </div>
 
             <div class="data-display">
@@ -33,34 +29,20 @@
                 <div class="value-card">
                     <h3>Current Value: {{ items.y }}</h3>
                     <p>Last Updated: {{ items.x | date:'mediumTime' }}</p>
+                    <p>In seconds: {{ items.xSeconds }}</p>
                 </div>
             </div>
-        <!--
-        <div class="data-display">
-            <pre>Raw Data: {{ items | json }}</pre>
-            <div class="value-card">
-                <h3>Current Value: {{ items.y }}</h3>
-                <p>Last Updated: {{ items.x | date:'mediumTime' }}</p>
-            </div>
-        </div>
-    -->
 
-        <div class="controls">
-            <button (click)="initBluetooth()" [disabled]="isConnected">
-                1. Pair ESP32
-            </button>
-    
-            <button (click)="requestNewData()" [disabled]="!isConnected">
-                2. Query New Data
-            </button>
-        </div>
-        <!--<pre>{{ items | json }}</pre>-->
-        <!--
-        <div>
-            <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}" (chartInstance)="getChartInstance($event)"></canvasjs-chart>    
-        </div>
-        -->
-        <!--<div #chart></div>-->
+            <div class="controls">
+                <button (click)="initBluetooth()" [disabled]="isConnected">
+                    Pair ESP32
+                </button>
+            </div>
+        
+            <div>
+                <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}" (chartInstance)="getChartInstance($event)"></canvasjs-chart>    
+            </div>
+        
             <div class="form-container">
                 <form [formGroup]="optionsForm" (ngSubmit)="settings()">
                     <button type="submit">Settings</button>
