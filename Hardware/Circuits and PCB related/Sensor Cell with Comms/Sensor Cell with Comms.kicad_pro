@@ -54,12 +54,16 @@
       "diff_pair_dimensions": [],
       "drc_exclusions": [
         [
+          "net_conflict|117475000|84190000|d2850fde-7d9d-4bcf-bb1d-1ba3f37fbdbe|00000000-0000-0000-0000-000000000000",
+          "Simplification from using the breakout board"
+        ],
+        [
           "net_conflict|70500000|49000000|3fbfb132-d7d0-4d70-a45c-0c0f661f0d93|00000000-0000-0000-0000-000000000000",
-          ""
+          "Simplification from using the breakout board"
         ],
         [
           "net_conflict|95500000|45620000|20d27f35-6fae-44e8-b297-bf2281e8f128|00000000-0000-0000-0000-000000000000",
-          ""
+          "Simplification from using the breakout board"
         ]
       ],
       "meta": {
@@ -601,7 +605,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../PCB_Gerber/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
