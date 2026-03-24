@@ -24,6 +24,7 @@ struct ContentView: View {
     @State var number = 0
     @State var state = "Searching"
     @State var loginStatus = false
+    @State var registering = false
     @State private var username: String = ""
     @State private var password: String = ""
     var manager = BLEHandler()
@@ -81,14 +82,39 @@ struct ContentView: View {
                 }).buttonStyle(.bordered)
             }
         }
-        else{
+        else if (registering == false){
             Text("Please login:")
                 .font(.largeTitle)
             TextField("Username:", text: $username)
-            SecureField("Password", text: $password)
+            TextField("Password", text: $password)
             Button("Login", action:{
-                loginStatus = true
+                httpManager.login(username: username, password: password)
+                
+                loginStatus = httpManager.loginResults
             })
+            Button("Refresh", action:{
+                loginStatus = httpManager.loginResults
+            })
+            Button("Register New User", action:{
+                registering = true
+                httpManager.loginResults = false
+                httpManager.registerResults = false
+            })
+            
+        }
+        else{
+            Text("Please enter your new information:")
+                .font(.largeTitle)
+            TextField("New Username:", text: $username)
+            TextField("New Password", text: $password)
+            Button("Create Account", action:{
+                httpManager.register(username: username, password: password)
+                
+            })
+            Button("Refresh", action:{
+                registering = !(httpManager.registerResults)
+            })
+            
         }
     }
 }
