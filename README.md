@@ -9,4 +9,4 @@ Put some base organization, hardware files in general should be put into the ove
 
 ### Software
 
-C, please fill free to organize how you feel, as wasn't sure what frontend and backend you'd like, as well as where microcontroller files worked out alongside T may be desired within.
+This folder includes our work on everything in our software stack. We have our code for our ESP32 handling BLE communication, IOS app code, our frontend website, and our backend api.
