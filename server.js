@@ -179,12 +179,12 @@ app.put('/api/update/:id', async (req, res) => {
 });
 // NOTE: Later, change to be for a specific id
 app.post('/api/data', async (req, res) => {
-  client.connect();
   const { user, time, temp } = req.body;
   if (temp == -0.01) {
     return res.json({is_inserted : true});
   }
   try {
+  client.connect();
   const result = await client.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
   const resNum = parseFloat(result.rows[0].temperature);
   if (resNum < 100) {
