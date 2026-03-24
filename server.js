@@ -140,10 +140,11 @@ const client = new Client({
   }
 });
 
-client.connect();
+//client.connect();
 
 app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
+  client.connect();
   const { username, password } = req.body;
   try {
     const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
@@ -155,6 +156,7 @@ app.post('/api/register', async (req, res) => {
   client.end();
 });
 app.post('/api/login', async (req, res) => {
+  client.connect();
   const { username, password } = req.body;
   try {
     const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
@@ -167,6 +169,7 @@ app.post('/api/login', async (req, res) => {
   client.end();
 });
 app.put('/api/update/:id', async (req, res) => {
+  client.connect();
   const { id } = req.params;
   const { username, password } = req.body;
   //await client.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id])
@@ -176,6 +179,7 @@ app.put('/api/update/:id', async (req, res) => {
 });
 // NOTE: Later, change to be for a specific id
 app.post('/api/data', async (req, res) => {
+  client.connect();
   const { user, time, temp } = req.body;
   if (temp == -0.01) {
     return res.json({is_inserted : true});
@@ -195,6 +199,7 @@ app.post('/api/data', async (req, res) => {
 });
 // NOTE: Later change to be for a specific id
 app.get('/api/data-init', async (req, res) => {
+  client.connect();
   const user = 1; // Hardcode for now
   // Example for when switch to specific id
   //const user = users.find(u => u.id === parseInt(req.params.id));
