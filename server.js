@@ -37,6 +37,7 @@ const cors = require('cors'); // Link Angular, NodeJS
 const service = 'ab2d02b4-ad53-400f-bf7e-d603a657d07d';
 const dataChar = '05ac146f-aee8-4659-aba5-882c1f7e0372';
 const commandChar = '58bb99f3-75cb-48cb-81e4-346cc4f0687d';
+var isInserted = false; // Mutual declaration, for keeping track that data inserted properly
 
 // Put most specific link here
 app.use(express.json()); // For correct form parsing for db
@@ -48,7 +49,7 @@ app.use(cors({
     optionsSuccessStatus: 200
     //credentials: true // Later for auth. found may be part of that
 }));
-
+/*
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -89,8 +90,46 @@ app.put('/api/update-password', async (req, res) => {
     console.error(err);
   }
 });
+// NOTE: Later, change to be for a specific id
+app.post('/api/data', async (req, res) => {
+  const { user, time, temp } = req.body;
+  if (temp == -0.01) {
+    console.log("Should not store, returning early");
+    return res.json({is_inserted : true});
+  }
+  console.log('Values:', user, ", ", time, "; ", temp);
+  try {
+  console.log("Made it to insert");
+  const result = await pool.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
+  console.log("Inserted some value");
+  const resNum = parseFloat(result.rows[0].temperature);
+  if (resNum < 100) {
+    isInserted = Number(parseFloat(resNum).toFixed(2)) == temp;
+  } else {
+    isInserted = Number(parseFloat(resNum).toFixed(1)) === temp;
+  }
+  console.log("Return boolean is: ", isInserted, ", for: ", temp, ", ", resNum);
+  res.json({is_inserted : isInserted});
+  } catch (err) {
+    console.error(err);
+  }
+});
+// NOTE: Later change to be for a specific id
+app.get('/api/data-init', async (req, res) => {
+  const user = 1; // Hardcode for now
+  // Example for when switch to specific id
+  //const user = users.find(u => u.id === parseInt(req.params.id));
+  try {
+    const result = await pool.query('SELECT (record_date, temperature) FROM temp_data WHERE (user_id = $1)', [user]);
+    res.json(result.rows); // Want all data points
+  } catch (err) {
+    console.error(err);
+  }
+});
+*/
 
-/*
+
+
 // Heroku DB, use client rather than pool
 
 const Client = require('pg').Client;
@@ -135,7 +174,37 @@ app.put('/api/update/:id', async (req, res) => {
   res.send('Updated');
   client.end();
 });
-*/
+// NOTE: Later, change to be for a specific id
+app.post('/api/data', async (req, res) => {
+  const { user, time, temp } = req.body;
+  if (temp == -0.01) {
+    return res.json({is_inserted : true});
+  }
+  try {
+  const result = await client.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
+  const resNum = parseFloat(result.rows[0].temperature);
+  if (resNum < 100) {
+    isInserted = Number(parseFloat(resNum).toFixed(2)) == temp;
+  } else {
+    isInserted = Number(parseFloat(resNum).toFixed(1)) === temp;
+  }
+  res.json({is_inserted : isInserted});
+  } catch (err) {
+    console.error(err);
+  }
+});
+// NOTE: Later change to be for a specific id
+app.get('/api/data-init', async (req, res) => {
+  const user = 1; // Hardcode for now
+  // Example for when switch to specific id
+  //const user = users.find(u => u.id === parseInt(req.params.id));
+  try {
+    const result = await client.query('SELECT (record_date, temperature) FROM temp_data WHERE (user_id = $1)', [user]);
+    res.json(result.rows); // Want all data points
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 // NOTE: For only database, modify for Heroku and local!!!
 // BLE API calls (ie. update data)
