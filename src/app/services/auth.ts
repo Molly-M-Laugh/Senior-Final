@@ -1,7 +1,7 @@
 import { Injectable, inject, signal} from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 
@@ -21,9 +21,15 @@ export class Auth {
     return this.http.post(`${this.apiUrl}/login`, {password: password}, {withCredentials:true}).pipe(
       tap(() => {
         this.loggedIn.next(true);
-      })
-    );
-  }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if(error.status === 401){
+          this.loggedIn.next(false);
+        }
+        return throwError(() => error);
+      }
+    )
+  )}
 
   logout(): void{
     this.redirectUrl = null;
