@@ -163,7 +163,9 @@ app.post('/api/login', async (req, res) => {
     // Later, have check if no value returned
     const isMatch = result.rows[0]?.is_match || false;
     res.json({is_match : isMatch});
-    res.statusCode = 401
+    if(isMatch == false){
+      res.status(401);
+    }
   } catch (err) {
     console.error(err);
   }
