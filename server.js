@@ -162,9 +162,11 @@ app.post('/api/login', async (req, res) => {
     const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
     // Later, have check if no value returned
     const isMatch = result.rows[0]?.is_match || false;
-    res.json({is_match : isMatch});
-    if(isMatch == false){
-      res.status(401);
+    if(isMatch){
+      res.json({is_match : isMatch});
+    }
+    else{
+      res.status(401).json({is_match : isMatch});
     }
   } catch (err) {
     console.error(err);
