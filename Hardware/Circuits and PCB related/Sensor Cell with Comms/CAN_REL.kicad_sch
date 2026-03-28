@@ -734,168 +734,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Diode:SMAJ12CA"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "D"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SMAJ12CA"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Diode_SMD:D_SMA"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "bidirectional diode TVS voltage suppressor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "D*SMA*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "SMAJ12CA_0_1"
-				(polyline
-					(pts
-						(xy -2.54 -1.27) (xy 0 0) (xy -2.54 1.27) (xy -2.54 -1.27)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.508 1.27) (xy 0 1.27) (xy 0 -1.27) (xy -0.508 -1.27)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 1.27) (xy 2.54 -1.27) (xy 0 0) (xy 2.54 1.27)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SMAJ12CA_1_1"
-				(pin passive line
-					(at -3.81 0 0)
-					(length 2.54)
-					(name "A1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 3.81 0 180)
-					(length 2.54)
-					(name "A2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Interface_CAN_LIN:MCP2518FD-xQBB"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1482,6 +1320,270 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Power_Protection:NUP2105L"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 5.715 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "NUP2105L"
+				(at 5.715 0.635 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+				(at 5.715 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF"
+				(at 3.175 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Dual Line CAN Bus Protector, 24Vrwm"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "can esd protection suppression transient"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "SOT?23*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "NUP2105L_0_0"
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "NUP2105L_0_1"
+				(rectangle
+					(start -4.445 2.54)
+					(end 4.445 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 1.27) (xy -3.175 0.635) (xy -1.905 0.635) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 2.54) (xy -2.54 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 0.635) (xy -2.54 -1.27) (xy 2.54 -1.27) (xy 2.54 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 0.635) (xy -1.905 -0.635) (xy -3.175 -0.635) (xy -2.54 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 0.635) (xy -3.175 1.905) (xy -1.905 1.905) (xy -2.54 0.635) (xy -2.54 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.27) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.905 0.635) (xy 2.54 0.635) (xy 3.175 0.635) (xy 3.81 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 2.54) (xy 2.54 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 0.635) (xy 1.905 -0.635) (xy 3.175 -0.635) (xy 2.54 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 0.635) (xy 3.175 1.905) (xy 1.905 1.905) (xy 2.54 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "NUP2105L_1_1"
+				(pin passive line
+					(at -2.54 5.08 270)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+3V3"
 			(power)
 			(pin_numbers
@@ -1710,12 +1812,6 @@
 		)
 	)
 	(junction
-		(at 110.49 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "00fe6c44-2ed7-4d40-8884-d97f644f516c")
-	)
-	(junction
 		(at 101.6 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1746,10 +1842,10 @@
 		(uuid "2b3e370a-1448-4ae3-8229-5ee5a98a245c")
 	)
 	(junction
-		(at 110.49 41.91)
+		(at 118.11 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "3db03a81-cdde-4cb9-8f53-ee9e6ec91ab7")
+		(uuid "3b8c622c-7178-4bf5-9a0a-10c685f60b54")
 	)
 	(junction
 		(at 101.6 50.8)
@@ -1762,12 +1858,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4cd1069f-52b3-4232-98b2-d859b298ec34")
-	)
-	(junction
-		(at 110.49 33.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6b34ed45-b8b2-4e38-b5a5-514082806216")
 	)
 	(junction
 		(at 101.6 41.91)
@@ -1842,6 +1932,12 @@
 		(uuid "cfef0cf1-1d80-4d10-abb9-180970afe7a8")
 	)
 	(junction
+		(at 118.11 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dac7b9c0-babe-4948-a85d-3e4283ec8e9a")
+	)
+	(junction
 		(at 83.82 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1859,7 +1955,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 33.02) (xy 110.49 33.02)
+			(xy 101.6 33.02) (xy 118.11 33.02)
 		)
 		(stroke
 			(width 0)
@@ -1969,6 +2065,16 @@
 	)
 	(wire
 		(pts
+			(xy 118.11 44.45) (xy 118.11 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "178e3259-f563-44bb-9e4e-9304a4c6ccbd")
+	)
+	(wire
+		(pts
 			(xy 78.74 39.37) (xy 78.74 33.02)
 		)
 		(stroke
@@ -1976,6 +2082,16 @@
 			(type default)
 		)
 		(uuid "18eb1b31-1cb6-47e5-841e-edbea5346e71")
+	)
+	(wire
+		(pts
+			(xy 118.11 50.8) (xy 125.73 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1e1d351c-f78a-4d39-9b2e-58b63d8e7dbf")
 	)
 	(wire
 		(pts
@@ -2006,16 +2122,6 @@
 			(type default)
 		)
 		(uuid "21606b77-9306-4c87-813e-613c884d482f")
-	)
-	(wire
-		(pts
-			(xy 110.49 40.64) (xy 110.49 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "23d01284-9e3c-4588-bdcd-f68c41ebd38a")
 	)
 	(wire
 		(pts
@@ -2149,6 +2255,16 @@
 	)
 	(wire
 		(pts
+			(xy 101.6 41.91) (xy 107.95 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48ec44c8-ee97-47d9-8d5e-fb744abf304c")
+	)
+	(wire
+		(pts
 			(xy 45.72 31.75) (xy 45.72 36.83)
 		)
 		(stroke
@@ -2249,16 +2365,6 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 33.02) (xy 125.73 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "662879ec-254d-44f4-95cd-94dcc102b083")
-	)
-	(wire
-		(pts
 			(xy 119.38 107.95) (xy 104.14 107.95)
 		)
 		(stroke
@@ -2319,16 +2425,6 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 50.8) (xy 110.49 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7cf1f958-ed8e-483f-ab11-26a595bfeaac")
-	)
-	(wire
-		(pts
 			(xy 78.74 100.33) (xy 93.98 100.33)
 		)
 		(stroke
@@ -2386,16 +2482,6 @@
 			(type default)
 		)
 		(uuid "8ce29c5a-b3cd-4cee-83dc-e3928fb87cdb")
-	)
-	(wire
-		(pts
-			(xy 119.38 41.91) (xy 110.49 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8d09d81e-c6c0-42f7-9d17-df00b403c6d7")
 	)
 	(wire
 		(pts
@@ -2469,16 +2555,6 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 41.91) (xy 110.49 43.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab959da9-c241-49f2-9b52-9cdf9eda35c4")
-	)
-	(wire
-		(pts
 			(xy 87.63 133.35) (xy 93.98 133.35)
 		)
 		(stroke
@@ -2519,7 +2595,7 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 50.8) (xy 125.73 50.8)
+			(xy 101.6 50.8) (xy 118.11 50.8)
 		)
 		(stroke
 			(width 0)
@@ -2569,6 +2645,16 @@
 	)
 	(wire
 		(pts
+			(xy 118.11 33.02) (xy 125.73 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bced0eef-18be-4509-8aad-f18fd9a9d40a")
+	)
+	(wire
+		(pts
 			(xy 93.98 149.86) (xy 93.98 151.13)
 		)
 		(stroke
@@ -2576,16 +2662,6 @@
 			(type default)
 		)
 		(uuid "bcfca0d1-c0c1-469c-964b-d29a618c6d8f")
-	)
-	(wire
-		(pts
-			(xy 110.49 41.91) (xy 101.6 41.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c3e5e7e5-39a8-4731-9200-4762ff96070e")
 	)
 	(wire
 		(pts
@@ -2626,6 +2702,16 @@
 			(type default)
 		)
 		(uuid "d7bcaf49-611c-4e80-a391-6dfbbb978720")
+	)
+	(wire
+		(pts
+			(xy 118.11 33.02) (xy 118.11 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dcb0296d-243d-4b04-b1b0-ffb03dcf75be")
 	)
 	(wire
 		(pts
@@ -3814,76 +3900,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Diode:SMAJ12CA")
-		(at 110.49 36.83 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5c8ce88f-c3b6-4c7c-b6ba-655efe2085e2")
-		(property "Reference" "D1"
-			(at 113.03 35.5599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "SMAJ12CA"
-			(at 113.03 38.0999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 115.57 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
-			(at 110.49 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
-			(at 110.49 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "5549de9e-d4f7-48ad-b874-d56adeaa34e2")
-		)
-		(pin "1"
-			(uuid "7856f281-ff34-4ca7-9030-b144e1e5f2c8")
-		)
-		(instances
-			(project "Sensor Cell with Comms"
-				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
-					(reference "D1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 53.34 49.53 180)
 		(unit 1)
@@ -4351,141 +4367,6 @@
 			(project "Sensor Cell with Comms"
 				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
 					(reference "#PWR036")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 119.38 41.91 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "7aed9f04-0a8d-41fd-8182-e826bbcadc5a")
-		(property "Reference" "#PWR048"
-			(at 119.38 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 120.65 41.402 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 119.38 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 119.38 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 119.38 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1dec288e-e213-41d0-a6ed-203216a4715e")
-		)
-		(instances
-			(project "Sensor Cell with Comms"
-				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
-					(reference "#PWR048")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Diode:SMAJ12CA")
-		(at 110.49 46.99 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7dbddef1-5ab9-47e1-af0b-ed0273448425")
-		(property "Reference" "D2"
-			(at 113.03 45.7199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "SMAJ12CA"
-			(at 113.03 48.2599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 115.57 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.littelfuse.com/media?resourcetype=datasheets&itemid=75e32973-b177-4ee3-a0ff-cedaf1abdb93&filename=smaj-datasheet"
-			(at 110.49 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "400W bidirectional Transient Voltage Suppressor, 12.0Vr, SMA(DO-214AC)"
-			(at 110.49 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "ffbc3c37-5ac1-47e7-92e9-77d2eaac4b5c")
-		)
-		(pin "1"
-			(uuid "2065f362-8405-496e-b83f-16c5a83e26a4")
-		)
-		(instances
-			(project "Sensor Cell with Comms"
-				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
-					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -5599,6 +5480,77 @@
 			(project "Sensor Cell with Comms"
 				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
 					(reference "#PWR049")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Power_Protection:NUP2105L")
+		(at 113.03 41.91 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d69df9b8-1d4b-406c-837b-a06d00f8d47f")
+		(property "Reference" "D8"
+			(at 113.792 48.514 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "NUP2105L"
+			(at 113.03 35.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+			(at 111.76 47.625 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF"
+			(at 116.205 45.085 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Dual Line CAN Bus Protector, 24Vrwm"
+			(at 113.03 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "79dbf59a-a401-4aee-a112-35f3b4d6bf1c")
+		)
+		(pin "1"
+			(uuid "36b02bbc-cce8-46c4-b108-8c84932bfaf5")
+		)
+		(pin "2"
+			(uuid "43b7f0ea-6100-4b57-aaa9-9fbca49111a7")
+		)
+		(instances
+			(project ""
+				(path "/953799b5-f11e-4770-941d-f5d23acc5c6d/779df1c1-ac91-4afc-a9dd-e99c8e3614d8"
+					(reference "D8")
 					(unit 1)
 				)
 			)

@@ -9752,7 +9752,7 @@
 				)
 			)
 		)
-		(property "Value" "SMF20A"
+		(property "Value" "RCLAMP01811PW.C"
 			(at 229.87 134.62 0)
 			(effects
 				(font
@@ -11145,7 +11145,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SMF36A"
+		(property "Value" "SMBJ3V3-E3/5B"
 			(at 58.42 77.4699 90)
 			(effects
 				(font
@@ -11359,7 +11359,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Molex:Molex_Micro-Latch_53254-0370_1x03_P2.00mm_Horizontal"
+		(property "Footprint" "footprintLib:CONN_SD-43650-001_03_MOL"
 			(at 15.24 99.06 0)
 			(effects
 				(font
@@ -11895,7 +11895,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SMF20A"
+		(property "Value" "RCLAMP01811PW.C"
 			(at 82.55 68.5799 90)
 			(effects
 				(font
