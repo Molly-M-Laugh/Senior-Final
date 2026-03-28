@@ -36,12 +36,8 @@ struct ContentView: View {
         if(loginStatus){
             if manager.devices.isEmpty{
                 ProgressView("\(state)").progressViewStyle(.circular)
-                Text("Debug: \(manager.debugVariable)")
                 Text("Scanning: \(manager.isScanning)")
-                Button("try to connect"){
-                    state = "Button pushed, searching"
-                    manager.startScan()
-                }
+                
             }
             else if !manager.isConnected{
                 Text("I'm trying to debug this")
@@ -56,9 +52,8 @@ struct ContentView: View {
                 Text("Connection Status: \(manager.isConnected)")
             }
             else {
-                Text("Debug Variable: \(manager.debugVariable)")
+                //Text("Debug Variable: \(manager.debugVariable)")
                 Text("Our current reading: \(manager.lastValue)")
-                Text("Last command sent: \(manager.lastCommandValue)")
                 HStack{
                     Button("Reset value",action: {
                         manager.sendCommand("12")
