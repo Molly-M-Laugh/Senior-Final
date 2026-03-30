@@ -41,6 +41,7 @@ export class Login {
         },
         error: (err) => {
           alert("Login failed on invalid credentials or unable to link");
+          this.unactiveLogin = false;
         },
         complete: () => {
           this.unactiveLogin = false; // re-enable after request finishes
