@@ -41,11 +41,11 @@ class HttpHandler: NSObject{
             switch response.result {
             case .success(_):
                 if(response.response?.statusCode == 200){
-                    self.loginResults = false
+                    self.loginResults = true
                     return
                 }
                 else{
-                    self.loginResults = true
+                    self.loginResults = false
                     return
                 }
                 

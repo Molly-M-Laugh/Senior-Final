@@ -31,7 +31,6 @@ struct ContentView: View {
     var httpManager = HttpHandler()
     
     
-    
     var body: some View{
         if(loginStatus){
             if manager.devices.isEmpty{
