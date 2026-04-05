@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { JsonPipe, DatePipe } from '@angular/common';
-import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { CanvasJSAngularChartsModule, CanvasJSChart } from '@canvasjs/angular-charts';
 import { interval, Subscription } from 'rxjs';
 import { HttpClient} from '@angular/common/http';
 import { BleService } from '../../services/ble-service';
@@ -25,51 +25,198 @@ export class Home implements OnInit, OnDestroy {
   router = inject(Router);
   private dataService = inject(DataService);
   data: Data[] = [];
-  // dps = graph pushed values, below were templated initial values
-  //dps = [{x: 1, y: 10}, {x: 2, y: 13}, {x: 3, y: 18}, {x: 4, y: 20}, {x: 5, y: 17},{x: 6, y: 10}, {x: 7, y: 13}, {x: 8, y: 18}, {x: 9, y: 20}, {x: 10, y: 17}];
-	dps: any[] = new Array(10).fill(null).map(() => ({})); // Empty array for then adding to for the chart
   chart: any;
   private startTime: Date = new Date('2023-10-27T10:00:00'); // Keep as such but reassign when get first date value
 
   private ble = inject(BleService);
   // Items is for testing only, delete instances when moving to finalize
-  items: any = { x: new Date(), xSeconds: new Date().getTime(), difference: 0, y: 0 };
+  items: any = { x: new Date().toUTCString(), xSeconds: new Date().getTime(), difference: 0, y: 0 };
   isConnected = false;
+  private scale = 5 * 60 * 1000; // Default scale is last 5 minutes (1000 ms/s * 60 s/min * 5 min)
+  private launchTime = new Date();
+  private formatString = "HH:mm:ss"
 	
+  // Note: Find way to create new chart instance as hard time shifting down frame
+  // as well as implement data shifting frame when updating graph and not just on scale shift
 	chartOptions = {
 	  exportEnabled: true,
 	  title: {
 		text: "Bluetooth random data"
 	  },
+    axisX: {
+      minimum : new Date(this.launchTime.getTime() - 5 * 60000),
+      maximum : this.launchTime,
+      valueFormatString: this.formatString
+    },
 	  data: [{
 		type: "line",
-		dataPoints: this.dps
+		dataPoints: [] as { x: Date; y: number }[]
 	  }]
 	}
-  ngOnInit () {
-    // Items under update chart went here before
-    // Otherwise, will put the initial values loaded here
-    /*
-    // Will eventually implement, but for now, need to figure out how to signal to get the return will be array of json
-    // (and have services, interfaces to initially try), but for time, will only implement data load for Heroku
+
+  ngOnInit(): void {
+    setTimeout(() => {
     this.dataService.getData()
     //this.http.get('api/data-init', dataValue)
       .subscribe({
-        next: response => {
-        if (response != null) {
-          this.data = response;
-          // First see what is returned
-          console.log(response[0]);
-          //new Date(isoString) // For later converting data back to string
+        next: (response: any[]) => {
+          if (response != null) {
+            // Change the scale later, but for seconds stay to last 30 minutes - actually last 5 minutes
+            const thirtyMinutesAgo = new Date(Date.now() - this.scale);
+
+            this.chartOptions.data[0].dataPoints = (response
+              .filter(item => {
+                const itemDate = new Date(item.record_date);
+                return itemDate >= thirtyMinutesAgo; // Only keep recent data
+              })
+              .map(item => {
+                const dateStr = item.record_date;
+                // Strip milliseconds and Z to be a valid date
+                const cleanDate = dateStr.includes('.') ? dateStr.split('.')[0] : dateStr;
+
+                return {
+                  x: new Date(cleanDate),
+                  y: parseFloat(item.temperature)
+                };
+              })).slice(-20); // Keep only last 20 values for visability
+
+        } else {
+          console.log("Response is empty");
         }
         },
         error: (err) => {
           alert("Login failed on invalid credentials or unable to link");
         }
       });
-    */
+      this.chart.render();
+    }, 1000);
+
+    this.statusSub = this.ble.isConnected$.subscribe(status => {
+      this.isConnected = status;
+      if (!status) {
+        console.log("Polling paused - waiting for reconnection.");
+      } else {
+        console.log("Polling active.");
+      }
+    });
   }
 
+  // Clean up the timer when the component is destroyed
+  ngOnDestroy() {
+    this.statusSub?.unsubscribe();
+    this.dataIntervalSub?.unsubscribe();
+  }
+  
+  getChartInstance(chart: object) {
+		this.chart = chart;
+    this.updateChart();
+    // Interval rather set in ngOnInit
+	}
+
+  // BLE will update at its own rate, but repeat data retrieval every second
+  // Would need to re-insert logic to pause graph when disconnected if wanted
+  updateChart() {
+    this.dataService.getData()
+    //this.http.get('api/data-init', dataValue)
+      .subscribe({
+        next: (response: any[]) => {
+          if (response) {
+            const thirtyMinutesAgo = new Date(Date.now() - this.scale);
+
+            // Update the dataPoints reference
+            this.chartOptions.data[0].dataPoints = response
+              .filter(item => new Date(item.record_date) >= thirtyMinutesAgo)
+              .map(item => ({
+                x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
+                y: parseFloat(item.temperature)
+              }))
+              .slice(-20);
+
+            if (this.chart) {
+              this.chart.render();
+            }
+          }
+        }
+      });
+  }
+
+  onSelectionChange(value: string) {
+    this.launchTime = new Date();
+    this.launchTime = new Date(this.launchTime.getTime() + 10 * 1000); // While rest builds, put up to 10 seconds ahead
+
+    if (value.match('s')) {
+      this.scale = 5 * 60 * 1000; // 1000 ms/s * 60 s/min * 5 min = Last 5 minutes
+      this.formatString = "HH:mm:ss"
+    } else if (value.match('m')) {
+      this.scale = 60 * 60 * 1000; // 1000 ms/s * 60 s/min * 60 min/hr = Last hour
+      this.formatString = "HH:mm:ss"
+    } else if (value.match('h')) {
+      this.scale = 24 * 60 * 60 * 1000; // 1000 ms/s * 60 s/min * 60 min/hr * 24 hr = Last day
+      this.formatString = "MMM D HH:mm:ss"
+    } else if (value.match('W')) {
+      this.scale = 7 * 24 * 60 * 60 * 1000; // 1000 ms/s * 60 s/min * 60 min/hr * 24 hr/days * 7 days = Last week
+      this.formatString = "MMM D HH:mm:ss"
+    } else {
+      return;
+    }
+
+    // Reset the graph scale
+    const minDate = new Date(this.launchTime.getTime() - this.scale);
+    this.chartOptions = {
+	  exportEnabled: true,
+	  title: {
+		text: "Bluetooth random data"
+	  },
+    axisX: {
+      minimum : minDate,
+      maximum : this.launchTime,
+      valueFormatString: this.formatString
+    },
+	  data: [{
+		type: "line",
+		dataPoints: [] as { x: Date; y: number }[]
+	  }]
+	}
+
+    this.dataService.getData()
+    //this.http.get('api/data-init', dataValue)
+      .subscribe({
+        next: (response: any[]) => {
+          if (response) {
+            const thirtyMinutesAgo = new Date(Date.now() - this.scale);
+
+            // Update the dataPoints reference
+            this.chartOptions.data[0].dataPoints = response
+              .filter(item => new Date(item.record_date) >= thirtyMinutesAgo)
+              .map(item => ({
+                x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
+                y: parseFloat(item.temperature)
+              }))
+              .slice(-20);
+
+            if (this.chart) {
+              this.chart.render();
+            }
+          } else {
+          console.log("Response is empty");
+        }
+        },
+        error: (err) => {
+          alert("Login failed on invalid credentials or unable to link");
+        }
+      });
+  }
+
+  // General (form) items  below --------------------------------------------------------------
+  constructor(private fb:FormBuilder, private http: HttpClient){
+    this.optionsForm=this.fb.group({});
+  }
+
+  settings(){
+    this.router.navigateByUrl("/settings");
+  }
+
+  // BLE items below -------------------------------------------------------------------------
   async initBluetooth() {
     this.hasAttemptedConnection = true;
     try {
@@ -106,12 +253,14 @@ export class Home implements OnInit, OnDestroy {
     const dataValue = { user: 1, time: dateItem.toISOString(), temp: latestValue };
 
     // Make insert to database before displaying debug code
-    //this.http.post<{is_inserted : boolean}>('http://localhost:8080/api/data', dataValue)
-    this.http.post<{is_inserted : boolean}>('api/data', dataValue)
+    this.http.post<{is_inserted : boolean}>('http://localhost:8080/api/data', dataValue)
+    //this.http.post<{is_inserted : boolean}>('api/data', dataValue)
       .subscribe({
         next: response => {
         if (!response.is_inserted) {
           alert("A data value failed to insert!");
+        } else {
+          this.updateChart();
         }
         },
         error: (err) => {
@@ -119,73 +268,9 @@ export class Home implements OnInit, OnDestroy {
         }
       });
 
-    this.items = { x: dateItem,xSeconds: dateItem.getTime(), y: latestValue};
+    //this.items = { x: dateItem.toUTCString(),xSeconds: dateItem.getTime(), y: latestValue};
   
     // The ESP32 will then run BtTemp->notify(), which 
     // automatically updates this.items via the subscription in ngOnInit/updateChart.
-  }
-
-	getChartInstance(chart: object) {
-		this.chart = chart;
-		setTimeout(this.updateChart, 1000); //Chart updated every 1 second
-    // Note: Change timeout/add checks if no new data(?)
-	}
-
-	updateChart = () => {
-    // 1. Existing data subscriber
-    this.ble.deviceValue$.subscribe((val: string) => {
-      if (val == '-0.01' || val == '0.00') return;
-
-      const numericValue = parseFloat(val);
-      if (isNaN(numericValue)) return;
-
-      // Update the local items object for the HTML (testing) 
-      // And otherwise update the graph data object
-      const xVal: Date = new Date();
-      this.items = { x: xVal, xSeconds: xVal.getTime(), y: val };
-
-      if (this.startTime.getTime() === new Date('2023-10-27T10:00:00').getTime()) { // If first time of data, put 1st as load
-        this.startTime = xVal;
-        this.dps.push({ x: 0, y: numericValue });
-      } else {
-        const timeDifSec: number = (xVal.getTime() - this.startTime.getTime()) / 1000;
-        this.dps.push({ x: timeDifSec, y:numericValue });
-
-      }
-
-      // Keep the chart from getting too crowded (e.g., last 20 points)
-      if (this.dps.length > 20) {
-        this.dps.shift();
-      }
-
-      // Re-render the chart if the instance exists
-      if (this.chart) {
-        this.chart.render();
-      }
-    });
-
-    // 2. Monitor connection status automatically
-    this.statusSub = this.ble.isConnected$.subscribe(status => {
-      this.isConnected = status;
-      if (!status) {
-        console.log("Polling paused - waiting for reconnection.");
-      } else {
-        console.log("Polling active.");
-      }
-    });
-	}
-
-  // Clean up the timer when the component is destroyed
-  ngOnDestroy() {
-    this.statusSub?.unsubscribe();
-    this.dataIntervalSub?.unsubscribe();
-  }
-
-  constructor(private fb:FormBuilder, private http: HttpClient){
-    this.optionsForm=this.fb.group({});
-  }
-
-  settings(){
-    this.router.navigateByUrl("/settings");
   }
 }

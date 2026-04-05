@@ -1,3 +1,4 @@
 export interface Data {
-    rowString: string;
+    date: string;
+    temperature: number;
 }

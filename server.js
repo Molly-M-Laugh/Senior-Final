@@ -49,7 +49,7 @@ app.use(cors({
     optionsSuccessStatus: 200
     //credentials: true // Later for auth. found may be part of that
 }));
-/*
+
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -120,18 +120,18 @@ app.get('/api/data-init', async (req, res) => {
   // Example for when switch to specific id
   //const user = users.find(u => u.id === parseInt(req.params.id));
   try {
-    const result = await pool.query('SELECT (record_date, temperature) FROM temp_data WHERE (user_id = $1)', [user]);
+    const result = await pool.query('SELECT record_date, temperature FROM temp_data WHERE (user_id = $1)', [user]);
     res.json(result.rows); // Want all data points
   } catch (err) {
     console.error(err);
   }
 });
-*/
+
 
 
 
 // Heroku DB, use client rather than pool
-
+/*
 const Client = require('pg').Client;
 const client = new Client({
   connectionString: process.env['DATABASE_URL'],
@@ -140,11 +140,10 @@ const client = new Client({
   }
 });
 
-//client.connect();
+client.connect();
 
 app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
-  client.connect();
   const { username, password } = req.body;
   try {
     const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
@@ -153,10 +152,8 @@ app.post('/api/register', async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-  client.end();
 });
 app.post('/api/login', async (req, res) => {
-  client.connect();
   const { username, password } = req.body;
   try {
     const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
@@ -166,16 +163,13 @@ app.post('/api/login', async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-  client.end();
 });
 app.put('/api/update/:id', async (req, res) => {
-  client.connect();
   const { id } = req.params;
   const { username, password } = req.body;
   //await client.query('UPDATE users SET username = $1, password = crypt($2,gen_salt(\'bf\')) WHERE id = $3', [username, password, id])
   // Later, have check if no value returned?
   res.send('Updated');
-  client.end();
 });
 // NOTE: Later, change to be for a specific id
 app.post('/api/data', async (req, res) => {
@@ -184,7 +178,6 @@ app.post('/api/data', async (req, res) => {
     return res.json({is_inserted : true});
   }
   try {
-  client.connect();
   const result = await client.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
   const resNum = parseFloat(result.rows[0].temperature);
   if (resNum < 100) {
@@ -199,7 +192,6 @@ app.post('/api/data', async (req, res) => {
 });
 // NOTE: Later change to be for a specific id
 app.get('/api/data-init', async (req, res) => {
-  client.connect();
   const user = 1; // Hardcode for now
   // Example for when switch to specific id
   //const user = users.find(u => u.id === parseInt(req.params.id));
@@ -210,7 +202,7 @@ app.get('/api/data-init', async (req, res) => {
     console.error(err);
   }
 });
-
+*/
 // NOTE: For only database, modify for Heroku and local!!!
 // BLE API calls (ie. update data)
 // Data should be in form of [{x:__,y:__},...{x:__,y:__}]
@@ -258,7 +250,7 @@ app.get('/api/data', async (req, res) => {
     }
   );
   
-  // 
+  client.end();
 });
 */
 
