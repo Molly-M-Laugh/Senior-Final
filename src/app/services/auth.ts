@@ -10,26 +10,21 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class Auth {
   private apiUrl = 'http://localhost:8080';
-  
+  private tokenKey = 'jwt_token';
   router = inject(Router);
   loggedIn = new BehaviorSubject<boolean>(false);
   redirectUrl: string | null = null;
 
   constructor(private http:HttpClient){}
 
-  login(password:string): Observable<any>{
-    return this.http.post(`${this.apiUrl}/login`, {password: password}, {withCredentials:true}).pipe(
-      tap(() => {
-        this.loggedIn.next(true);
-      }),
-      catchError((error: HttpErrorResponse) => {
-        if(error.status === 401){
-          this.loggedIn.next(false);
-        }
-        return throwError(() => error);
-      }
-    )
-  )}
+  login(password:string){
+    return this.http.post(`${this.apiUrl}/login`, {password: password}, {withCredentials:true})
+    .subscribe((response: any) => {
+      localStorage.setItem(this.tokenKey, response.token);
+      this.router.navigate(['/dashboard']);
+      
+    });
+  }
 
   logout(): void{
     this.redirectUrl = null;

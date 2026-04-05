@@ -1,5 +1,6 @@
 //Install express server
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 
 const app = express();
@@ -172,6 +173,45 @@ app.post('/api/login', async (req, res) => {
     console.error(err);
   }
   //client.end();
+});
+app.post("/api/generateToken", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
+    // Later, have check if no value returned
+    const isMatch = result.rows[0]?.is_match || false;
+    if(isMatch){
+      let jwtSecretKey = process.env.JWT_SECRET_KEY;
+      let data = {
+        time:Date(),
+        userId:username
+      }
+      const token = jwt.sign(data, jwtSecretKey);
+      res.status(200).send(token);
+    }
+    else{
+      res.status(401).json({is_match : isMatch});
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
+app.get("/api/verifyToken", async (req,res) => {
+  let tokenHeaderKey = process.env.TOKEN_KEY
+  let jwtSecretKey = process.env.JWT_KEY
+  try{
+    const token = req.header(tokenHeaderKey);
+    const verified = jwt.verify(token, jwtSecretKey);
+    if(verified) {
+      return res.send("Successfully verified");
+    }
+    else{
+      return res.status(401).send(error);
+    }
+  }
+  catch(error){
+    return res.status(401).send(error);
+  }
 });
 app.put('/api/update/:id', async (req, res) => {
   //client.connect();

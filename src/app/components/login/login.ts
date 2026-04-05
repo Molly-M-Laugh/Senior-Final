@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class Login {
   loginForm:FormGroup;
+  tokenKey = 'jwt_secret';
   creationForm:FormGroup;
   unactiveLogin = false; // No double register submissions
   router = inject(Router);
@@ -30,10 +31,11 @@ export class Login {
     this.unactiveLogin = true; // disable until response
 
     //this.http.post<{is_match : boolean}>('http://localhost:8080/api/login', this.loginForm.value)
-    this.http.post<{is_match : boolean}>('api/login', this.loginForm.value)
+    this.http.post<{is_match : boolean, token: string}>('api/login', this.loginForm.value)
       .subscribe({
         next: response => {
         if (response.is_match) {
+          localStorage.setItem(this.tokenKey, response.token);
           this.router.navigateByUrl("/home");
         } else {
           alert("Invalid login");
