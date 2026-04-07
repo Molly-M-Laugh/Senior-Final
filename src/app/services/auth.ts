@@ -17,31 +17,33 @@ export class Auth {
 
   constructor(private http:HttpClient){}
 
-  login(password:string){
-    return this.http.post(`${this.apiUrl}/login`, {password: password}, {withCredentials:true})
+  login(username:string, password:string){
+    return this.http.post<{token:string}>(`${this.apiUrl}/login`, {username, password}, {withCredentials:true})
+    .pipe(tap(response => localStorage.setItem('token', response.token)));
+    /*
     .subscribe((response: any) => {
       localStorage.setItem(this.tokenKey, response.token);
       this.router.navigate(['/dashboard']);
-      
-    });
+    });*/
   }
 
   logout(): void{
     this.redirectUrl = null;
+    localStorage.removeItem(this.tokenKey);
     this.http.post(`${this.apiUrl}/logout`, {}, {withCredentials:true}).subscribe(() => this.loggedIn.next(false));
   }
 
-  isAuthenticated(): Observable<any>{
-    return this.http.get(`${this.apiUrl}/verify`, {withCredentials:true}).pipe(
-      map(() => {
-        this.loggedIn.next(true);
-        return true;
-    }),
-    catchError(() => {
-      this.loggedIn.next(false);
-      return of(false);
-    })
-  );
+  isAuthenticated(): boolean{
+    const token = localStorage.getItem(this.tokenKey);
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    }
+    catch{
+      return false;
+    }
+
   }
 
 
