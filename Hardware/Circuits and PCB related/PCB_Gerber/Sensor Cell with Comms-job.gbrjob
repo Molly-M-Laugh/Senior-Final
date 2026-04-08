@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "9.0.7"
     },
-    "CreationDate": "2026-03-25T09:32:40-05:00"
+    "CreationDate": "2026-03-31T08:13:12-05:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -14,8 +14,8 @@
       "Revision": "rev?"
     },
     "Size": {
-      "X": 102.55,
-      "Y": 62.05
+      "X": 70.05,
+      "Y": 77.05
     },
     "LayerNumber": 4,
     "BoardThickness": 1.6,
@@ -57,6 +57,16 @@
     {
       "Path": "Sensor Cell with Comms-B_Cu.gbr",
       "FileFunction": "Copper,L4,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "Sensor Cell with Comms-F_Paste.gbr",
+      "FileFunction": "SolderPaste,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "Sensor Cell with Comms-B_Paste.gbr",
+      "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
