@@ -19,7 +19,9 @@ export class Auth {
 
   login(username:string, password:string){
     return this.http.post<{token:string}>(`${this.apiUrl}/login`, {username, password}, {withCredentials:true})
-    .pipe(tap(response => localStorage.setItem('token', response.token)));
+    .pipe(tap(response => {
+      this.loggedIn.next(true);
+      localStorage.setItem('token', response.token)}));
     /*
     .subscribe((response: any) => {
       localStorage.setItem(this.tokenKey, response.token);
