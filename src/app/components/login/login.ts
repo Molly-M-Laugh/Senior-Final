@@ -34,9 +34,10 @@ export class Login {
 
     if(credentials.username && credentials.password){      
       this.authService.login(credentials.username, credentials.password)
-      .subscribe(() => {
-        this.router.navigateByUrl("/home");
-      });
+      .subscribe({
+        next: () => {
+          this.router.navigateByUrl("/home");
+      }});
     }
   }
 
