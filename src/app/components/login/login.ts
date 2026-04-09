@@ -33,11 +33,11 @@ export class Login {
     const credentials = this.loginForm.value;
 
     if(credentials.username && credentials.password){      
-      this.authService.login(credentials.username, credentials.password)
-      .subscribe({
+      this.authService.login(credentials.username, credentials.password).subscribe({
         next: () => {
-          this.router.navigateByUrl("/home");
-      }});
+          this.router.navigateByUrl('/home');
+      }
+    });
     }
   }
 
