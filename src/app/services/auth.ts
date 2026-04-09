@@ -9,7 +9,7 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class Auth {
-  private apiUrl = 'http://localhost:8080';
+  //private apiUrl = 'http://localhost:8080';
   private tokenKey = 'jwt_token';
   router = inject(Router);
   loggedIn = new BehaviorSubject<boolean>(false);
@@ -18,7 +18,7 @@ export class Auth {
   constructor(private http:HttpClient){}
 
   login(username:string, password:string){
-    return this.http.post(`${this.apiUrl}/login`, {username:username, password:password}, {withCredentials:true})
+    return this.http.post(`api/login`, {username:username, password:password}, {withCredentials:true})
     .pipe(tap(() => {
       this.loggedIn.next(true);}));
     /*
@@ -31,7 +31,7 @@ export class Auth {
   logout(): void{
     this.redirectUrl = null;
     localStorage.removeItem(this.tokenKey);
-    this.http.post(`${this.apiUrl}/logout`, {}, {withCredentials:true}).subscribe(() => this.loggedIn.next(false));
+    this.http.post(`api/logout`, {}, {withCredentials:true}).subscribe(() => this.loggedIn.next(false));
   }
 
   isAuthenticated(): boolean{
