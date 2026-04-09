@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { response } from 'express';
 
 
 @Injectable({
@@ -19,7 +20,8 @@ export class Auth {
 
   login(username:string, password:string){
     return this.http.post(`api/login`, {username:username, password:password}, {withCredentials:true})
-    .pipe(tap(() => {
+    .pipe(tap((response : any) => {
+      localStorage.setItem(this.tokenKey, response.token);
       this.loggedIn.next(true);}));
     /*
     .subscribe((response: any) => {
