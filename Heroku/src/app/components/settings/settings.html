@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Make compatibile for phone display -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <div class="form-container">
+            <form [formGroup]="optionsForm1" (ngSubmit)="updateUsername()">
+                <div class="input-container">
+                    <input type="text" formControlName="username" placeholder="username"/>
+                    <button type="submit" [disabled]="unactiveUpdate">Update Update</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-container">
+            <form [formGroup]="optionsForm2" (ngSubmit)="updatePassword()">
+                <div class="input-container">
+                    <input type="password" formControlName="password" placeholder="password"/>
+                    <button type="submit" [disabled]="unactiveUpdate">Update Account</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-container">
+            <form [formGroup]="homeForm" (ngSubmit)="home()">
+                <button type="submit">Home</button>
+            </form>
+        </div>
+    </body>
+</html>
+<router-outlet></router-outlet>

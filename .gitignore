@@ -45,3 +45,9 @@ Thumbs.db
 # KiCad temp/lock files
 *.lck
 
+**/node_modules
+npm-debug.log
+yarn-error.log
+**/.env
+
+
