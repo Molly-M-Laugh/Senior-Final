@@ -44,25 +44,27 @@ export class Home implements OnInit, OnDestroy {
 		text: "Bluetooth random data"
 	  },
     axisX: {
-      minimum : new Date(this.launchTime.getTime() - 5 * 60000),
-      maximum : this.launchTime,
+      //minimum : new Date(this.launchTime.getTime() - 5 * 60000),
+      //maximum : this.launchTime,
+      title: "Time Passed",
       valueFormatString: this.formatString
     },
 	  data: [{
 		type: "line",
+    xValueType: "dateTime",
 		dataPoints: [] as { x: Date; y: number }[]
 	  }]
 	}
 
   ngOnInit(): void {
     setTimeout(() => {
-    this.dataService.getData()
-    //this.http.get('api/data-init', dataValue)
+      this.dataService.getData()
+      //this.http.get('api/data-init', dataValue)
       .subscribe({
         next: (response: any[]) => {
           if (response != null) {
             // Change the scale later, but for seconds stay to last 30 minutes - actually last 5 minutes
-            const thirtyMinutesAgo = new Date(Date.now() - this.scale);
+            let thirtyMinutesAgo = new Date(Date.now() - this.scale);
 
             this.chartOptions.data[0].dataPoints = (response
               .filter(item => {
@@ -78,7 +80,7 @@ export class Home implements OnInit, OnDestroy {
                   x: new Date(cleanDate),
                   y: parseFloat(item.temperature)
                 };
-              })).slice(-20); // Keep only last 20 values for visability
+              })).slice(-100); // Keep only last 20 values for visability
 
         } else {
           console.log("Response is empty");
@@ -88,6 +90,10 @@ export class Home implements OnInit, OnDestroy {
           alert("Login failed on invalid credentials or unable to link");
         }
       });
+      // Update axis as well and render full chart
+      let minDate = new Date(this.launchTime.getTime() - this.scale);
+      this.chart.axisX[0].set("viewportMinimum", minDate.getTime());
+      this.chart.axisX[0].set("viewportMaximum", new Date().getTime());
       this.chart.render();
     }, 1000);
 
@@ -116,12 +122,13 @@ export class Home implements OnInit, OnDestroy {
   // BLE will update at its own rate, but repeat data retrieval every second
   // Would need to re-insert logic to pause graph when disconnected if wanted
   updateChart() {
+    // Get new data
     this.dataService.getData()
     //this.http.get('api/data-init', dataValue)
       .subscribe({
         next: (response: any[]) => {
           if (response) {
-            const thirtyMinutesAgo = new Date(Date.now() - this.scale);
+            let thirtyMinutesAgo = new Date(Date.now() - this.scale);
 
             // Update the dataPoints reference
             this.chartOptions.data[0].dataPoints = response
@@ -130,9 +137,12 @@ export class Home implements OnInit, OnDestroy {
                 x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
                 y: parseFloat(item.temperature)
               }))
-              .slice(-20);
+              .slice(-100);
 
             if (this.chart) {
+              let minDate = new Date(this.launchTime.getTime() - this.scale);
+              this.chart.axisX[0].set("viewportMinimum", minDate.getTime());
+              this.chart.axisX[0].set("viewportMaximum", new Date().getTime());
               this.chart.render();
             }
           }
@@ -161,22 +171,10 @@ export class Home implements OnInit, OnDestroy {
     }
 
     // Reset the graph scale
-    const minDate = new Date(this.launchTime.getTime() - this.scale);
-    this.chartOptions = {
-	  exportEnabled: true,
-	  title: {
-		text: "Bluetooth random data"
-	  },
-    axisX: {
-      minimum : minDate,
-      maximum : this.launchTime,
-      valueFormatString: this.formatString
-    },
-	  data: [{
-		type: "line",
-		dataPoints: [] as { x: Date; y: number }[]
-	  }]
-	}
+    let minDate = new Date(this.launchTime.getTime() - this.scale);
+    this.chart.axisX[0].set("valueFormatString", this.formatString);
+    this.chart.axisX[0].set("viewportMinimum", minDate.getTime());
+    this.chart.axisX[0].set("viewportMaximum", new Date().getTime());
 
     this.dataService.getData()
     //this.http.get('api/data-init', dataValue)
@@ -192,7 +190,7 @@ export class Home implements OnInit, OnDestroy {
                 x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
                 y: parseFloat(item.temperature)
               }))
-              .slice(-20);
+              .slice(-100);
 
             if (this.chart) {
               this.chart.render();
