@@ -1,46 +1,52 @@
 import { Injectable, inject, signal} from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { response } from 'express';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
-  private apiUrl = 'http://localhost:8080';
-  
+  //private apiUrl = 'http://localhost:8080';
+  private tokenKey = 'jwt_token';
   router = inject(Router);
   loggedIn = new BehaviorSubject<boolean>(false);
   redirectUrl: string | null = null;
 
   constructor(private http:HttpClient){}
 
-  login(password:string): Observable<any>{
-    return this.http.post(`${this.apiUrl}/login`, {password: password}, {withCredentials:true}).pipe(
-      tap(() => {
-        this.loggedIn.next(true);
-      })
-    );
+  login(username:string, password:string){
+    return this.http.post(`api/login`, {username:username, password:password}, {withCredentials:true})
+    .pipe(tap((response : any) => {
+      localStorage.setItem(this.tokenKey, response.token);
+      this.loggedIn.next(true);}));
+    /*
+    .subscribe((response: any) => {
+      localStorage.setItem(this.tokenKey, response.token);
+      this.router.navigate(['/dashboard']);
+    });*/
   }
 
   logout(): void{
     this.redirectUrl = null;
-    this.http.post(`${this.apiUrl}/logout`, {}, {withCredentials:true}).subscribe(() => this.loggedIn.next(false));
+    localStorage.removeItem(this.tokenKey);
+    this.http.post(`api/logout`, {}, {withCredentials:true}).subscribe(() => this.loggedIn.next(false));
   }
 
-  isAuthenticated(): Observable<any>{
-    return this.http.get(`${this.apiUrl}/verify`, {withCredentials:true}).pipe(
-      map(() => {
-        this.loggedIn.next(true);
-        return true;
-    }),
-    catchError(() => {
-      this.loggedIn.next(false);
-      return of(false);
-    })
-  );
+  isAuthenticated(): boolean{
+    const token = localStorage.getItem(this.tokenKey);
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    }
+    catch{
+      return false;
+    }
+
   }
 
 
