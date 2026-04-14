@@ -249,7 +249,6 @@ app.get('/api/data-init', async (req, res) => {
   }
 });
 
-client.end();
 // NOTE: For only database, modify for Heroku and local!!!
 // BLE API calls (ie. update data)
 // Data should be in form of [{x:__,y:__},...{x:__,y:__}]
@@ -331,3 +330,5 @@ app.use(cors({
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
+
+client.end();
