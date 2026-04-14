@@ -169,7 +169,6 @@ app.post('/api/login', async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-  //client.end();
 });
 app.post("/api/generateToken", async (req, res) => {
   const { username, password } = req.body;
@@ -248,11 +247,9 @@ app.get('/api/data-init', async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-
-
-  client.end();
 });
 
+client.end();
 // NOTE: For only database, modify for Heroku and local!!!
 // BLE API calls (ie. update data)
 // Data should be in form of [{x:__,y:__},...{x:__,y:__}]
