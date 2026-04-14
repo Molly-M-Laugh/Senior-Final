@@ -295,8 +295,6 @@ app.get('/api/data', async (req, res) => {
       res.json(data.rows[0]);
     }
   );
-  
-  client.end();
 });
 */
 
@@ -331,4 +329,4 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
 
-client.end();
+//client.end();
