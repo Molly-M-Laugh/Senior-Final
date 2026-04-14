@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
-import { JsonPipe, DatePipe } from '@angular/common';
-import { CanvasJSAngularChartsModule, CanvasJSChart } from '@canvasjs/angular-charts';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { interval, Subscription } from 'rxjs';
 import { HttpClient} from '@angular/common/http';
 import { BleService } from '../../services/ble-service';
@@ -11,7 +10,7 @@ import { Data } from '../../data';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterOutlet,FormsModule,ReactiveFormsModule, CanvasJSAngularChartsModule, JsonPipe, DatePipe],
+  imports: [RouterOutlet,FormsModule,ReactiveFormsModule, CanvasJSAngularChartsModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -44,8 +43,6 @@ export class Home implements OnInit, OnDestroy {
 		text: "Bluetooth random data"
 	  },
     axisX: {
-      //minimum : new Date(this.launchTime.getTime() - 5 * 60000),
-      //maximum : this.launchTime,
       title: "Time Passed",
       valueFormatString: this.formatString
     },
@@ -59,7 +56,6 @@ export class Home implements OnInit, OnDestroy {
   ngOnInit(): void {
     setTimeout(() => {
       this.dataService.getData()
-      //this.http.get('api/data-init', dataValue)
       .subscribe({
         next: (response: any[]) => {
           if (response != null) {
@@ -124,7 +120,6 @@ export class Home implements OnInit, OnDestroy {
   updateChart() {
     // Get new data
     this.dataService.getData()
-    //this.http.get('api/data-init', dataValue)
       .subscribe({
         next: (response: any[]) => {
           if (response) {
@@ -177,7 +172,6 @@ export class Home implements OnInit, OnDestroy {
     this.chart.axisX[0].set("viewportMaximum", new Date().getTime());
 
     this.dataService.getData()
-    //this.http.get('api/data-init', dataValue)
       .subscribe({
         next: (response: any[]) => {
           if (response) {
@@ -251,8 +245,8 @@ export class Home implements OnInit, OnDestroy {
     const dataValue = { user: 1, time: dateItem.toISOString(), temp: latestValue };
 
     // Make insert to database before displaying debug code
-    this.http.post<{is_inserted : boolean}>('http://localhost:8080/api/data', dataValue)
-    //this.http.post<{is_inserted : boolean}>('api/data', dataValue)
+    //this.http.post<{is_inserted : boolean}>('http://localhost:8080/api/data', dataValue)
+    this.http.post<{is_inserted : boolean}>('api/data', dataValue)
       .subscribe({
         next: response => {
         if (!response.is_inserted) {

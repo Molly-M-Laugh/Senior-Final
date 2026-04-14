@@ -50,7 +50,7 @@ app.use(cors({
     optionsSuccessStatus: 200
     //credentials: true // Later for auth. found may be part of that
 }));
-
+/*
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -127,12 +127,12 @@ app.get('/api/data-init', async (req, res) => {
     console.error(err);
   }
 });
-
+*/
 
 
 
 // Heroku DB, use client rather than pool
-/*
+
 const Client = require('pg').Client;
 const client = new Client({
   connectionString: process.env['DATABASE_URL'],
@@ -252,7 +252,7 @@ app.get('/api/data-init', async (req, res) => {
 
   client.end();
 });
-*/
+
 // NOTE: For only database, modify for Heroku and local!!!
 // BLE API calls (ie. update data)
 // Data should be in form of [{x:__,y:__},...{x:__,y:__}]
