@@ -33,7 +33,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
         case CAN_ALRT1_Pin:
         case CAN_ALRT2_Pin:
         case CAN_FLT_Pin:
-        	can_ctrl_fault_irq_handler(GPIO_Pin);
+        	can_ctrl_irq_handler(GPIO_Pin);
         	break;
 
         case AN_ALRT1_Pin:
