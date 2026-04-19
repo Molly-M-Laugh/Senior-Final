@@ -63,6 +63,7 @@ export class Home implements OnInit, OnDestroy {
             const now = new Date().getTime();
             let thirtyMinutesAgo = now - this.scale;
 
+            console.log(response[0])
             this.chartOptions.data[0].dataPoints =response
               .map(item => {
                 // Postgres strings like "2026-04-19 21:20:33.724+00" 
@@ -75,8 +76,8 @@ export class Home implements OnInit, OnDestroy {
                   y: parseFloat(item.temperature)
                 };
               })
-              .filter(point => point.x.getTime() >= thirtyMinutesAgo) // Filter AFTER mapping
-              .slice(-100);
+              //.filter(point => point.x.getTime() >= thirtyMinutesAgo) // Filter AFTER mapping
+              //.slice(-100);
             /*(response
               .filter(item => {
                 const itemDate = new Date(item.record_date);
