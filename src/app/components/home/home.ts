@@ -60,28 +60,10 @@ export class Home implements OnInit, OnDestroy {
         next: (response: any[]) => {
           if (response != null) {
             // Change the scale later, but for seconds stay to last 30 minutes - actually last 5 minutes
-            const now = new Date().getTime();
-            let thirtyMinutesAgo = now - this.scale;
+            let thirtyMinutesAgo = new Date(Date.now() - this.scale);
 
             console.log(response[0])
-            this.chartOptions.data[0].dataPoints =response
-              .map(item => {
-                // item is a string like: ("2026-03-24 04:17:53.508+00",12.0)
-                // This regex looks for text between quotes and the number after the comma
-                const regex = /\("([^"]+)",\s*([\d.]+)\)/;
-                const match = String(item).match(regex);
-
-                if (match) {
-                  return {
-                    x: new Date(match[1]), // The date string
-                    y: parseFloat(match[2]) // The temperature
-                  };
-                }
-                return { x: new Date(0), y: 0 }; // Fallback for bad rows
-              })
-              //.filter(point => point.x.getTime() > 0 && point.x.getTime() >= thirtyMinutesAgo)
-              //.slice(-100);
-            /*(response
+            this.chartOptions.data[0].dataPoints =(response
               .filter(item => {
                 const itemDate = new Date(item.record_date);
                 return itemDate >= thirtyMinutesAgo; // Only keep recent data
@@ -100,7 +82,6 @@ export class Home implements OnInit, OnDestroy {
                   y: parseFloat(item.temperature)
                 };
               })).slice(-100); // Keep only last 20 values for visability
-              */
 
               console.log("Initial Load")
               console.log(this.chartOptions.data[0].dataPoints)

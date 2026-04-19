@@ -245,7 +245,7 @@ app.get('/api/data-init', async (req, res) => {
   // Example for when switch to specific id
   //const user = users.find(u => u.id === parseInt(req.params.id));
   try {
-    const result = await pool.query('SELECT (record_date, temperature) FROM temp_data WHERE (user_id = $1)', [user]);
+    const result = await pool.query('SELECT record_date, temperature FROM temp_data WHERE (user_id = $1)', [user]);
     res.json(result.rows); // Want all data points
   } catch (err) {
     console.error(err);
