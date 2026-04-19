@@ -30,7 +30,10 @@ const {Pool} = require('pg');
 //require('dotenv').config(); // Need for inserting .env variables
 
 const pool = new Pool({
-  connectionString : process.env['DATABASE_URL']
+  connectionString : process.env['DATABASE_URL'],
+  ssl: {
+    rejectUnauthorized: false // Keep in for Heroku!
+  }
 });
 const cors = require('cors'); // Link Angular, NodeJS
 
@@ -141,13 +144,13 @@ const client = new Client({
   }
 });
 
-client.connect();
+//client.connect();
 
 app.use(express.json()); // For correct form parsing for db
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await client.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
+    const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, crypt($2,gen_salt(\'bf\'))) RETURNING username', [username, password])
     // Later, have check if no value returned
     res.json(result.rows[0]);
   } catch (err) {
@@ -157,7 +160,7 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
+    const result = await pool.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
     // Later, have check if no value returned
     const isMatch = result.rows[0]?.is_match || false;
     if(isMatch){
@@ -173,7 +176,7 @@ app.post('/api/login', async (req, res) => {
 app.post("/api/generateToken", async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await client.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
+    const result = await pool.query('SELECT COALESCE((password = crypt($1, password)), false) As is_match FROM users WHERE (username = $2)', [password, username])
     // Later, have check if no value returned
     const isMatch = result.rows[0]?.is_match || false;
     if(isMatch){
@@ -224,7 +227,7 @@ app.post('/api/data', async (req, res) => {
     return res.json({is_inserted : true});
   }
   try {
-  const result = await client.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
+  const result = await pool.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
   const resNum = parseFloat(result.rows[0].temperature);
   if (resNum < 100) {
     isInserted = Number(parseFloat(resNum).toFixed(2)) == temp;
@@ -242,14 +245,14 @@ app.get('/api/data-init', async (req, res) => {
   // Example for when switch to specific id
   //const user = users.find(u => u.id === parseInt(req.params.id));
   try {
-    const result = await client.query('SELECT (record_date, temperature) FROM temp_data WHERE (user_id = $1)', [user]);
+    const result = await pool.query('SELECT (record_date, temperature) FROM temp_data WHERE (user_id = $1)', [user]);
     res.json(result.rows); // Want all data points
   } catch (err) {
     console.error(err);
   }
 });
 
-client.end();
+//client.end();
 
 // NOTE: For only database, modify for Heroku and local!!!
 // BLE API calls (ie. update data)
