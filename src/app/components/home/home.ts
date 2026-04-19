@@ -79,8 +79,8 @@ export class Home implements OnInit, OnDestroy {
                 }
                 return { x: new Date(0), y: 0 }; // Fallback for bad rows
               })
-              .filter(point => point.x.getTime() > 0 && point.x.getTime() >= thirtyMinutesAgo)
-              .slice(-100);
+              //.filter(point => point.x.getTime() > 0 && point.x.getTime() >= thirtyMinutesAgo)
+              //.slice(-100);
             /*(response
               .filter(item => {
                 const itemDate = new Date(item.record_date);
