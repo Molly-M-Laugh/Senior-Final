@@ -66,18 +66,21 @@ export class Home implements OnInit, OnDestroy {
             console.log(response[0])
             this.chartOptions.data[0].dataPoints =response
               .map(item => {
-                // Postgres strings like "2026-04-19 21:20:33.724+00" 
-                // are usually parsed correctly by new Date() as UTC, 
-                // but let's be explicit.
-                const recordDate = new Date(item.record_date);
-    
-                return {
-                  x: recordDate,
-                  y: parseFloat(item.temperature)
-                };
+                // item is a string like: ("2026-03-24 04:17:53.508+00",12.0)
+                // This regex looks for text between quotes and the number after the comma
+                const regex = /\("([^"]+)",\s*([\d.]+)\)/;
+                const match = String(item).match(regex);
+
+                if (match) {
+                  return {
+                    x: new Date(match[1]), // The date string
+                    y: parseFloat(match[2]) // The temperature
+                  };
+                }
+                return { x: new Date(0), y: 0 }; // Fallback for bad rows
               })
-              //.filter(point => point.x.getTime() >= thirtyMinutesAgo) // Filter AFTER mapping
-              //.slice(-100);
+              .filter(point => point.x.getTime() > 0 && point.x.getTime() >= thirtyMinutesAgo)
+              .slice(-100);
             /*(response
               .filter(item => {
                 const itemDate = new Date(item.record_date);
