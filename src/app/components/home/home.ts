@@ -68,9 +68,13 @@ export class Home implements OnInit, OnDestroy {
                 return itemDate >= thirtyMinutesAgo; // Only keep recent data
               })
               .map(item => {
+                console.log(item)
+                console.log("")
                 const dateStr = item.record_date;
                 // Strip milliseconds and Z to be a valid date
                 const cleanDate = dateStr.includes('.') ? dateStr.split('.')[0] : dateStr;
+                console.log(item)
+                console.log("")
 
                 return {
                   x: new Date(cleanDate),
