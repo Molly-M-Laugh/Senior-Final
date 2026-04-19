@@ -60,9 +60,24 @@ export class Home implements OnInit, OnDestroy {
         next: (response: any[]) => {
           if (response != null) {
             // Change the scale later, but for seconds stay to last 30 minutes - actually last 5 minutes
-            let thirtyMinutesAgo = new Date(Date.now() - this.scale);
+            const now = new Date().getTime();
+            let thirtyMinutesAgo = now - this.scale;
 
-            this.chartOptions.data[0].dataPoints = response/*(response
+            this.chartOptions.data[0].dataPoints =response
+              .map(item => {
+                // Postgres strings like "2026-04-19 21:20:33.724+00" 
+                // are usually parsed correctly by new Date() as UTC, 
+                // but let's be explicit.
+                const recordDate = new Date(item.record_date);
+    
+                return {
+                  x: recordDate,
+                  y: parseFloat(item.temperature)
+                };
+              })
+              .filter(point => point.x.getTime() >= thirtyMinutesAgo) // Filter AFTER mapping
+              .slice(-100);
+            /*(response
               .filter(item => {
                 const itemDate = new Date(item.record_date);
                 return itemDate >= thirtyMinutesAgo; // Only keep recent data
