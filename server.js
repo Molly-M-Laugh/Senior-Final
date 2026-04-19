@@ -27,7 +27,7 @@ const bluetooth = new Bluetooth({ deviceFound });
 // For local connections/runs, use Pool
 
 const {Pool} = require('pg');
-require('dotenv').config(); // Need for inserting .env variables
+//require('dotenv').config(); // Need for inserting .env variables
 
 const pool = new Pool({
   connectionString : process.env['DATABASE_URL']
