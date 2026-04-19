@@ -62,7 +62,7 @@ export class Home implements OnInit, OnDestroy {
             // Change the scale later, but for seconds stay to last 30 minutes - actually last 5 minutes
             let thirtyMinutesAgo = new Date(Date.now() - this.scale);
 
-            this.chartOptions.data[0].dataPoints = (response
+            this.chartOptions.data[0].dataPoints = response/*(response
               .filter(item => {
                 const itemDate = new Date(item.record_date);
                 return itemDate >= thirtyMinutesAgo; // Only keep recent data
@@ -81,10 +81,12 @@ export class Home implements OnInit, OnDestroy {
                   y: parseFloat(item.temperature)
                 };
               })).slice(-100); // Keep only last 20 values for visability
+              */
 
               console.log("Initial Load")
               console.log(this.chartOptions.data[0].dataPoints)
               console.log("")
+              console.log(response)
 
         } else {
           console.log("Response is empty");
