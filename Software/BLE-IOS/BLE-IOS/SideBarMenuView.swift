@@ -12,6 +12,8 @@ struct SideBarMenuView: View {
     @Binding var menuOpen: Bool
     @State var router = Router.shared
     
+    @Binding var tab: Int
+    
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)){
             if menuOpen{
@@ -35,7 +37,7 @@ struct SideBarMenuView: View {
                         VStack{
                             ForEach(SideBarMenuItems.allCases){ option in
                                 Button(action: {
-                                    router.tab = option.rawValue
+                                    tab = option.rawValue
                                     menuOpen.toggle()
                                 }, label: {
                                     SideBarItemView(item: option)
@@ -58,5 +60,5 @@ struct SideBarMenuView: View {
 }
 
 #Preview{
-    SideBarMenuView(menuOpen: .constant(true))
+    SideBarMenuView(menuOpen: .constant(true), tab: .constant(0))
 }

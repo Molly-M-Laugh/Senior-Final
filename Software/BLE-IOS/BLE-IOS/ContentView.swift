@@ -26,11 +26,12 @@ struct ContentView: View {
     @State var router = Router.shared
     var manager = BLEHandler()
     var httpManager = HttpHandler()
+    @State var tab = 0
     
     var body: some View{
         NavigationStack{
             ZStack{
-                TabView(selection: $router.tab){
+                TabView(selection: $tab){
                     loginView()
                         .tag(0)
                     registerView()
@@ -40,7 +41,7 @@ struct ContentView: View {
                     graphView()
                         .tag(3)
                 }
-                SideBarMenuView(menuOpen: $isMenuOpen)
+                SideBarMenuView(menuOpen: $isMenuOpen, tab: $tab)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
