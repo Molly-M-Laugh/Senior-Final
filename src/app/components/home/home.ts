@@ -78,6 +78,10 @@ export class Home implements OnInit, OnDestroy {
                 };
               })).slice(-100); // Keep only last 20 values for visability
 
+              console.log("Initial Load")
+              console.log(this.chartOptions.data[0].dataPoints)
+              console.log("")
+
         } else {
           console.log("Response is empty");
         }
