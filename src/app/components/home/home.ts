@@ -129,7 +129,8 @@ export class Home implements OnInit, OnDestroy {
             this.chartOptions.data[0].dataPoints = response
               .filter(item => new Date(item.record_date) >= thirtyMinutesAgo)
               .map(item => ({
-                x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
+                x: new Date(item.record_date.endsWith('Z') ? item.record_date : item.record_date + 'Z'),
+                //x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
                 y: parseFloat(item.temperature)
               }))
               .slice(-100);
@@ -181,7 +182,8 @@ export class Home implements OnInit, OnDestroy {
             this.chartOptions.data[0].dataPoints = response
               .filter(item => new Date(item.record_date) >= thirtyMinutesAgo)
               .map(item => ({
-                x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
+                x: new Date(item.record_date.endsWith('Z') ? item.record_date : item.record_date + 'Z'),
+                //x: new Date(item.record_date.replace(' ', 'T')), // Ensure ISO format
                 y: parseFloat(item.temperature)
               }))
               .slice(-100);
