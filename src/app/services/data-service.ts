@@ -9,7 +9,7 @@ import { Data } from '../data'; // Import interface
 export class DataService {
   private http = inject(HttpClient); // Modern inject() in Angular
   //private apiUrl = 'http://localhost:8080/api/data-init'; // Used only for local
-  private apiUrl = 'https://senior-t-fd5496756068.herokuapp.com/api/data-init'; // Used only for Heroku?
+  private apiUrl = '/api/data-init'; // Used only for Heroku?
   // Define return type as Observable<User>
   getData(): Observable<Data[]> {
     // Pass the interface to the get method
