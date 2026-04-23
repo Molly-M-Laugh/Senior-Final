@@ -37,12 +37,6 @@
 #include "fault_ctrl.h"
 #include "telemetry.h"
 #include "self_test.h"
-#include "iwdg.h"
-#include "main.h"
-#include "i2c.h"
-#include "spi.h"
-#include "usb.h"
-#include "gpio.h"
 /*
  *
  Hardware interrupts
@@ -96,22 +90,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#include "i2c.h"
-
-/* Scans all 128 I2C addresses and records which ones ACK.
-   found[] will contain the addresses, count returns how many. */
-static uint8_t i2c_scan(uint8_t *found, uint8_t max_found)
-{
-    uint8_t count = 0;
-    for (uint8_t addr = 1; addr < 128 && count < max_found; addr++)
-    {
-        if (HAL_I2C_IsDeviceReady(&hi2c1, addr << 1, 1, 10) == HAL_OK)
-        {
-            found[count++] = addr;
-        }
-    }
-    return count;
-}
 /* USER CODE END 0 */
 
 /**
@@ -158,9 +136,9 @@ int main(void)
 
   ina3221_status_t ina_st = ina3221_init();
   /* Non-fatal at boot — process() will detect via INA3221 reads failing */
-
+  (void)ina_st;
   tmp75b_status_t tmp_st = tmp75b_init_all();
-
+  (void)tmp_st;
   for (int s = TMP75B_SENSOR_0; s < TMP75B_SENSOR_COUNT; s++)
   {
       tmp75b_set_limits((tmp75b_sensor_t)s, 75000, 85000);
@@ -177,6 +155,7 @@ int main(void)
   mcp_port_init_device_struct();
 
   can_ctrl_status_t can_st = can_ctrl_init();
+  (void)can_st;
   /* CAN init failure doesn't halt — telemetry will silently drop until recovered */
 
   fault_ctrl_init();
