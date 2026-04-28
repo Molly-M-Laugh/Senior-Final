@@ -1,51 +1,27 @@
-<div class="login-wrapper d-flex flex-column align-items-center justify-content-center">
-  
-  <h1 class="brand-text">Vital<span class="text-accent">Vest</span></h1>
+<div class="page-wrapper d-flex flex-column align-items-center justify-content-center">
+  <h1 class="brand-text">Vital<span>Vest</span></h1>
 
-  <div class="card shadow-lg border-0">
+  <div class="card shadow-lg border-0 shadow-sm" style="max-width: 400px; width: 100%;">
     <div class="card-body p-4 p-md-5">
-      <h2 class="h4 fw-bold color-primary mb-1">Create Account</h2>
-      <p class="text-muted small mb-4">Join VitalVest to start managing your assets.</p>
+      <h2 class="h5 fw-bold mb-4 text-center" style="color: rgb(16, 101, 171);">Sign In</h2>
       
-      <form [formGroup]="userForm" (ngSubmit)="createUser()">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
         <div class="mb-3">
-          <label for="reg-username" class="form-label small fw-bold">New Username</label>
-          <input 
-            type="text" 
-            id="reg-username"
-            class="form-control custom-input" 
-            formControlName="username" 
-            placeholder="Choose a unique username"
-          />
+          <input type="text" class="form-control custom-input" formControlName="username" placeholder="Username"/>
         </div>
-
         <div class="mb-4">
-          <label for="reg-password" class="form-label small fw-bold">Password</label>
-          <input 
-            type="password" 
-            id="reg-password"
-            class="form-control custom-input" 
-            formControlName="password" 
-            placeholder="Create a strong password"
-          />
+          <input type="password" class="form-control custom-input" formControlName="password" placeholder="Password"/>
         </div>
-
-        <button 
-          type="submit" 
-          class="btn btn-primary-custom w-100 py-2 fw-bold mb-3" 
-          [disabled]="unactiveRegistration">
-          Create Account
+        <button type="submit" class="btn btn-blue w-100 fw-bold" [disabled]="unactiveLogin">
+          Login
         </button>
       </form>
 
-      <div class="text-center mt-2">
-        <button 
-          type="button" 
-          (click)="cancelNewUser()" 
-          class="btn btn-link text-decoration-none text-muted fw-semibold small">
-          ← Back to Login
+      <form [formGroup]="creationForm" (ngSubmit)="toCreate()" class="mt-4 text-center">
+        <button type="submit" class="btn btn-link text-muted small text-decoration-none">
+          New to VitalVest? Create Account
         </button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
