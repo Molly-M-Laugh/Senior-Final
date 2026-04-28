@@ -1,30 +1,50 @@
 <div class="login-wrapper d-flex flex-column align-items-center justify-content-center">
   
-  <div class="brand-header text-center mb-4">
-    <h1 class="display-5 fw-bold brand-text">Vital<span class="text-accent">Vest</span></h1>
-    <p class="brand-subtitle text-muted fw-semibold">Secure Financial Management</p>
-  </div>
+  <h1 class="brand-text">Vital<span class="text-accent">Vest</span></h1>
 
   <div class="card shadow-lg border-0">
     <div class="card-body p-4 p-md-5">
-      <h2 class="h4 text-center mb-4 fw-bold color-primary">Sign In</h2>
+      <h2 class="h4 fw-bold color-primary mb-1">Create Account</h2>
+      <p class="text-muted small mb-4">Join VitalVest to start managing your assets.</p>
       
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <form [formGroup]="userForm" (ngSubmit)="createUser()">
         <div class="mb-3">
-          <label for="username" class="form-label small fw-semibold">Username</label>
-          <input type="text" id="username" class="form-control custom-input" formControlName="username" placeholder="Enter your username"/>
+          <label for="reg-username" class="form-label small fw-bold">New Username</label>
+          <input 
+            type="text" 
+            id="reg-username"
+            class="form-control custom-input" 
+            formControlName="username" 
+            placeholder="Choose a unique username"
+          />
         </div>
+
         <div class="mb-4">
-          <label for="password" class="form-label small fw-semibold">Password</label>
-          <input type="password" id="password" class="form-control custom-input" formControlName="password" placeholder="••••••••"/>
+          <label for="reg-password" class="form-label small fw-bold">Password</label>
+          <input 
+            type="password" 
+            id="reg-password"
+            class="form-control custom-input" 
+            formControlName="password" 
+            placeholder="Create a strong password"
+          />
         </div>
-        <button type="submit" class="btn btn-primary-custom w-100 py-2 fw-bold mb-3" [disabled]="unactiveLogin">Login</button>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary-custom w-100 py-2 fw-bold mb-3" 
+          [disabled]="unactiveRegistration">
+          Create Account
+        </button>
       </form>
 
-      <hr class="my-4 text-muted opacity-25">
-
-      <div class="text-center">
-        <button type="button" (click)="toCreate()" class="btn btn-outline-danger-custom btn-sm px-4">Create New User</button>
+      <div class="text-center mt-2">
+        <button 
+          type="button" 
+          (click)="cancelNewUser()" 
+          class="btn btn-link text-decoration-none text-muted fw-semibold small">
+          ← Back to Login
+        </button>
       </div>
     </div>
   </div>

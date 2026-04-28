@@ -1,8 +1,11 @@
 .login-wrapper {
   min-height: 100vh;
   background-color: rgb(249, 249, 249);
-  background-image: radial-gradient(rgb(209, 229, 240) 1px, transparent 0);
-  background-size: 30px 30px; /* Modern dot-grid pattern */
+  /* Larger, more distinct grid pattern */
+  background-image: 
+    linear-gradient(rgb(209, 229, 240) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgb(209, 229, 240) 1.5px, transparent 1.5px);
+  background-size: 60px 60px; /* Increased from 30px for a bolder look */
   padding: 20px;
 }
 
@@ -13,8 +16,13 @@
   margin-bottom: 0;
 }
 
-.brand-text .text-accent {
-  color: rgb(179, 21, 41); /* Deep Red */
+.brand-text {
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgb(16, 101, 171);
+  letter-spacing: -2px;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 0px #ffffff;
 }
 
 .brand-subtitle {
@@ -40,4 +48,8 @@
   border-color: rgb(47, 103, 177);
   box-shadow: 0 0 0 4px rgba(47, 103, 177, 0.15);
   outline: none;
+}
+
+.brand-text .text-accent {
+  color: rgb(179, 21, 41);
 }
