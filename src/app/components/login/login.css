@@ -1,71 +1,43 @@
-/* Container to center everything on screen */
 .login-wrapper {
-  min-height: 90vh;
-  background-color: rgb(249, 249, 249); /* Your White Tone */
+  min-height: 100vh;
+  background-color: rgb(249, 249, 249);
+  background-image: radial-gradient(rgb(209, 229, 240) 1px, transparent 0);
+  background-size: 30px 30px; /* Modern dot-grid pattern */
+  padding: 20px;
 }
 
+/* Branding Styles */
+.brand-text {
+  color: rgb(16, 101, 171); /* Deep Blue */
+  letter-spacing: -1px;
+  margin-bottom: 0;
+}
+
+.brand-text .text-accent {
+  color: rgb(179, 21, 41); /* Deep Red */
+}
+
+.brand-subtitle {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgb(47, 103, 177) !important;
+  opacity: 0.8;
+}
+
+/* Enhancing the Card for the pattern background */
 .card {
   max-width: 400px;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #ffffff;
+  /* Stronger shadow to pop against the pattern */
+  box-shadow: 0 10px 30px rgba(16, 101, 171, 0.08) !important; 
 }
 
-/* Typography */
-.color-primary {
-  color: rgb(16, 101, 171);
-}
-
-/* Input Styling */
-.custom-input {
-  border: 2px solid rgb(209, 229, 240);
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
-  transition: all 0.2s ease;
-}
-
+/* Custom Input focus update */
 .custom-input:focus {
-  border-color: rgb(58, 147, 195);
-  box-shadow: 0 0 0 4px rgb(209, 229, 240);
+  border-color: rgb(47, 103, 177);
+  box-shadow: 0 0 0 4px rgba(47, 103, 177, 0.15);
   outline: none;
-}
-
-/* Primary Button: Blue */
-.btn-primary-custom {
-  background-color: rgb(47, 103, 177);
-  border: none;
-  color: white;
-  border-radius: 8px;
-  transition: transform 0.1s;
-}
-
-.btn-primary-custom:hover:not(:disabled) {
-  background-color: rgb(16, 101, 171);
-}
-
-.btn-primary-custom:disabled {
-  background-color: rgb(142, 196, 222);
-  cursor: not-allowed;
-}
-
-/* Outline Button: Red */
-.btn-outline-danger-custom {
-  color: rgb(179, 21, 41);
-  border: 2px solid rgb(179, 21, 41);
-  background: transparent;
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-.btn-outline-danger-custom:hover {
-  background-color: rgb(254, 219, 199); /* Light Peach Tint */
-  color: rgb(179, 21, 41);
-}
-
-.card {
-  max-width: 400px;
-  width: 90%; /* Ensures a small margin on the left/right for mobile */
-  margin: 20px auto; 
-  border-radius: 12px;
-  background: #ffffff;
 }
