@@ -1,32 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <!-- Make compatibile for phone display -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </head>
-    <body>
-        <div class="form-container">
-            <form [formGroup]="optionsForm1" (ngSubmit)="updateUsername()">
-                <div class="input-container">
-                    <input type="text" formControlName="username" placeholder="username"/>
-                    <button type="submit" [disabled]="unactiveUpdate">Update Update</button>
-                </div>
-            </form>
-        </div>
-        <div class="form-container">
-            <form [formGroup]="optionsForm2" (ngSubmit)="updatePassword()">
-                <div class="input-container">
-                    <input type="password" formControlName="password" placeholder="password"/>
-                    <button type="submit" [disabled]="unactiveUpdate">Update Account</button>
-                </div>
-            </form>
-        </div>
-        <div class="form-container">
-            <form [formGroup]="homeForm" (ngSubmit)="home()">
-                <button type="submit">Home</button>
-            </form>
-        </div>
-    </body>
-</html>
+<div class="page-wrapper d-flex flex-column align-items-center py-5">
+  <div class="mb-4 text-center">
+    <h1 class="h3 fw-bold brand-text-sm mb-1">Vital<span>Vest</span></h1>
+    <p class="text-muted small fw-bold text-uppercase tracking-wider">Account Settings</p>
+  </div>
+
+  <div class="container" style="max-width: 500px;">
+    
+    <div class="card shadow-sm border-0 mb-4 rounded-4">
+      <div class="card-body p-4">
+        <h3 class="h6 fw-bold color-primary mb-3">Update Identity</h3>
+        <form [formGroup]="optionsForm1" (ngSubmit)="updateUsername()">
+          <div class="input-group">
+            <input 
+              type="text" 
+              class="form-control custom-input" 
+              formControlName="username" 
+              placeholder="New username"
+            />
+            <button 
+              class="btn btn-blue px-3" 
+              type="submit" 
+              [disabled]="unactiveUpdate">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4 rounded-4">
+      <div class="card-body p-4">
+        <h3 class="h6 fw-bold text-danger-custom mb-3">Security & Password</h3>
+        <form [formGroup]="optionsForm2" (ngSubmit)="updatePassword()">
+          <div class="mb-3">
+            <input 
+              type="password" 
+              class="form-control custom-input" 
+              formControlName="password" 
+              placeholder="Enter new password"
+            />
+          </div>
+          <button 
+            type="submit" 
+            class="btn btn-red w-100 fw-bold" 
+            [disabled]="unactiveUpdate">
+            Update Account Password
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-2 border-top border-light text-center">
+      <form [formGroup]="homeForm" (ngSubmit)="home()">
+        <button type="submit" class="btn btn-link text-decoration-none text-muted fw-bold">
+          <i class="bi bi-arrow-left"></i> Return to Dashboard
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
 <router-outlet></router-outlet>
