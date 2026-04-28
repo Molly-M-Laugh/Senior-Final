@@ -1,12 +1,76 @@
-.form-container {
-  display: grid;
-  place-items: center;
-  height: 200px;
-  border: 3px solid green;
+/* Re-using your brand colors for the dashboard */
+.brand-text-sm {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: rgb(16, 101, 171);
+}
+.brand-text-sm span { color: rgb(179, 21, 41); }
+
+/* Connection Status Pill */
+.status-pill {
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: rgb(209, 229, 240); /* Light Blue Tint */
+  color: rgb(16, 101, 171);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.chart { 
-  width: 100%; 
-  height: 400px; 
-  display: block; 
+.status-pill.online {
+  background: #e8f5e9; /* Soft green success */
+  color: #2e7d32;
+}
+
+.status-pill .dot {
+  height: 8px;
+  width: 8px;
+  background-color: currentColor;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Custom Select Dropdown */
+.custom-select {
+  border: 2px solid rgb(209, 229, 240);
+  border-radius: 8px;
+  color: rgb(16, 101, 171);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Blur Effect when connection is lost */
+.blurred {
+  filter: blur(8px);
+  pointer-events: none;
+  transition: filter 0.4s ease;
+}
+
+/* Buttons */
+.btn-blue {
+  background-color: rgb(47, 103, 177);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn-blue:disabled {
+  background-color: rgb(142, 196, 222);
+  opacity: 0.7;
+}
+
+.btn-outline-secondary-custom {
+  border: 2px solid rgb(209, 229, 240);
+  color: rgb(47, 103, 177);
+  font-weight: 600;
+  background: white;
+}
+
+.btn-outline-secondary-custom:hover {
+  background: rgb(249, 249, 249);
+  border-color: rgb(142, 196, 222);
 }

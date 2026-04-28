@@ -1,27 +1,50 @@
-<div class="page-wrapper d-flex flex-column align-items-center justify-content-center">
-  <h1 class="brand-text">Vital<span>Vest</span></h1>
-
-  <div class="card shadow-lg border-0 shadow-sm" style="max-width: 400px; width: 100%;">
+<div class="login-wrapper d-flex align-items-center justify-content-center">
+  <div class="card shadow-sm border-0">
     <div class="card-body p-4 p-md-5">
-      <h2 class="h5 fw-bold mb-4 text-center" style="color: rgb(16, 101, 171);">Sign In</h2>
+      <h2 class="text-center mb-4 fw-bold color-primary">Welcome Back</h2>
       
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <div class="mb-3">
-          <input type="text" class="form-control custom-input" formControlName="username" placeholder="Username"/>
+          <label for="username" class="form-label small fw-semibold">Username</label>
+          <input 
+            type="text" 
+            id="username"
+            class="form-control custom-input" 
+            formControlName="username" 
+            placeholder="Enter your username"
+          />
         </div>
+
         <div class="mb-4">
-          <input type="password" class="form-control custom-input" formControlName="password" placeholder="Password"/>
+          <label for="password" class="form-label small fw-semibold">Password</label>
+          <input 
+            type="password" 
+            id="password"
+            class="form-control custom-input" 
+            formControlName="password" 
+            placeholder="••••••••"
+          />
         </div>
-        <button type="submit" class="btn btn-blue w-100 fw-bold" [disabled]="unactiveLogin">
+
+        <button 
+          type="submit" 
+          class="btn btn-primary-custom w-100 py-2 fw-bold mb-3" 
+          [disabled]="unactiveLogin">
           Login
         </button>
       </form>
 
-      <form [formGroup]="creationForm" (ngSubmit)="toCreate()" class="mt-4 text-center">
-        <button type="submit" class="btn btn-link text-muted small text-decoration-none">
-          New to VitalVest? Create Account
+      <hr class="my-4 text-muted">
+
+      <div class="text-center">
+        <p class="text-muted small">Don't have an account?</p>
+        <button 
+          type="button" 
+          (click)="toCreate()" 
+          class="btn btn-outline-danger-custom btn-sm px-4">
+          Create New User
         </button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
