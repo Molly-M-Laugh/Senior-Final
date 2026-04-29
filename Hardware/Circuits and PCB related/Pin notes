@@ -1,0 +1,20 @@
+Pin notes
+
+Pin7-NRST: Resets MCU when pulled to ground
+Pin44-BOOT0: Not connected, already has exposed header on-board
+		Pins 2,3,4 share a 3mA total driving output current, not a risk if used as inputs or sense
+			Pin2-PC13: Used as testpoint, connected to on-board LED and VBAT power domain, do not use, pre-loaded with LED and pullup
+			Pin3-PC14:
+			Pin4-PC15:
+
+		Pins 32, 33 control USB, so to maintain use of the USB header leave these alone
+			PA11 and PA12
+
+		Pins control JTAG, so they can be reclaimed but must define this very VERY early to not fall into memory pit
+			PA15,PB3,PB4
+			RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+			AFIO->MAPR &= ~AFIO_MAPR_SWJ_CFG;
+			AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+
+		PB3 will be used as its SWO to get outputs w/out tieing up UART channels
+			Wire a PCB solder jumper so after testing is done we can reclaim it as either GPIO or INTERUPT

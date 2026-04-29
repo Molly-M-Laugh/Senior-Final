@@ -1,7 +1,9 @@
-# STM32CubeIDE / Eclipse project metadata (local)
+# STM32CubeIDE / Eclipse project metadata
 .project
 .cproject
 .settings/
+
+# Workspace metadata — ignore only if this repo is NOT the workspace root
 .metadata/
 
 # Build output
@@ -42,6 +44,9 @@ Thumbs.db
 
 # CubeMX backup files
 *.ioc.bak
+
 # KiCad temp/lock files
 *.lck
 
+# Local history / nested repo problem
+.history/.history/

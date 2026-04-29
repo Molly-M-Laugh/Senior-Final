@@ -1,0 +1,22 @@
+# STM32CubeIDE build outputs
+Debug/
+Release/
+
+# Object and dependency files
+*.o
+*.d
+
+# Linker outputs
+*.elf
+*.map
+*.bin
+*.hex
+
+# CubeIDE generated (keep .ioc, ignore IDE workspace cache)
+.settings/
+.metadata/
+*.launch
+
+# Stale editor files
+*.swp
+*~

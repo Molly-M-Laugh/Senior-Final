@@ -157,7 +157,44 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
              }
          }
      }
+     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+     guard let data = characteristic.value else { return }
+    
+     if characteristic.uuid == dataUUID {
+        // Check for fault frame (prefixed with 0x02 type byte)
+        if data.first == 0x02 && data.count >= 2 {
+            let faultFlags = data[1]
+            lastValue = "FAULT: 0x\(String(format: "%02X", faultFlags))"
+            return
+        }
+        
+        // Parse as can_telemetry_t — must be exactly 16 bytes
+        guard data.count >= 16 else {
+            lastValue = "Bad frame: \(data.count) bytes"
+            return
+        }
+        
+        let temp0  = data.subdata(in: 0..<2).withUnsafeBytes { $0.load(as: Int16.self) }
+        let temp1  = data.subdata(in: 2..<4).withUnsafeBytes { $0.load(as: Int16.self) }
+        let temp2  = data.subdata(in: 4..<6).withUnsafeBytes { $0.load(as: Int16.self) }
+        let cur0   = data.subdata(in: 6..<8).withUnsafeBytes  { $0.load(as: UInt16.self) }
+        let cur1   = data.subdata(in: 8..<10).withUnsafeBytes { $0.load(as: UInt16.self) }
+        let cur2   = data.subdata(in: 10..<12).withUnsafeBytes { $0.load(as: UInt16.self) }
+        let volt0  = data.subdata(in: 12..<14).withUnsafeBytes { $0.load(as: UInt16.self) }
+        let volt1  = data.subdata(in: 14..<16).withUnsafeBytes { $0.load(as: UInt16.self) }
+        // volt2 would be bytes 16..<18 if you want it — struct is 18 bytes not 16, see note below
+        
+        lastValue = "T: \(Double(temp0)/100.0)° \(Double(temp1)/100.0)° \(Double(temp2)/100.0)°C | " +
+                    "I: \(cur0) \(cur1) \(cur2)mA | " +
+                    "V: \(volt0) \(volt1)mV"
+     } else {
+        lastCommandValue = String(decoding: data, as: UTF8.self)
+     }
+}
 
+
+
+/*
      func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
          guard let data = characteristic.value else {return}
          if(characteristic == dataCharacteristic){
@@ -172,7 +209,7 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
              lastCommandValue = String(decoding: data, as: UTF8.self)
          }
      }
-
+ */
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?){
         if error != nil {

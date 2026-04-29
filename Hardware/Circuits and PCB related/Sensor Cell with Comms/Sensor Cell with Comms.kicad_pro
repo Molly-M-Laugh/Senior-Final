@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.8,
-          "height": 1.27,
-          "width": 2.54
+          "drill": 0.5,
+          "height": 0.85,
+          "width": 0.85
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -48,17 +48,30 @@
         "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.5
+          "min_clearance": 0.2
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "net_conflict|117475000|84190000|d2850fde-7d9d-4bcf-bb1d-1ba3f37fbdbe|00000000-0000-0000-0000-000000000000",
+          "Simplification from using the breakout board"
+        ],
+        [
+          "net_conflict|70500000|49000000|3fbfb132-d7d0-4d70-a45c-0c0f661f0d93|00000000-0000-0000-0000-000000000000",
+          "Simplification from using the breakout board"
+        ],
+        [
+          "net_conflict|95500000|45620000|20d27f35-6fae-44e8-b297-bf2281e8f128|00000000-0000-0000-0000-000000000000",
+          "Simplification from using the breakout board"
+        ]
+      ],
       "meta": {
         "version": 2
       },
       "rule_severities": {
         "annular_width": "error",
-        "clearance": "error",
+        "clearance": "ignore",
         "connection_width": "warning",
         "copper_edge_clearance": "error",
         "copper_sliver": "warning",
@@ -66,7 +79,7 @@
         "creepage": "error",
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
-        "drill_out_of_range": "error",
+        "drill_out_of_range": "ignore",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "footprint": "error",
@@ -117,7 +130,7 @@
       },
       "rules": {
         "max_error": 0.005,
-        "min_clearance": 0.0,
+        "min_clearance": 0.2,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
         "min_groove_width": 0.0,
@@ -412,8 +425,8 @@
       "duplicate_sheet_names": "error",
       "endpoint_off_grid": "warning",
       "extra_units": "error",
-      "footprint_filter": "ignore",
-      "footprint_link_issues": "warning",
+      "footprint_filter": "warning",
+      "footprint_link_issues": "ignore",
       "four_way_junction": "ignore",
       "global_label_dangling": "warning",
       "hier_label_mismatch": "error",
@@ -431,14 +444,14 @@
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "warning",
+      "pin_to_pin": "error",
       "power_pin_not_driven": "error",
       "same_local_global_label": "warning",
       "similar_label_and_power": "warning",
       "similar_labels": "warning",
       "similar_power": "warning",
-      "simulation_model_issue": "ignore",
-      "single_global_label": "ignore",
+      "simulation_model_issue": "warning",
+      "single_global_label": "warning",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
       "undefined_netclass": "error",
@@ -474,6 +487,41 @@
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
+      },
+      {
+        "clearance": 0.2,
+        "name": "CAN",
+        "pcb_color": "rgb(242, 8, 255)",
+        "priority": 2,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.25
+      },
+      {
+        "clearance": 0.2,
+        "name": "Ground",
+        "pcb_color": "rgb(75, 144, 0)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.5,
+        "via_diameter": 0.8,
+        "via_drill": 0.5
+      },
+      {
+        "clearance": 0.2,
+        "name": "Power",
+        "pcb_color": "rgb(255, 211, 69)",
+        "priority": 3,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.8,
+        "via_diameter": 1.0
+      },
+      {
+        "clearance": 0.2,
+        "name": "Signals",
+        "pcb_color": "rgb(3, 5, 255)",
+        "priority": 1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.2
       }
     ],
     "meta": {
@@ -481,14 +529,83 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": []
+    "netclass_patterns": [
+      {
+        "netclass": "Power",
+        "pattern": "*+?*"
+      },
+      {
+        "netclass": "CAN",
+        "pattern": "*CAN*_?*t*"
+      },
+      {
+        "netclass": "Ground",
+        "pattern": "GND"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*INA*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "/S??"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "/WP"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "/TEMP*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*MCP*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*FLT*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*MCU*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*ALRT*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*EN*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*ON"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*PG*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*Ser*"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*LED"
+      },
+      {
+        "netclass": "Signals",
+        "pattern": "*WAKE"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../PCB_Gerber/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
@@ -602,6 +719,18 @@
     [
       "953799b5-f11e-4770-941d-f5d23acc5c6d",
       "Root"
+    ],
+    [
+      "3d764e8b-7a8a-4a04-8ce0-2c927a9d8ed4",
+      "Sensors||IIC_BUS"
+    ],
+    [
+      "779df1c1-ac91-4afc-a9dd-e99c8e3614d8",
+      "CAN Related"
+    ],
+    [
+      "fd73c0a6-9291-47e7-9fe4-221baafadf1c",
+      "POWER"
     ]
   ],
   "text_variables": {}
