@@ -1,0 +1,7 @@
+menu "NETESP Config"
+
+config SIM_MODE
+    bool "Enable simulated transport (no CANESP required)"
+    default y
+
+endmenu
