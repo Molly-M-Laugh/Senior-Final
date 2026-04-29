@@ -6,17 +6,35 @@
 //
 
 import SwiftUI
+internal import Combine
+import Foundation
+import Observation
 
+enum Route: Hashable{
+    case home
+    case login
+    case register
+    case graph
+}
 
-class Router{
+@MainActor
+class Router: ObservableObject{
   
-    static let shared = Router()
+    @Published var path: [Route] = []
     //Need to change this to have dynamic settings between logged in and out
-    var tab = 0
+    func setPath(_ newPath: [Route]){
+        path = newPath
+    }
     
-    
-    private init(){}
-
-    
+    func reset(){
+        path.removeAll()
+    }
+    func backOne()
+    {
+       _ = path.popLast()
+    }
+    func forwardOne(_ route: Route){
+        path.append(route)
+    }
 }
 

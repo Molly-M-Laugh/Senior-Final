@@ -11,10 +11,11 @@
 import Foundation
 import CoreBluetooth
 import Observation
+internal import Combine
 
 
-@Observable
-class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+
+class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, ObservableObject{
     
     struct BLEDevice: Identifiable, Hashable{
         let id: UUID
@@ -41,13 +42,13 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var debugVariable = ""
     var isConnected = false
     var isScanning = false
-    var devices: [BLEDevice] = []
-    var lastValue : String
-    var lastCommandValue = "Nothing yet"
-    var lastDate : Date = Date()
-    var values : [ChartData] = []
-    var int1 : Float = 0.0
-    var cleanValue = ""
+    @Published var devices: [BLEDevice] = []
+    @Published var lastValue : String
+    @Published var lastCommandValue = "Nothing yet"
+    @Published var lastDate : Date = Date()
+    @Published var values : [ChartData] = []
+    @Published var int1 : Float = 0.0
+    @Published var cleanValue = ""
     
 
     
@@ -99,6 +100,18 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         return date
     }
     
+    func disconnectFromPeripheral(){
+        if let peripheral = esp32Peripheral{
+            centralManager.cancelPeripheralConnection(peripheral)
+            isConnected = false
+            esp32Peripheral = nil
+            dataCharacteristic = nil
+            commandCharacteristic = nil
+            devices = []
+            startScan()
+        }
+    }
+    
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber){
         debugVariable = "Attempting to connect to something"
 
@@ -112,6 +125,14 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         isConnected = true
         peripheral.discoverServices([serviceUUID])
      }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral){
+        isConnected = false
+        esp32Peripheral = nil
+        dataCharacteristic = nil
+        commandCharacteristic = nil
+        devices = []
+    }
 
      func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
          guard let services = peripheral.services else {return}

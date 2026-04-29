@@ -27,7 +27,7 @@ class HttpHandler: NSObject{
     
     
     
-    func login(username:String, password:String){
+    func login(username:String, password:String, completion: @escaping (Bool) -> Void){
         if loginAttempt == true {
             return
         }
@@ -37,31 +37,31 @@ class HttpHandler: NSObject{
             "username": username,
             "password": password
         ]
-        AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { response in
+        print("attempting request")
+        AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { (response) in
+            var working = Bool()
             switch response.result {
             case .success(_):
                 if(response.response?.statusCode == 200){
                     self.loginResults = true
-                    return
+                    working = true
                 }
                 else{
                     self.loginResults = false
-                    return
+                    working = false
                 }
                 
-            case .failure(let error):
+            case .failure(_):
                 print("login failed")
                 self.loginResults = false
-                print(error)
+                working = false
             }
+            completion(working)
         }
-        
-        
-        loginAttempt = false
         return
     }
     
-    func register(username:String, password:String){
+    func register(username:String, password:String, completion: @escaping (Bool) -> Void){
         if registerAttempt == true {
             return
         }
@@ -75,27 +75,23 @@ class HttpHandler: NSObject{
         print("Register 1, username is \(username) and password is \(password)")
         
         AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { response in
+            var working = Bool()
             switch response.result {
             case .success(_):
                 print("Register 2")
                 self.registerResults = true
-                return
+                working = true
+                
             case .failure(let error):
                 print("Register 3")
                 print(error)
                 self.registerResults = false
-                return
+                working = false
             }
+            completion(working)
         }
         
         return
     }
-
-
-    
-    
-    
-    
-    
     
 }

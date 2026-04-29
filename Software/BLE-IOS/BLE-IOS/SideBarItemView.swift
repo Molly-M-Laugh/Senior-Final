@@ -24,6 +24,3 @@ struct SideBarItemView: View{
     }
 }
 
-#Preview{
-    SideBarItemView(item: .login)
-}

@@ -8,12 +8,11 @@
 
 import SwiftUI
 
+
 struct SideBarMenuView: View {
     @Binding var menuOpen: Bool
-    @State var router = Router.shared
-    
-    @Binding var tab: Int
-    
+    @ObservedObject var router: Router
+    @ObservedObject var manager: BLEHandler
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)){
             if menuOpen{
@@ -26,7 +25,7 @@ struct SideBarMenuView: View {
                 HStack{
                     VStack(alignment: .leading){
                         VStack(alignment: .leading, spacing: 0.3){
-                            Text("T-Temp")
+                            Text("VitalVest")
                                 .padding()
                                 .font(.subheadline)
                             Text("UI testing")
@@ -37,7 +36,10 @@ struct SideBarMenuView: View {
                         VStack{
                             ForEach(SideBarMenuItems.allCases){ option in
                                 Button(action: {
-                                    tab = option.rawValue
+                                    if(option.route == .login){
+                                        manager.disconnectFromPeripheral()
+                                    }
+                                    router.setPath([option.route])
                                     menuOpen.toggle()
                                 }, label: {
                                     SideBarItemView(item: option)
@@ -49,7 +51,7 @@ struct SideBarMenuView: View {
                     }
                     .padding()
                     .frame(width: 200, alignment: .leading)
-                    .background(.white)
+                    .background()
                 }
             }
         }
@@ -59,6 +61,3 @@ struct SideBarMenuView: View {
     }
 }
 
-#Preview{
-    SideBarMenuView(menuOpen: .constant(true), tab: .constant(0))
-}
