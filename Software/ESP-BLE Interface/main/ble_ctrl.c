@@ -198,9 +198,8 @@ void ble_ctrl_init(void)
         ble_svc_gatt_init();
         ble_gatts_count_cfg(s_gatt_svcs);
         ble_gatts_add_svcs(s_gatt_svcs);
-        ble_svc_gap_device_name_set(DEVICE_NAME);
+        ble_svc_gap_device_name_set(DEVICE_NAME);                
 
-        /* Pin NimBLE host task to Core 0 where the BLE stack lives */
         nimble_port_freertos_init(nimble_host_task);
         s_nimble_inited = true;
     }
