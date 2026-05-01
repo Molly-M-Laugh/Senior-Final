@@ -16,9 +16,11 @@
 #include "nimble/nimble_port_freertos.h"
 #include "esp_log.h"
 #include <string.h>
+#include "nvs_flash.h"
+
 
 #define TAG             "ble_ctrl"
-#define DEVICE_NAME     "TelemetryNode"
+#define DEVICE_NAME     "myESP32"
 
 /* -----------------------------------------------------------------------
  * UUIDs — 128-bit, stored little-endian per BLE spec
@@ -43,6 +45,21 @@ static uint16_t              s_data_val_handle = 0;
 static ble_cmd_callback_t    s_cmd_cb          = NULL;
 static bool                  s_subscribed      = false;
 
+static const uint8_t _hidReportDescriptor[] = {
+  0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+  0x09, 0x06,                    // USAGE (Keyboard)
+  0xa1, 0x01,                    // COLLECTION (Application)
+  0x85, 0x01,                    //   REPORT_ID (1)
+  0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
+  0x19, 0xe0,                    //   USAGE_MINIMUM (Keyboard LeftControl)
+  0x29, 0xe7,                    //   USAGE_MAXIMUM (Keyboard Right GUI)
+  0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
+  0x25, 0x01,                    //   LOGICAL_MAXIMUM (1)
+  0x75, 0x01,                    //   REPORT_SIZE (1)
+  0x95, 0x08,                    //   REPORT_COUNT (8)
+  0x81, 0x02,                    //   INPUT (Data,Var,Abs)
+  0xc0                           // END_COLLECTION
+};
 /* -----------------------------------------------------------------------
  * GATT characteristic access callbacks
  * --------------------------------------------------------------------- */
@@ -78,6 +95,19 @@ static int cmd_char_access(uint16_t conn_handle, uint16_t attr_handle,
     return BLE_ATT_ERR_UNLIKELY;
 }
 
+static int hid_char_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg){
+    uint16_t uuid = ble_uuid_u16(ctxt->chr->uuid);
+
+    if(uuid == 0x2A4B){
+        return os_mbuf_append(ctxt->om, _hidReportDescriptor, sizeof(_hidReportDescriptor));
+    }
+    if(uuid == 0x2A4A){
+        static const uint8_t hid_info[] = {0x01, 0x01, 0x00, 0x02};
+        return os_mbuf_append(ctxt->om, hid_info, sizeof(hid_info));
+    }
+    return 0;
+}
+
 /* -----------------------------------------------------------------------
  * GATT service table
  * --------------------------------------------------------------------- */
@@ -102,8 +132,36 @@ static const struct ble_gatt_svc_def s_gatt_svcs[] = {
             { 0 } /* terminator */
         },
     },
+     {
+        /* -----------------------------------------------------------------------
+        * HID Mask for Windows Compatibility
+        * --------------------------------------------------------------------- */
+
+        .type = BLE_GATT_SVC_TYPE_PRIMARY,
+        .uuid = BLE_UUID16_DECLARE(0x1812),
+        .characteristics = (struct ble_gatt_chr_def[]){
+            {
+                .uuid = BLE_UUID16_DECLARE(0x2A4A),
+                .access_cb = hid_char_access,
+                .flags = BLE_GATT_CHR_F_READ,
+            },
+            {
+                .uuid = BLE_UUID16_DECLARE(0x24AB),
+                .access_cb = hid_char_access,
+                .flags = BLE_GATT_CHR_F_READ,
+            },
+            {
+                .uuid = BLE_UUID16_DECLARE(0x24AE),
+                .access_cb = hid_char_access,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+            },
+            {0},
+        },
+    },
     { 0 } /* terminator */
 };
+
+
 
 /* -----------------------------------------------------------------------
  * GAP event handler
@@ -159,6 +217,11 @@ static void start_advertising(void)
     fields.name                  = (const uint8_t *)DEVICE_NAME;
     fields.name_len              = strlen(DEVICE_NAME);
     fields.name_is_complete      = 1;
+    
+    // Tried this here to mask it as a keyboard, also tried other devices windows considers high priority
+    //fields.appearance = 0x03C1;
+    //fields.appearance_is_present = 1;
+
     /* Advertise service UUID so iOS scan filter works */
     fields.uuids128              = &s_svc_uuid;
     fields.num_uuids128          = 1;
@@ -190,6 +253,19 @@ void ble_ctrl_register_cmd_callback(ble_cmd_callback_t cb)
 
 void ble_ctrl_init(void)
 {
+
+    // need to init nvs_flash first for functionality of HID
+    // causes a core dump otherwise
+
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+
     static bool s_nimble_inited = false;
 
     if (!s_nimble_inited) {
@@ -199,6 +275,11 @@ void ble_ctrl_init(void)
         ble_gatts_count_cfg(s_gatt_svcs);
         ble_gatts_add_svcs(s_gatt_svcs);
         ble_svc_gap_device_name_set(DEVICE_NAME);                
+
+        ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
+        ble_hs_cfg.sm_bonding = 1;
+        ble_hs_cfg.sm_mitm = 1;
+        ble_hs_cfg.sm_sc = 1;
 
         nimble_port_freertos_init(nimble_host_task);
         s_nimble_inited = true;
