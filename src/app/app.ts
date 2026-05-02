@@ -12,6 +12,6 @@ import { Settings } from './components/settings/settings';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('senior-et');
+  protected readonly title = signal('vital-vest');
   //protected title = "senior-et";
 }
