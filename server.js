@@ -37,12 +37,6 @@ const pool = new Pool({
 });
 const cors = require('cors'); // Link Angular, NodeJS
 
-// Bluetooth variables
-const service = 'ab2d02b4-ad53-400f-bf7e-d603a657d07d';
-const dataChar = '05ac146f-aee8-4659-aba5-882c1f7e0372';
-const commandChar = '58bb99f3-75cb-48cb-81e4-346cc4f0687d';
-var isInserted = false; // Mutual declaration, for keeping track that data inserted properly
-
 // Put most specific link here
 app.use(express.json()); // For correct form parsing for db
 app.use(cors({
