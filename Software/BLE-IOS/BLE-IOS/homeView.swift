@@ -10,7 +10,7 @@ import SwiftUI
 
 struct homeView: View{
     @ObservedObject var router: Router
-    @ObservedObject var manager: BLEHandler
+    var manager: BLEHandler
     @State private var isMenuOpen = false
     var body: some View{
         ZStack(){

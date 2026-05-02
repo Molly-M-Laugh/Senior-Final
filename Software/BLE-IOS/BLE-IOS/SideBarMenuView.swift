@@ -12,7 +12,7 @@ import SwiftUI
 struct SideBarMenuView: View {
     @Binding var menuOpen: Bool
     @ObservedObject var router: Router
-    @ObservedObject var manager: BLEHandler
+    var manager: BLEHandler
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)){
             if menuOpen{

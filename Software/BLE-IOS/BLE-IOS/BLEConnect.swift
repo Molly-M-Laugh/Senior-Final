@@ -15,7 +15,7 @@ internal import Combine
 
 
 
-class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, ObservableObject{
+class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
     
     struct BLEDevice: Identifiable, Hashable{
         let id: UUID
@@ -42,11 +42,15 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
     var debugVariable = ""
     var isConnected = false
     var isScanning = false
+    var lastValue : String
     @Published var devices: [BLEDevice] = []
-    @Published var lastValue : String
+    @Published var lastDataValue : [String]  = []
+    @Published var lastTempValues: [Float] = []
     @Published var lastCommandValue = "Nothing yet"
     @Published var lastDate : Date = Date()
-    @Published var values : [ChartData] = []
+    @Published var tempValues : [ChartData] = []
+    @Published var currentValues : [ChartData] = []
+    @Published var voltageValues : [ChartData] = []
     @Published var int1 : Float = 0.0
     @Published var cleanValue = ""
     
@@ -55,7 +59,6 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
     
     override init(){
         lastValue = "0"
-        
         super.init()
         centralManager = CBCentralManager(delegate: self, queue:nil)
     }
@@ -84,9 +87,6 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
         esp32Peripheral?.writeValue(data, for: commandCharacteristic!, type: .withResponse)
     }
     
-    func resetGraph(){
-        values = []
-    }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         debugVariable = "Bluetooth on"
@@ -171,6 +171,7 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
         // Parse as can_telemetry_t — must be exactly 16 bytes
         guard data.count >= 16 else {
             lastValue = "Bad frame: \(data.count) bytes"
+            print(lastValue)
             return
         }
         
@@ -187,6 +188,21 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, Obse
         lastValue = "T: \(Double(temp0)/100.0)° \(Double(temp1)/100.0)° \(Double(temp2)/100.0)°C | " +
                     "I: \(cur0) \(cur1) \(cur2)mA | " +
                     "V: \(volt0) \(volt1)mV"
+        
+         lastDataValue = lastValue.components(separatedBy: " | ")
+         let inputTrim1 = CharacterSet.init(charactersIn: "T: ")
+         let cleanValue = lastDataValue[0].trimmingCharacters(in: inputTrim1)
+         let tempChartData = (Float(cleanValue) ?? -1)
+         if(tempChartData == -1){
+             print("Error on this data: \(cleanValue)")
+         }
+         else{
+             tempValues.append(ChartData(x:lastDate, y: tempChartData))
+         }
+         
+         
+         
+         // check values for notification!!
      } else {
         lastCommandValue = String(decoding: data, as: UTF8.self)
      }

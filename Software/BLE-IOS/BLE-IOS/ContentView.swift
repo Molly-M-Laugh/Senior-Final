@@ -13,7 +13,7 @@ import Charts
 
 struct ContentView: View {
     @StateObject private var router = Router()
-    @StateObject private var BLEmanager = BLEHandler()
+    private var BLEmanager = BLEHandler()
     var body: some View {
         NavigationStack(path: $router.path) {
             loginView (router: router)

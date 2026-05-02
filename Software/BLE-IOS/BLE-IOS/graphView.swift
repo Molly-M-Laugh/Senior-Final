@@ -16,28 +16,33 @@ struct ChartData: Identifiable {
 }
 
 
+
+
 struct graphView: View{
     @ObservedObject var router: Router
-    @ObservedObject var manager: BLEHandler
+    var manager: BLEHandler
+    var times = ["Last 5 Minutes", "Last Hour", "Last 24 hours", "Last week"]
+    @State var currentDuration = "Last 5 Minutes"
     @State private var isMenuOpen = false
     
     var body: some View{
         ZStack{
             VStack{
-                Text("\(manager.lastValue)")
+                Picker("Duration", selection: $currentDuration){
+                    //change option based on duration
+                    ForEach(times, id: \.self){ time in
+                        Text(time)
+                    }
+                }
+                Text("\(manager.lastDataValue[0])")
                 Chart {
-                    ForEach(manager.values) { data in
+                    ForEach(manager.tempValues) { data in
                         LineMark(x: .value("x", data.x, unit:.second), y: .value("y", data.y))
                     }
                 }
                 .chartXVisibleDomain(length: 60)
                 .frame(width: 350, height: 200)
                 .padding()
-                
-                Button("Reset Graph", action:{
-                    manager.resetGraph()
-                })
-                .buttonStyle(.bordered)
             }
             .padding()
             .navigationBarBackButtonHidden(true)
