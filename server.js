@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8080;
 const Bluetooth = require('webbluetooth').Bluetooth;
 const deviceFound = (device, selectFn) => {
     // If device can be automatically selected, do so by returning true
-    if (device.name === 'VitalVest') {
+    if (device.name === 'MyESP32') {
       console.log([device.name]); // Get device name for here
       return true;
       }
