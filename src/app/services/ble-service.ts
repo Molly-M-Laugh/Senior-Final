@@ -46,7 +46,7 @@ export class BleService {
 
       await dataChar.startNotifications();
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
-      const value = new TextDecoder().decode(event.target.value);
+      const value = new TextDecoder('utf-8').decode(event.target.value);
 
       // Force Angular to recognize this asynchronous Bluetooth event
       this.ngZone.run(() => {
