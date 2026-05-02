@@ -40,7 +40,7 @@ export class BleService {
       const service = await this.gattServer.getPrimaryService('ab2d02b4-ad53-400f-bf7e-d603a657d07d');
       console.log("Retreived service");
 
-      const dataChar = await service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372');
+      const dataChar = await service.getCharacteristic('05ac146f-aee8-4659-abba-882c1f7e0372');
       this.dataCharacteristic = dataChar;
       console.log("Retreived characteristics");
 
