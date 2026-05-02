@@ -42,7 +42,7 @@ export class BleService {
 
       const dataChar = await service.getCharacteristic('05ac146f-aee8-4659-aba5-882c1f7e0372');
       this.dataCharacteristic = dataChar;
-      console.log("Retreived characteristic");
+      console.log("Retreived characteristics");
 
       await dataChar.startNotifications();
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {

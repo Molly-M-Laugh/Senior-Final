@@ -251,7 +251,7 @@ export class Home implements OnInit, OnDestroy {
     if (!this.isConnected) return;
 
     // Sending "5" triggers the 'Increment number' logic 
-    await this.ble.sendCommand("5"); 
+    //await this.ble.sendCommand("5"); 
     const latestValue = await this.ble.read();
     const dateItem = new Date();
     const dataValue = { user: 1, time: dateItem.toISOString(), temp: latestValue };
