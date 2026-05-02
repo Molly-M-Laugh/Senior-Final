@@ -178,10 +178,10 @@ app.get('/api/data-init', async (req, res) => {
 //client.end();
 
 // Serve only the static files form the dist directory
-app.use(express.static(path.join(__dirname,'dist/senior-et/browser')));
+app.use(express.static(path.join(__dirname,'dist/vital-vest/browser')));
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/senior-et/browser/index.csr.html'));
+  res.sendFile(path.join(__dirname, 'dist/vital-vest/browser/index.csr.html'));
 });
 
 // Start the app by listening on the default Heroku port
