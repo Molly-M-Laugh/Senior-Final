@@ -29,20 +29,24 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
         let y : Float
     }
     
-    
     private var centralManager: CBCentralManager!
     private var esp32Peripheral: CBPeripheral?
+    
     var dataCharacteristic: CBCharacteristic?
     var commandCharacteristic: CBCharacteristic?
     //Our UUIDs for connecting to the ESP
     var serviceUUID = CBUUID(string:"ab2d02b4-ad53-400f-bf7e-d603a657d07d")
-    var dataUUID = CBUUID(string:"05ac146f-aee8-4659-aba5-882c1f7e0372")
+    var dataUUID = CBUUID(string:"05ac146f-aee8-4659-abba-882c1f7e0372")
     var commandUUID = CBUUID(string:"58bb99f3-75cb-48cb-81e4-346cc4f0687d")
     
     var debugVariable = ""
     var isConnected = false
     var isScanning = false
     var lastValue : String
+    
+    private var bleDelay = false
+    private var timer: Timer?
+    
     @Published var devices: [BLEDevice] = []
     @Published var lastDataValue : [String]  = []
     @Published var lastTempValues: [Float] = []
@@ -53,6 +57,7 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
     @Published var voltageValues : [ChartData] = []
     @Published var int1 : Float = 0.0
     @Published var cleanValue = ""
+    
     
 
     
@@ -175,6 +180,11 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
             return
         }
         
+        if(bleDelay){
+             return
+        }
+        startTimer()
+        print("Timer started")
         let temp0  = data.subdata(in: 0..<2).withUnsafeBytes { $0.load(as: Int16.self) }
         let temp1  = data.subdata(in: 2..<4).withUnsafeBytes { $0.load(as: Int16.self) }
         let temp2  = data.subdata(in: 4..<6).withUnsafeBytes { $0.load(as: Int16.self) }
@@ -192,13 +202,16 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
          lastDataValue = lastValue.components(separatedBy: " | ")
          let inputTrim1 = CharacterSet.init(charactersIn: "T: ")
          let cleanValue = lastDataValue[0].trimmingCharacters(in: inputTrim1)
-         let tempChartData = (Float(cleanValue) ?? -1)
+         let tempChartData = (Float((Double(temp0)/100.0)) ?? -1)
+         //let tempChartData = (Float(cleanValue) ?? -1)
          if(tempChartData == -1){
              print("Error on this data: \(cleanValue)")
          }
          else{
+             print("Date: \(lastDate), temp: \(tempChartData)")
              tempValues.append(ChartData(x:lastDate, y: tempChartData))
          }
+        
          
          
          
@@ -234,4 +247,21 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
         }
         lastCommandValue = "We sent something"
     }
+    
+    
+    
+    private func startTimer(){
+        bleDelay = true
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fire), userInfo: nil, repeats: false)
+    }
+    
+    @objc func fire(){
+        print("Timer fired")
+        bleDelay = false;
+        timer?.invalidate()
+        timer = nil
+    }
+    
 }
+
+    
