@@ -25,6 +25,7 @@ export class BleService {
     reservation : 1
   };
   private buf : ArrayBuffer = new ArrayBuffer(100);
+  readTime : any;
 
   constructor(@Inject(PLATFORM_ID) private platformId: object, private ngZone: NgZone) {}
 
@@ -59,34 +60,43 @@ export class BleService {
       console.log("Retreived characteristics");
 
       await dataChar.startNotifications();
-      // Don't use TextDecoder, as only for existing strings, not raw bytes
-      dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
 
-        //const decoder = new TextDecoder('utf-8', { fatal: true });
+      this.readTime = setInterval(async () => {
         try {
-          //const dataBytes: Uint8Array = new Uint8Array(event.target.value)
-          //const value = decoder.decode(dataBytes);
           this.parseDt(this.buf)
           console.log("Value updated in Zone: ", this.dataBtye);
+        } catch (error) {
+          console.error("Error: ", error);
+        }
+      },1000);
+      // Don't use TextDecoder, as only for existing strings, not raw bytes
+      //dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
+
+        //const decoder = new TextDecoder('utf-8', { fatal: true });
+        //try {
+          //const dataBytes: Uint8Array = new Uint8Array(event.target.value)
+          //const value = decoder.decode(dataBytes);
+          //this.parseDt(this.buf)
+          //console.log("Value updated in Zone: ", this.dataBtye);
           //this.ngZone.run(() => {
             //this.deviceValue$.next(value);
             //console.log("Value updated in Zone:", value);
           //});
-        } catch (e) {
-          console.error("Invalid TextDecoder sequence detected");
-        }
+        //} catch (e) {
+          //console.error("Invalid TextDecoder sequence detected");
+        //}
       //const value = new TextDecoder('utf-8').decode(event.target.value);
 
       // Force Angular to recognize this asynchronous Bluetooth event
-    });
-    console.log("Added event listener");
+      //});
+      console.log("Added event listener");
 
 
-    // 2. Setup the Command Characteristic (to send triggers)
-    this.commandChar = await service.getCharacteristic('58bb99f3-75cb-48cb-81e4-346cc4f0687d');
-    console.log("Connected and Command Char ready.");
+      // 2. Setup the Command Characteristic (to send triggers)
+      this.commandChar = await service.getCharacteristic('58bb99f3-75cb-48cb-81e4-346cc4f0687d');
+      console.log("Connected and Command Char ready.");
 
-    // If we got this far, we are connected
+      // If we got this far, we are connected
       this.isConnected$.next(true);
     } catch (error) {
       this.isConnected$.next(false);
