@@ -1,33 +1,31 @@
-/* =======================================================================
- * uart_port.h — transport seam between NETESP app and physical UART/sim
+/* =============================================================================
+ * uart_port.h — UART transport seam for CANESP
  *
- * Real build:  uart_dma.c is compiled in
- * Sim build:   sim_transport.c is compiled in (CONFIG_SIM_MODE=y)
+ * Identical interface to NETESP's uart_port.h.
+ * On CANESP there is no sim mode — real hardware only.
  *
- * Application code calls only these functions — never the impl directly.
- * ===================================================================== */
-#ifndef UART_PORT_H
-#define UART_PORT_H
+ * Queue model:
+ *   g_uart_rx_queue: commands arriving FROM NETESP → can_task TX
+ *   g_uart_tx_queue: telemetry/fault going TO NETESP ← can_task RX
+ * =========================================================================== */
+#pragma once
 
 #include "frame_codec.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 #include <stdbool.h>
 
-/* Frame envelope delivered to the application */
 typedef struct {
-    uint8_t  type;          /* FRAME_TYPE_* */
-    uint8_t  payload[64];   /* raw payload bytes */
-    uint8_t  len;           /* payload length in bytes */
-} uart_frame_t;
+    uint8_t  type;
+    uint8_t  payload[FRAME_MAX_PAYLOAD_LEN];
+    uint16_t payload_len;
+} uart_port_msg_t;
 
-/* Initialize the transport (real or sim). Call once from app_main. */
+extern QueueHandle_t g_uart_rx_queue;
+extern QueueHandle_t g_uart_tx_queue;
+
+#define UART_PORT_QUEUE_DEPTH   16u
+
 void uart_port_init(void);
-
-/* Block until a frame arrives (use portMAX_DELAY or a finite timeout).
-   Returns true on success, false on timeout. */
-bool uart_port_read(uart_frame_t *out, uint32_t timeout_ms);
-
-/* Send a frame toward CANESP (commands from phone).
-   Returns true if enqueued successfully. */
-bool uart_port_write(const uart_frame_t *frame);
-
-#endif /* UART_PORT_H */
+bool uart_port_receive(uart_port_msg_t *msg_out, uint32_t timeout_ms);
+bool uart_port_send(uint8_t type, const void *payload, uint16_t payload_len);

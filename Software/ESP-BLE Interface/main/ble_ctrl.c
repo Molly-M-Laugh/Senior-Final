@@ -16,9 +16,11 @@
 #include "nimble/nimble_port_freertos.h"
 #include "esp_log.h"
 #include <string.h>
+#include "nvs_flash.h"
+
 
 #define TAG             "ble_ctrl"
-#define DEVICE_NAME     "TelemetryNode"
+#define DEVICE_NAME     "MyESP32"
 
 /* -----------------------------------------------------------------------
  * UUIDs — 128-bit, stored little-endian per BLE spec
@@ -105,6 +107,8 @@ static const struct ble_gatt_svc_def s_gatt_svcs[] = {
     { 0 } /* terminator */
 };
 
+
+
 /* -----------------------------------------------------------------------
  * GAP event handler
  * --------------------------------------------------------------------- */
@@ -159,6 +163,10 @@ static void start_advertising(void)
     fields.name                  = (const uint8_t *)DEVICE_NAME;
     fields.name_len              = strlen(DEVICE_NAME);
     fields.name_is_complete      = 1;
+
+    //fields.appearance = 0x03C1;
+    //fields.appearance_is_present = 1;
+
     /* Advertise service UUID so iOS scan filter works */
     fields.uuids128              = &s_svc_uuid;
     fields.num_uuids128          = 1;
@@ -190,6 +198,18 @@ void ble_ctrl_register_cmd_callback(ble_cmd_callback_t cb)
 
 void ble_ctrl_init(void)
 {
+    /*
+    //need to init nvs_flash first 
+
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
+    */
     static bool s_nimble_inited = false;
 
     if (!s_nimble_inited) {
@@ -198,9 +218,14 @@ void ble_ctrl_init(void)
         ble_svc_gatt_init();
         ble_gatts_count_cfg(s_gatt_svcs);
         ble_gatts_add_svcs(s_gatt_svcs);
-        ble_svc_gap_device_name_set(DEVICE_NAME);
+        ble_svc_gap_device_name_set(DEVICE_NAME);                
 
-        /* Pin NimBLE host task to Core 0 where the BLE stack lives */
+        /*
+        ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
+        ble_hs_cfg.sm_bonding = 1;
+        ble_hs_cfg.sm_mitm = 1;
+        ble_hs_cfg.sm_sc = 1;
+        */
         nimble_port_freertos_init(nimble_host_task);
         s_nimble_inited = true;
     }
