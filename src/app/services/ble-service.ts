@@ -45,8 +45,9 @@ export class BleService {
       console.log("Retreived characteristics");
 
       await dataChar.startNotifications();
+      // Raw bytes don't follow: utf-8,
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
-        const decoder = new TextDecoder('utf-8', { fatal: true });
+        const decoder = new TextDecoder('utf-16', { fatal: true });
         try {
           const value = decoder.decode(event.target.value);
           this.ngZone.run(() => {
@@ -54,7 +55,7 @@ export class BleService {
             console.log("Value updated in Zone:", value);
           });
         } catch (e) {
-          console.error("Invalid UTF-8 sequence detected");
+          console.error("Invalid TextDecoder sequence detected");
         }
       //const value = new TextDecoder('utf-8').decode(event.target.value);
 
