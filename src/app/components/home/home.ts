@@ -46,12 +46,27 @@ export class Home implements OnInit, OnDestroy {
       title: "Time Passed",
       valueFormatString: this.formatString
     },
+    /*
+    axisY: {
+      title: "Temperature (F)",
+      stripLines:[
+        {
+          value: 100,
+          color: "red",
+          thickness: 3,
+          label: "Threshold"
+        }
+      ]
+    },
+    */
 	  data: [{
 		type: "line",
     xValueType: "dateTime",
 		dataPoints: [] as { x: Date; y: number }[]
 	  }]
 	}
+  // For a threshold on graph, access as(?): 
+  //this.chartOptions.axisY[0].stripLines = //?
 
   ngOnInit(): void {
     setTimeout(() => {

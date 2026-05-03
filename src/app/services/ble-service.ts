@@ -46,13 +46,19 @@ export class BleService {
 
       await dataChar.startNotifications();
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
-      const value = new TextDecoder('utf-8').decode(event.target.value);
+        const decoder = new TextDecoder('utf-8', { fatal: true });
+        try {
+          const value = decoder.decode(event.target.value);
+          this.ngZone.run(() => {
+            this.deviceValue$.next(value);
+            console.log("Value updated in Zone:", value);
+          });
+        } catch (e) {
+          console.error("Invalid UTF-8 sequence detected");
+        }
+      //const value = new TextDecoder('utf-8').decode(event.target.value);
 
       // Force Angular to recognize this asynchronous Bluetooth event
-      this.ngZone.run(() => {
-        this.deviceValue$.next(value);
-        console.log("Value updated in Zone:", value);
-      });
     });
     console.log("Added event listener");
 
