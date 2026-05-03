@@ -11,6 +11,20 @@ export class BleService {
   private dataCharacteristic: any = null;
   private commandChar: any = null;
   public isConnected$ = new BehaviorSubject<boolean>(false);
+  private dataBtye : parseData = {
+    temp1 : 1,
+    temp2 : 1,
+    temp3 : 1,
+    current1 : 1,
+    current2 : 1,
+    current3 : 1,
+    volt1 : 1,
+    volt2 : 1,
+    volt3 : 1,
+    faultFlag : 1,
+    reservation : 1
+  };
+  private buf : ArrayBuffer = new ArrayBuffer(100);
 
   constructor(@Inject(PLATFORM_ID) private platformId: object, private ngZone: NgZone) {}
 
@@ -47,14 +61,17 @@ export class BleService {
       await dataChar.startNotifications();
       // Raw bytes don't follow: utf-8, utf-16, utf-16le, utf-16be
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
-        const decoder = new TextDecoder('utf-8', { fatal: true });
+
+        //const decoder = new TextDecoder('utf-8', { fatal: true });
         try {
-          const dataBytes: Uint8Array = new Uint8Array(event.target.value)
-          const value = decoder.decode(dataBytes);
-          this.ngZone.run(() => {
-            this.deviceValue$.next(value);
-            console.log("Value updated in Zone:", value);
-          });
+          //const dataBytes: Uint8Array = new Uint8Array(event.target.value)
+          //const value = decoder.decode(dataBytes);
+          this.parseDt(this.buf)
+          console.log("Value updated in Zone: ", String.fromCharCode(this.dataBtye)
+          //this.ngZone.run(() => {
+            //this.deviceValue$.next(value);
+            //console.log("Value updated in Zone:", value);
+          //});
         } catch (e) {
           console.error("Invalid TextDecoder sequence detected");
         }
@@ -124,4 +141,36 @@ export class BleService {
       return '-0.01';
     }
   }
+
+  // Custom byte parsing
+  parseDt(buffer:ArrayBuffer) {
+    const view = new DataView(buffer)
+    this.dataBtye = {
+      temp1 : view.getInt16(0,true),
+      temp2 : view.getInt16(2,true),
+      temp3 : view.getInt16(4,true),
+      current1 : view.getUint16(6,true),
+      current2 : view.getUint16(8,true),
+      current3 : view.getUint16(10,true),
+      volt1 : view.getUint8(12),
+      volt2 : view.getUint8(14),
+      volt3 : view.getUint8(16),
+      faultFlag : view.getUint8(18),
+      reservation : view.getUint8(20)
+    }
+  }
+}
+
+interface parseData {
+  temp1 : number;
+  temp2 : number;
+  temp3 : number;
+  current1 : number;
+  current2 : number;
+  current3 : number;
+  volt1 : number;
+  volt2 : number;
+  volt3 : number;
+  faultFlag : number;
+  reservation : number;
 }
