@@ -59,7 +59,7 @@ export class BleService {
       console.log("Retreived characteristics");
 
       await dataChar.startNotifications();
-      // Raw bytes don't follow: utf-8, utf-16, utf-16le, utf-16be
+      // Don't use TextDecoder, as only for existing strings, not raw bytes
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
 
         //const decoder = new TextDecoder('utf-8', { fatal: true });
@@ -146,17 +146,17 @@ export class BleService {
   parseDt(buffer:ArrayBuffer) {
     const view = new DataView(buffer)
     this.dataBtye = {
-      temp1 : view.getInt16(0,true),
-      temp2 : view.getInt16(2,true),
-      temp3 : view.getInt16(4,true),
-      current1 : view.getUint16(6,true),
-      current2 : view.getUint16(8,true),
-      current3 : view.getUint16(10,true),
-      volt1 : view.getUint8(12),
-      volt2 : view.getUint8(14),
-      volt3 : view.getUint8(16),
-      faultFlag : view.getUint8(18),
-      reservation : view.getUint8(20)
+      temp1 : view.getInt16(22,true),//0
+      temp2 : view.getInt16(24,true),//2
+      temp3 : view.getInt16(26,true),//4
+      current1 : view.getUint16(28,true),//6
+      current2 : view.getUint16(30,true),//8
+      current3 : view.getUint16(32,true),//10
+      volt1 : view.getUint8(34),//12
+      volt2 : view.getUint8(36),//14
+      volt3 : view.getUint8(38),//16
+      faultFlag : view.getUint8(40),//18
+      reservation : view.getUint8(42)//20
     }
   }
 }
