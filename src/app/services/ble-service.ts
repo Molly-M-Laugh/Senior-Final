@@ -67,7 +67,7 @@ export class BleService {
           //const dataBytes: Uint8Array = new Uint8Array(event.target.value)
           //const value = decoder.decode(dataBytes);
           this.parseDt(this.buf)
-          console.log("Value updated in Zone: ", String.fromCharCode(this.dataBtye)
+          console.log("Value updated in Zone: ", this.dataBtye);
           //this.ngZone.run(() => {
             //this.deviceValue$.next(value);
             //console.log("Value updated in Zone:", value);
