@@ -25,7 +25,6 @@ export class BleService {
     reservation : 1
   };
   private buf : ArrayBuffer = new ArrayBuffer(100);
-  readTime : any;
 
   constructor(@Inject(PLATFORM_ID) private platformId: object, private ngZone: NgZone) {}
 
@@ -61,14 +60,16 @@ export class BleService {
 
       await dataChar.startNotifications();
 
-      this.readTime = setInterval(async () => {
-        try {
-          this.parseDt(this.buf)
-          console.log("Value updated in Zone: ", this.dataBtye);
-        } catch (error) {
-          console.error("Error: ", error);
-        }
-      },1000);
+      this.ngZone.run(() => {
+        setInterval(async () => {
+          try {
+            this.parseDt(this.buf)
+            console.log("Value updated in Zone: ", this.dataBtye);
+          } catch (error) {
+            console.error("Error: ", error);
+          }
+        },1000);
+      });
       // Don't use TextDecoder, as only for existing strings, not raw bytes
       //dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
 
