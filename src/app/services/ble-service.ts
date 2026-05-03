@@ -45,9 +45,9 @@ export class BleService {
       console.log("Retreived characteristics");
 
       await dataChar.startNotifications();
-      // Raw bytes don't follow: utf-8, utf-16
+      // Raw bytes don't follow: utf-8, utf-16, utf-16le
       dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
-        const decoder = new TextDecoder('utf-16le', { fatal: true });
+        const decoder = new TextDecoder('utf-16be', { fatal: true });
         try {
           const value = decoder.decode(event.target.value);
           this.ngZone.run(() => {
