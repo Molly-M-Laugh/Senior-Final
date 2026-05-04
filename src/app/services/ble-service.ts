@@ -158,12 +158,12 @@ export class BleService {
         reservation : view.getUint8(19)//20
       }
       const avgTemp = (this.dataBtye.temp1 + this.dataBtye.temp2 + this.dataBtye.temp3) / 3 / 100;
-      const groupDt: TempData = {
-        average : avgTemp.toFixed(2),
-        t1: this.dataBtye.temp1.toFixed(2),
-        t2: this.dataBtye.temp2.toFixed(2),
-        t3: this.dataBtye.temp3.toFixed(2)
-      }
+      const groupDt = [
+        avgTemp.toFixed(2),
+        this.dataBtye.temp1.toFixed(2),
+        this.dataBtye.temp2.toFixed(2),
+        this.dataBtye.temp3.toFixed(2)
+      ]
       this.deviceValue$.next(groupDt);
       console.log("Service parsed new value:", avgTemp);
     } catch (e) {

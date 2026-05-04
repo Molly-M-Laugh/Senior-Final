@@ -287,10 +287,10 @@ export class Home implements OnInit, OnDestroy {
     //await this.ble.sendCommand("5"); 
     this.isProcessing = true;
     const latestValue = this.ble.deviceValue$.value;//await this.ble.read();
-    const teAvg = latestValue.average
-    const te1 = latestValue.t1
-    const te2 = latestValue.t2
-    const te3 = latestValue.t3
+    const teAvg = latestValue[0];
+    const te1 = latestValue[1];
+    const te2 = latestValue[2];
+    const te3 = latestValue[3];
     const dateItem = new Date();
     const dataValue = { user: 1, time: dateItem.toISOString(), temp_avg: teAvg, temp_1: te1, temp_2 : te2, temp_3 : te3};
 
