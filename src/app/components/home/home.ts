@@ -273,6 +273,18 @@ export class Home implements OnInit, OnDestroy {
     const dateItem = new Date();
     const dataValue = { user: 1, time: dateItem.toISOString(), temp: latestValue };
 
+    const newPoint = { x: dateItem, y: parseFloat(latestValue) };
+    this.chartOptions.data[0].dataPoints.push(newPoint);
+    if (this.chartOptions.data[0].dataPoints.length > 100) {
+      this.chartOptions.data[0].dataPoints.shift();
+    }
+    if (this.chart) {
+      const now = new Date().getTime();
+      this.chart.axisX[0].set("viewportMinimum", now - this.scale);
+      this.chart.axisX[0].set("viewportMaximum", now);
+      this.chart.render();
+    }
+
     // Make insert to database before displaying debug code
     //this.http.post<{is_inserted : boolean}>('http://localhost:8080/api/data', dataValue)
     this.http.post<{is_inserted : boolean}>('api/data', dataValue)

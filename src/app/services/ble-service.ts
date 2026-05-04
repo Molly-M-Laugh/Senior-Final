@@ -188,9 +188,9 @@ export class BleService {
         current1 : view.getUint16(6,true),//6
         current2 : view.getUint16(8,true),//8
         current3 : view.getUint16(10,true),//10
-        volt1 : view.getUint8(12),//12
-        volt2 : view.getUint8(14),//14
-        volt3 : view.getUint8(16),//16
+        volt1 : view.getUint16(12,true),//12
+        volt2 : view.getUint16(14,true),//14
+        volt3 : view.getUint16(16,true),//16
         faultFlag : view.getUint8(18),//18
         reservation : view.getUint8(19)//20
       }
