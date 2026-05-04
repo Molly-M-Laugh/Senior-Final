@@ -307,7 +307,6 @@ export class Home implements OnInit, OnDestroy {
     }
 
     // Make insert to database before displaying debug code
-    //this.http.post<{is_inserted : boolean}>('http://localhost:8080/api/data', dataValue)
     this.http.post<{is_inserted : boolean}>('api/data', dataValue)
       .subscribe({
         next: response => {

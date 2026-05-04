@@ -140,22 +140,17 @@ app.put('/api/update/:id', async (req, res) => {
 // NOTE: Later, change to be for a specific id
 app.post('/api/data', async (req, res) => {
   const { user, time, temp_avg, temp_1, temp_2, temp_3 } = req.body;
-  console.print("Made to assignment");
   if (temp_avg == -0.01) {
     return res.json({is_inserted : true});
   }
-  console.print("Made to start query");
   try {
-  const result = await pool.query('INSERT INTO temp_data (user_id, record_date, temperature_avg, temperature_1, temperature_2, temperature_3) VALUES ($1, $2, $3, $4, $5, $6) RETURNING temperature_avg', [user, time, temp_avg, temp_1,temp_2,temp_3]);
-  console.print("Made past query");
+  const result = await pool.query('INSERT INTO temp_data (user_id, record_date, temperature_avg, temperature_1, temperature_2, temperature_3) VALUES ($1, $2, $3, $4, $5, $6) RETURNING temperature_avg', [user, time, temp_avg, temp_1, temp_2, temp_3]);
   const resNum = parseFloat(result.rows[0].temperature_avg);
-  console.print("Made to parse");
   if (resNum < 100) {
     isInserted = Number(parseFloat(resNum).toFixed(2)) == temp_avg;
   } else {
-    isInserted = Number(parseFloat(resNum).toFixed(1)) === temp_avg;
+    isInserted = Number(parseFloat(resNum).toFixed(1)) == temp_avg;
   }
-  console.print("Made to return value");
   res.json({is_inserted : isInserted});
   } catch (err) {
     console.error(err);
