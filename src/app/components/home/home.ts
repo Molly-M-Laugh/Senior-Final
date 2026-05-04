@@ -281,7 +281,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   async requestNewData() {
-    if (!this.isConnected || this.isProcessing) return;
+    if (!this.isConnected) return;
 
     // Sending "5" triggers the 'Increment number' logic 
     //await this.ble.sendCommand("5"); 
