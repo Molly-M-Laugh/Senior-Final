@@ -47,7 +47,6 @@ export class Home implements OnInit, OnDestroy {
       title: "Time Passed",
       valueFormatString: this.formatString
     },
-    /*
     axisY: {
       title: "Temperature (C)",
       stripLines:[
@@ -59,7 +58,6 @@ export class Home implements OnInit, OnDestroy {
         }
       ]
     },
-    */
 	  data: [{
 		type: "line",
     xValueType: "dateTime",
@@ -291,20 +289,6 @@ export class Home implements OnInit, OnDestroy {
     const te3 = latestValue[3];
     const dateItem = new Date();
     const dataValue = { user: 1, time: dateItem.toISOString(), temp_avg: teAvg, temp_1: te1, temp_2 : te2, temp_3 : te3};
-
-    /*
-    const newPoint = { x: dateItem, y: parseFloat(teAvg) };
-    this.chartOptions.data[0].dataPoints.push(newPoint);
-    if (this.chartOptions.data[0].dataPoints.length > 100) {
-      this.chartOptions.data[0].dataPoints.shift();
-    }
-    if (this.chart) {
-      const now = new Date().getTime();
-      this.chart.axisX[0].set("viewportMinimum", now - this.scale);
-      this.chart.axisX[0].set("viewportMaximum", now);
-      this.chart.render();
-    }
-      */
 
     console.log("Queried Database");
     // Make insert to database before displaying debug code
