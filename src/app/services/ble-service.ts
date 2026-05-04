@@ -59,7 +59,19 @@ export class BleService {
       console.log("Retreived characteristics");
 
       await dataChar.startNotifications();
-
+      dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
+        const dataView = event.target.value as DataView;
+  
+        this.ngZone.run(() => {
+          this.parseDt(dataView);
+        });
+      });
+      /*
+      setInterval(() => {
+        device.read().then(data => {
+          this.parseDt(data);
+        });
+      },1000);
       this.ngZone.run(() => {
         setInterval(async () => {
           try {
@@ -70,6 +82,7 @@ export class BleService {
           }
         },1000);
       });
+      */
       // Don't use TextDecoder, as only for existing strings, not raw bytes
       //dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
 
@@ -135,7 +148,8 @@ export class BleService {
     try {
       // Manually pull the current value from the ESP32
       const value = await this.dataCharacteristic.readValue();
-      const decoded = new TextDecoder().decode(value);
+      const decoded = new TextDecoder().decode(value); // Remove later, but first get accurate data
+      console.log("Value read");
 
       // Also wrap the manual read
       this.ngZone.run(() => {
@@ -154,20 +168,25 @@ export class BleService {
   }
 
   // Custom byte parsing
-  parseDt(buffer:ArrayBuffer) {
-    const view = new DataView(buffer)
-    this.dataBtye = {
-      temp1 : view.getInt16(22,true),//0
-      temp2 : view.getInt16(24,true),//2
-      temp3 : view.getInt16(26,true),//4
-      current1 : view.getUint16(28,true),//6
-      current2 : view.getUint16(30,true),//8
-      current3 : view.getUint16(32,true),//10
-      volt1 : view.getUint8(34),//12
-      volt2 : view.getUint8(36),//14
-      volt3 : view.getUint8(38),//16
-      faultFlag : view.getUint8(40),//18
-      reservation : view.getUint8(42)//20
+  parseDt(view: DataView) {
+    try {
+      this.dataBtye = {
+        temp1 : view.getInt16(0,true),//0
+        temp2 : view.getInt16(2,true),//2
+        temp3 : view.getInt16(4,true),//4
+        current1 : view.getUint16(6,true),//6
+        current2 : view.getUint16(8,true),//8
+        current3 : view.getUint16(10,true),//10
+        volt1 : view.getUint8(12),//12
+        volt2 : view.getUint8(14),//14
+        volt3 : view.getUint8(16),//16
+        faultFlag : view.getUint8(18),//18
+        reservation : view.getUint8(19)//20
+      }
+      const avgTemp = (this.dataBtye.temp1 + this.dataBtye.temp2 + this.dataBtye.temp3) / 3 / 100;
+      this.deviceValue$.next(avgTemp.toFixed(2));
+    } catch (e) {
+      console.error("Parsing error: ", e);
     }
   }
 }
