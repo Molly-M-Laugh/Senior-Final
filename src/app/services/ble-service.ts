@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root' 
 })
 export class BleService {
-  public deviceValue$ = new BehaviorSubject<string>('0.00');
+  public deviceValue$ = new BehaviorSubject<string[]>('0.00','0.00','0.00','0.00');
   private gattServer: BluetoothRemoteGATTServer | null = null;
   private dataCharacteristic: any = null;
   private commandChar: any = null;
@@ -69,7 +69,7 @@ export class BleService {
       device.addEventListener('gattserverdisconnected', () => {
         this.ngZone.run(() => {
           this.isConnected$.next(false);
-          this.deviceValue$.next('0.00'); // Reset value on disconnect
+          this.deviceValue$.next('0.00', '0.00','0.00','0.00'); // Reset value on disconnect
         });
       });
       console.log("Added event listener");
@@ -107,6 +107,7 @@ export class BleService {
   }
 
 
+  /*
   async read(): Promise<string> {
     if (!this.dataCharacteristic) {
       console.error("Not connected to a characteristic yet.");
@@ -135,6 +136,7 @@ export class BleService {
       return '-0.01';
     }
   }
+    */
 
   // Custom byte parsing
   parseDt(view: DataView) {
