@@ -162,9 +162,9 @@ export class BleService {
       const avgTemp = (this.dataBtye.temp1 + this.dataBtye.temp2 + this.dataBtye.temp3) / 3 / 100;
       const groupDt = [
         avgTemp.toFixed(2),
-        (this.dataBtye.temp1/10).toFixed(2),
-        (this.dataBtye.temp2/10).toFixed(2),
-        (this.dataBtye.temp3/10).toFixed(2)
+        (this.dataBtye.temp1/100).toFixed(2),
+        (this.dataBtye.temp2/100).toFixed(2),
+        (this.dataBtye.temp3/100).toFixed(2)
       ]
       this.deviceValue$.next(groupDt);
       console.log("Service parsed new value:", avgTemp);

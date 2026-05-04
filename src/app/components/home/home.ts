@@ -283,8 +283,6 @@ export class Home implements OnInit, OnDestroy {
   async requestNewData() {
     if (!this.isConnected) return;
 
-    // Sending "5" triggers the 'Increment number' logic 
-    //await this.ble.sendCommand("5"); 
     this.isProcessing = true;
     const latestValue = this.ble.deviceValue$.value;//await this.ble.read();
     const teAvg = latestValue[0];
@@ -306,6 +304,7 @@ export class Home implements OnInit, OnDestroy {
       this.chart.render();
     }
 
+    console.log("Queried Database");
     // Make insert to database before displaying debug code
     this.http.post<{is_inserted : boolean}>('api/data', dataValue)
       .subscribe({
