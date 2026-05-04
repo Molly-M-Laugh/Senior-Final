@@ -127,6 +127,22 @@ export class Home implements OnInit, OnDestroy {
         console.log("Polling active.");
       }
     });
+
+    interval(1000).subscribe(() => {
+      if (this.chart && this.chart.axisX && this.chart.axisX[0]) {
+      const now = new Date().getTime();
+      const minDate = now - this.scale;
+    
+      // Setting viewport directly
+      this.chart.axisX[0].set("viewportMinimum", minDate);
+      this.chart.axisX[0].set("viewportMaximum", now);
+    
+      // If not connected, still render to show the empty grid moving
+      if (!this.isConnected) {
+        this.chart.render();
+      }
+    }
+  });
   }
 
   // Clean up the timer when the component is destroyed
