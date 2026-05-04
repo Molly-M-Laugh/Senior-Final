@@ -66,6 +66,12 @@ export class BleService {
           this.parseDt(dataView);
         });
       });
+      device.addEventListener('gattserverdisconnected', () => {
+        this.ngZone.run(() => {
+          this.isConnected$.next(false);
+          this.deviceValue$.next('0.00'); // Reset value on disconnect
+        });
+      });
       /*
       setInterval(() => {
         device.read().then(data => {

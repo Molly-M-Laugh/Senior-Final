@@ -34,6 +34,7 @@ export class Home implements OnInit, OnDestroy {
   private scale = 5 * 60 * 1000; // Default scale is last 5 minutes (1000 ms/s * 60 s/min * 5 min)
   private launchTime = new Date();
   private formatString = "HH:mm:ss"
+  private isProcessing = false;
 	
   // Note: Find way to create new chart instance as hard time shifting down frame
   // as well as implement data shifting frame when updating graph and not just on scale shift
@@ -263,10 +264,11 @@ export class Home implements OnInit, OnDestroy {
   }
 
   async requestNewData() {
-    if (!this.isConnected) return;
+    if (!this.isConnected || this.isProcessing) return;
 
     // Sending "5" triggers the 'Increment number' logic 
     //await this.ble.sendCommand("5"); 
+    this.isProcessing = true;
     const latestValue = this.ble.deviceValue$.value;//await this.ble.read();
     const dateItem = new Date();
     const dataValue = { user: 1, time: dateItem.toISOString(), temp: latestValue };
@@ -276,14 +278,14 @@ export class Home implements OnInit, OnDestroy {
     this.http.post<{is_inserted : boolean}>('api/data', dataValue)
       .subscribe({
         next: response => {
-        if (!response.is_inserted) {
-          alert("A data value failed to insert!");
-        } else {
+        if (response.is_inserted) {
+          this.isProcessing = false;
           this.updateChart();
         }
         },
         error: (err) => {
-          alert("Login failed on invalid credentials or unable to link");
+          this.isProcessing = false; // Unlock even on error
+          console.error("Insert failed:", err);
         }
       });
 
