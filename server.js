@@ -139,13 +139,13 @@ app.put('/api/update/:id', async (req, res) => {
 });
 // NOTE: Later, change to be for a specific id
 app.post('/api/data', async (req, res) => {
-  const { user, time, temp } = req.body;
+  const { user, time, temp_avg, temp_1, temp_2, temp_3 } = req.body;
   if (temp == -0.01) {
     return res.json({is_inserted : true});
   }
   try {
-  const result = await pool.query('INSERT INTO temp_data (user_id, record_date, temperature) VALUES ($1, $2, $3) RETURNING temperature', [user, time, temp]);
-  const resNum = parseFloat(result.rows[0].temperature);
+  const result = await pool.query('INSERT INTO temp_data (user_id, record_date, temperature_avg, temperature_1, temperature_2, temperature_3) VALUES ($1, $2, $3, $4, $5, $6) RETURNING temperature_avg', [user, time, temp_avg, temp_1,temp_2,temp_3]);
+  const resNum = parseFloat(result.rows[0].temperature_avg);
   if (resNum < 100) {
     isInserted = Number(parseFloat(resNum).toFixed(2)) == temp;
   } else {
@@ -162,7 +162,7 @@ app.get('/api/data-init', async (req, res) => {
   // Example for when switch to specific id
   //const user = users.find(u => u.id === parseInt(req.params.id));
   try {
-    const result = await pool.query('SELECT record_date, temperature FROM temp_data WHERE (user_id = $1) ORDER BY record_date DESC LIMIT 100', [user]);
+    const result = await pool.query('SELECT record_date, temperature_avg FROM temp_data WHERE (user_id = $1) ORDER BY record_date DESC LIMIT 100', [user]);
     res.json(result.rows); // Want all data points
   } catch (err) {
     console.error(err);

@@ -72,43 +72,6 @@ export class BleService {
           this.deviceValue$.next('0.00'); // Reset value on disconnect
         });
       });
-      /*
-      setInterval(() => {
-        device.read().then(data => {
-          this.parseDt(data);
-        });
-      },1000);
-      this.ngZone.run(() => {
-        setInterval(async () => {
-          try {
-            this.parseDt(this.buf)
-            console.log("Value updated in Zone: ", this.dataBtye);
-          } catch (error) {
-            console.error("Error: ", error);
-          }
-        },1000);
-      });
-      */
-      // Don't use TextDecoder, as only for existing strings, not raw bytes
-      //dataChar.addEventListener('characteristicvaluechanged', (event: any) => {
-
-        //const decoder = new TextDecoder('utf-8', { fatal: true });
-        //try {
-          //const dataBytes: Uint8Array = new Uint8Array(event.target.value)
-          //const value = decoder.decode(dataBytes);
-          //this.parseDt(this.buf)
-          //console.log("Value updated in Zone: ", this.dataBtye);
-          //this.ngZone.run(() => {
-            //this.deviceValue$.next(value);
-            //console.log("Value updated in Zone:", value);
-          //});
-        //} catch (e) {
-          //console.error("Invalid TextDecoder sequence detected");
-        //}
-      //const value = new TextDecoder('utf-8').decode(event.target.value);
-
-      // Force Angular to recognize this asynchronous Bluetooth event
-      //});
       console.log("Added event listener");
 
 
@@ -195,7 +158,13 @@ export class BleService {
         reservation : view.getUint8(19)//20
       }
       const avgTemp = (this.dataBtye.temp1 + this.dataBtye.temp2 + this.dataBtye.temp3) / 3 / 100;
-      this.deviceValue$.next(avgTemp.toFixed(2));
+      const groupDt: TempData = {
+        average : avgTemp.toFixed(2),
+        t1: this.dataBtye.temp1.toFixed(2),
+        t2: this.dataBtye.temp2.toFixed(2),
+        t3: this.dataBtye.temp3.toFixed(2)
+      }
+      this.deviceValue$.next(groupDt);
       console.log("Service parsed new value:", avgTemp);
     } catch (e) {
       console.error(`Parsing error at length ${view.byteLength}:`, e);
@@ -215,4 +184,11 @@ interface parseData {
   volt3 : number;
   faultFlag : number;
   reservation : number;
+}
+
+export interface TempData {
+  average: string,
+  t1: string,
+  t2: string,
+  t3: string
 }

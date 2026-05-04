@@ -4,7 +4,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { interval, Subscription } from 'rxjs';
 import { HttpClient} from '@angular/common/http';
-import { BleService } from '../../services/ble-service';
+import { BleService, TempData } from '../../services/ble-service';
 import { DataService } from '../../services/data-service';
 import { Data } from '../../data';
 
@@ -287,10 +287,14 @@ export class Home implements OnInit, OnDestroy {
     //await this.ble.sendCommand("5"); 
     this.isProcessing = true;
     const latestValue = this.ble.deviceValue$.value;//await this.ble.read();
+    const teAvg = latestValue.average
+    const te1 = latestValue.t1
+    const te2 = latestValue.t2
+    const te3 = latestValue.t3
     const dateItem = new Date();
-    const dataValue = { user: 1, time: dateItem.toISOString(), temp: latestValue };
+    const dataValue = { user: 1, time: dateItem.toISOString(), temp_avg: teAvg, temp_1: te1, temp_2 : te2, temp_3 : te3};
 
-    const newPoint = { x: dateItem, y: parseFloat(latestValue) };
+    const newPoint = { x: dateItem, y: parseFloat(teAvg) };
     this.chartOptions.data[0].dataPoints.push(newPoint);
     if (this.chartOptions.data[0].dataPoints.length > 100) {
       this.chartOptions.data[0].dataPoints.shift();
@@ -317,10 +321,5 @@ export class Home implements OnInit, OnDestroy {
           console.error("Insert failed:", err);
         }
       });
-
-    //this.items = { x: dateItem.toUTCString(),xSeconds: dateItem.getTime(), y: latestValue};
-  
-    // The ESP32 will then run BtTemp->notify(), which 
-    // automatically updates this.items via the subscription in ngOnInit/updateChart.
   }
 }
