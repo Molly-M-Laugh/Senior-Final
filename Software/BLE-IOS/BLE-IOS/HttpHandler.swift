@@ -94,4 +94,61 @@ class HttpHandler: NSObject{
         return
     }
     
+    
+    func pullFromDB(username:String, password:String, completion: @escaping (Bool) -> Void){
+        let url = baseAPI + "data-init"
+        let currentLogin: Parameters = [
+            "username": username,
+            "password": password
+        ]
+        AF.request(url, method: .get, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { (response) in
+            var working = Bool()
+            switch response.result {
+            case .success(_):
+                if(response.response?.statusCode == 200){
+                    print()
+                    working = true
+                }
+                else{
+                    
+                    working = false
+                }
+                
+            case .failure(_):
+                print("pull from DB failed")
+                working = false
+            }
+            completion(working)
+        }
+        return
+    }
+    
+    func pushToDB(username:String, password:String, dataToPush: [ChartData], completion: @escaping (Bool) -> Void){
+        let url = baseAPI + "data"
+        let currentLogin: Parameters = [
+            "username": username,
+            "password": password
+        ]
+        
+        
+        AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { (response) in
+            var working = Bool()
+            switch response.result {
+            case .success(_):
+                if(response.response?.statusCode == 200){
+                    working = true
+                }
+                else{
+                    working = false
+                }
+                
+            case .failure(_):
+                print("pull from DB failed")
+                working = false
+            }
+            completion(working)
+        }
+        return
+    }
+    
 }

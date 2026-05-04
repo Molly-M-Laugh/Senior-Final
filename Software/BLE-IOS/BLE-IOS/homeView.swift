@@ -10,7 +10,7 @@ import SwiftUI
 
 struct homeView: View{
     @ObservedObject var router: Router
-    var manager: BLEHandler
+    @ObservedObject var manager: BLEHandler
     @State private var isMenuOpen = false
     var body: some View{
         ZStack(){
@@ -34,7 +34,7 @@ struct homeView: View{
                     //Get current battery reading from CAN on ESP
                     Text("")
                     Text("Currently connected to VitalVest: \(manager.isConnected)")
-                    Text("Current battery: ")
+                    Text("Current battery: \(manager.lastDataValue[2])")
                     
                 }
             }

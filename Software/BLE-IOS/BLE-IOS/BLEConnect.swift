@@ -15,7 +15,7 @@ internal import Combine
 
 
 
-class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
+class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate, ObservableObject{
     
     struct BLEDevice: Identifiable, Hashable{
         let id: UUID
@@ -203,15 +203,13 @@ class BLEHandler: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate{
          let inputTrim1 = CharacterSet.init(charactersIn: "T: ")
          let cleanValue = lastDataValue[0].trimmingCharacters(in: inputTrim1)
          let tempChartData = (Float((Double(temp0)/100.0)) ?? -1)
-         //let tempChartData = (Float(cleanValue) ?? -1)
          if(tempChartData == -1){
              print("Error on this data: \(cleanValue)")
          }
          else{
-             print("Date: \(lastDate), temp: \(tempChartData)")
-             tempValues.append(ChartData(x:lastDate, y: tempChartData))
+             tempValues.append(ChartData(x:Date(), y: tempChartData))
          }
-        
+         
          
          
          
