@@ -51,7 +51,7 @@ export class Home implements OnInit, OnDestroy {
       title: "Temperature (C)",
       stripLines:[
         {
-          value: 100,
+          value: 35,
           color: "red",
           thickness: 3,
           label: "Threshold"
