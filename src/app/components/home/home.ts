@@ -168,7 +168,7 @@ export class Home implements OnInit, OnDestroy {
             let thirtyMinutesAgo = new Date(Date.now() - this.scale);
 
             // Update the dataPoints reference
-            this.chartOptions.data[0].dataPoints = response
+            const dbPoints = response
               .filter(item => new Date(item.record_date) >= thirtyMinutesAgo)
               .map(item => ({
                 x: new Date(item.record_date.endsWith('Z') ? item.record_date : item.record_date + 'Z'),
@@ -176,6 +176,7 @@ export class Home implements OnInit, OnDestroy {
                 y: parseFloat(item.temperature)
               }))
               .slice(-100);
+            this.chartOptions.data[0].dataPoints = [...dbPoints].slice(-100);
 
             if (this.chart) {
               let minDate = new Date(this.launchTime.getTime() - this.scale);

@@ -196,6 +196,7 @@ export class BleService {
       }
       const avgTemp = (this.dataBtye.temp1 + this.dataBtye.temp2 + this.dataBtye.temp3) / 3 / 100;
       this.deviceValue$.next(avgTemp.toFixed(2));
+      console.log("Service parsed new value:", avgTemp);
     } catch (e) {
       console.error(`Parsing error at length ${view.byteLength}:`, e);
     }
