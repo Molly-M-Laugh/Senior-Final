@@ -106,38 +106,6 @@ export class BleService {
     }
   }
 
-
-  /*
-  async read(): Promise<string> {
-    if (!this.dataCharacteristic) {
-      console.error("Not connected to a characteristic yet.");
-      //return;
-      return '0.00';
-    }
-  
-    try {
-      // Manually pull the current value from the ESP32
-      const value = await this.dataCharacteristic.readValue();
-      const decoded = new TextDecoder().decode(value); // Remove later, but first get accurate data
-      console.log("Value read");
-
-      // Also wrap the manual read
-      this.ngZone.run(() => {
-        this.deviceValue$.next(decoded);
-      });
-      return decoded; // Update the stream
-    } catch (error) {
-      console.error("Manual read failed:", error, ", assuming disconnect - please re-pair.");
-
-      this.ngZone.run(() => {
-        this.isConnected$.next(false);
-      });
-
-      return '-0.01';
-    }
-  }
-    */
-
   // Custom byte parsing
   parseDt(view: DataView) {
     console.log("Raw Bytes Received:", new Uint8Array(view.buffer));
