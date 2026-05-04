@@ -169,6 +169,11 @@ export class BleService {
 
   // Custom byte parsing
   parseDt(view: DataView) {
+    console.log("Raw Bytes Received:", new Uint8Array(view.buffer));
+    if (view.byteLength < 20) {
+      // This is likely a FRAME_TYPE_FAULT (which is smaller)
+      return;
+    }
     try {
       this.dataBtye = {
         temp1 : view.getInt16(0,true),//0
@@ -186,7 +191,7 @@ export class BleService {
       const avgTemp = (this.dataBtye.temp1 + this.dataBtye.temp2 + this.dataBtye.temp3) / 3 / 100;
       this.deviceValue$.next(avgTemp.toFixed(2));
     } catch (e) {
-      console.error("Parsing error: ", e);
+      console.error(`Parsing error at length ${view.byteLength}:`, e);
     }
   }
 }
