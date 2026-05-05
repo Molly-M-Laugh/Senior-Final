@@ -1,0 +1,65 @@
+/* Styling for the identity section */
+.color-primary {
+  color: rgb(16, 101, 171);
+}
+
+/* Styling for the security section */
+.text-danger-custom {
+  color: rgb(179, 21, 41);
+}
+
+/* Branding Mini-Header */
+.brand-text-sm {
+  font-weight: 800;
+  color: rgb(16, 101, 171);
+  letter-spacing: -1px;
+}
+.brand-text-sm span { color: rgb(179, 21, 41); }
+
+.tracking-wider {
+  letter-spacing: 2px;
+}
+
+/* Modern Input Groups */
+.input-group .custom-input {
+  border-right: none; /* Merges the input with the button for a modern look */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group .btn-blue {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Button Variants */
+.btn-blue {
+  background-color: rgb(47, 103, 177);
+  color: white;
+  border: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-blue:hover:not(:disabled) {
+  background-color: rgb(16, 101, 171);
+}
+
+.btn-red {
+  background-color: rgb(179, 21, 41);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-red:hover:not(:disabled) {
+  background-color: rgb(215, 95, 76);
+  box-shadow: 0 4px 12px rgba(179, 21, 41, 0.2);
+}
+
+.btn-red:disabled {
+  background-color: rgb(254, 219, 199);
+  color: rgb(215, 95, 76);
+}

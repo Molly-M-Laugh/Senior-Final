@@ -1,0 +1,15 @@
+:root {
+  /* Blues */
+  --brand-blue-dark: rgb(16, 101, 171);
+  --brand-blue-mid: rgb(47, 103, 177);
+  --brand-blue-light: rgb(142, 196, 222);
+  --brand-blue-soft: rgb(209, 229, 240);
+  
+  /* Reds */
+  --brand-red-dark: rgb(179, 21, 41);
+  --brand-red-mid: rgb(191, 44, 35);
+  --brand-red-accent: rgb(215, 95, 76);
+  
+  /* Neutrals */
+  --brand-white: rgb(249, 249, 249);
+}

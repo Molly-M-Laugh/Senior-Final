@@ -1,0 +1,31 @@
+.color-primary {
+  color: rgb(16, 101, 171);
+}
+
+.custom-input {
+  border: 2px solid rgb(209, 229, 240);
+  border-radius: 8px;
+  background-color: rgb(255, 255, 255);
+}
+
+.custom-input:focus {
+  border-color: rgb(58, 147, 195);
+  box-shadow: 0 0 0 4px rgba(58, 147, 195, 0.15);
+}
+
+.btn-primary-custom {
+  background-color: rgb(179, 021, 041); /* Registration uses the Red for a distinct "Action" feel */
+  border: none;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-custom:hover:not(:disabled) {
+  background-color: rgb(215, 095, 076);
+  transform: translateY(-1px);
+}
+
+.btn-primary-custom:disabled {
+  background-color: rgb(254, 219, 199);
+  color: rgb(215, 095, 076);
+}

@@ -1,0 +1,34 @@
+/* @import url("./node_modules/bootstrap/dist/css/bootstrap.min.css");You can add global styles to this file, and also import other style files */
+:root {
+    box-sizing: border-box;
+}
+
+h1 {
+  font-size: 3.125rem;
+  color: var(--gray-900);
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.125rem;
+  margin: 0;
+  font-family: "Antonio Light", "Antonio Regular", "Antonio Bold";
+}
+
+p {
+  margin: 0;
+  color: var(--gray-700);
+  font-family: "Roboto Thin", "Roboto Thin Italic", "Roboto Light", 
+  "Roboto Light Italic", "Roboto Regular", "Roboto Regular Italic", 
+  "Roboto Medium", "Roboto Medium Italic", "Roboto Bold", 
+  "Roboto Bold Italic", "Roboto Black";
+}
+ .content {
+  margin-bottom: 3rem;
+}
+
+.content h1 {
+  margin-top: 1.75rem;
+}
+
+.content p {
+  margin-top: 1.5rem;
+}
