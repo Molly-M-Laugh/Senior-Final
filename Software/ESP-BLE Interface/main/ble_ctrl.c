@@ -20,7 +20,11 @@
 
 
 #define TAG             "ble_ctrl"
+<<<<<<< HEAD
 #define DEVICE_NAME     "myESP32"
+=======
+#define DEVICE_NAME     "MyESP32"
+>>>>>>> M-C_IosHttp
 
 /* -----------------------------------------------------------------------
  * UUIDs — 128-bit, stored little-endian per BLE spec
@@ -217,8 +221,12 @@ static void start_advertising(void)
     fields.name                  = (const uint8_t *)DEVICE_NAME;
     fields.name_len              = strlen(DEVICE_NAME);
     fields.name_is_complete      = 1;
+<<<<<<< HEAD
     
     // Tried this here to mask it as a keyboard, also tried other devices windows considers high priority
+=======
+
+>>>>>>> M-C_IosHttp
     //fields.appearance = 0x03C1;
     //fields.appearance_is_present = 1;
 
@@ -253,9 +261,14 @@ void ble_ctrl_register_cmd_callback(ble_cmd_callback_t cb)
 
 void ble_ctrl_init(void)
 {
+<<<<<<< HEAD
 
     // need to init nvs_flash first for functionality of HID
     // causes a core dump otherwise
+=======
+    /*
+    //need to init nvs_flash first 
+>>>>>>> M-C_IosHttp
 
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
@@ -265,7 +278,11 @@ void ble_ctrl_init(void)
     }
     ESP_ERROR_CHECK(ret);
 
+<<<<<<< HEAD
 
+=======
+    */
+>>>>>>> M-C_IosHttp
     static bool s_nimble_inited = false;
 
     if (!s_nimble_inited) {
@@ -275,12 +292,22 @@ void ble_ctrl_init(void)
         ble_gatts_count_cfg(s_gatt_svcs);
         ble_gatts_add_svcs(s_gatt_svcs);
         ble_svc_gap_device_name_set(DEVICE_NAME);                
+<<<<<<< HEAD
 
         ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
         ble_hs_cfg.sm_bonding = 1;
         ble_hs_cfg.sm_mitm = 1;
         ble_hs_cfg.sm_sc = 1;
 
+=======
+
+        /*
+        ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
+        ble_hs_cfg.sm_bonding = 1;
+        ble_hs_cfg.sm_mitm = 1;
+        ble_hs_cfg.sm_sc = 1;
+        */
+>>>>>>> M-C_IosHttp
         nimble_port_freertos_init(nimble_host_task);
         s_nimble_inited = true;
     }

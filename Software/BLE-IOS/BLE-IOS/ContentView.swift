@@ -9,54 +9,46 @@
 
 import SwiftUI
 import CoreBluetooth
+import Charts
+import UserNotifications
+
 
 struct ContentView: View {
-    
-    @State var connectionStatus = false
-    @State var number = 0
-    @State var state = "Searching"
-    var manager = BLEHandler()
-    
-    
-
-    var body: some View{
-        if manager.devices.isEmpty{
-            ProgressView("\(state)").progressViewStyle(.circular)
-            Text("Debug: \(manager.debugVariable)")
-            Text("Scanning: \(manager.isScanning)")
-            Button("try to connect"){
-                state = "Button pushed, searching"
-                manager.startScan()
+   
+    @StateObject private var router = Router()
+    private var BLEmanager = BLEHandler()
+    @State var NotifManager = NotifDelegate()
+    init(){
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){
+            success,error in
+            if success {}
+            else if let error {
+                print(error.localizedDescription)
             }
         }
-        else if !manager.isConnected{
-            Text("I'm trying to debug this")
-            List(manager.devices, id: \.self){ device in
-                Button(action: {
-                    manager.connect(to: device)
-                }){
-                    Text(device.name)
+        
+        
+    }
+    var body: some View {
+        NavigationStack(path: $router.path) {
+            loginView (router: router)
+                .navigationDestination(for: Route.self){ route in
+                    switch route {
+                    case .login:
+                        loginView(router: router)
+                    case .home:
+                        homeView(router: router, manager: BLEmanager)
+                    case .register:
+                        registerView(router: router)
+                    case .settings:
+                        settingsView(router: router, manager: BLEmanager)
+                    case .graph:
+                        graphView(router: router, manager: BLEmanager)
+                    }
                 }
-            }
-            Text("Scanning Status: \(manager.isScanning)")
-            Text("Connection Status: \(manager.isConnected)")
         }
-        else {
-            Text("Debug Variable: \(manager.debugVariable)")
-            Text("Our current reading: \(manager.lastValue)")
-            Text("Last command sent: \(manager.lastCommandValue)")
-            HStack{
-                Button("Reset value",action: {
-                    manager.sendCommand("12")
-                })
-                Button("increase value",action: {
-                    manager.sendCommand("5")
-                })
-                Button("Random value",action: {
-                    manager.sendCommand("1")
-                })
-            }.buttonStyle(.bordered)
-        }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
 }
 
