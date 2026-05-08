@@ -11,6 +11,7 @@ import Charts
 
 struct ChartData: Identifiable {
     let id = UUID()
+    let sensor : String
     let x : Date
     let y : Float
 }
@@ -40,6 +41,7 @@ struct graphView: View{
     var times = ["Last 5 Minutes", "Last Hour", "Last 24 hours", "Last week"]
     @State var currentDuration : durations = .last5
     @State private var isMenuOpen = false
+    var httpManager = HttpHandler()
     
     var body: some View{
         ZStack{
@@ -52,16 +54,39 @@ struct graphView: View{
                     Text("Last Week").tag(durations.lastWeek)
                 }
                 .pickerStyle(.segmented)
-                Text("\(manager.lastDataValue)")
-                Chart {
-                    ForEach(manager.tempValues) { data in
-                        LineMark(x: .value("x", data.x, unit:.second), y: .value("y", data.y))
-                    }
+                if(manager.alertFired){
+                    Text("Threshold Breached!")
+                        .bold()
+                        .foregroundStyle(.red)
+                }
+                Chart(manager.tempAvgValues){
+                    LineMark(
+                        x: .value("Time", $0.x),
+                        y: .value("Temperature", $0.y)
+                    ).foregroundStyle(by: .value("Sensor", $0.sensor))
                 }
                 .chartXScale(domain: ClosedRange(uncheckedBounds: (Date() - currentDuration.duration, Date())))
                 .frame(width: 350, height: 200)
                 .padding()
                 .clipped()
+                Button(action:{
+                    httpManager.pullFromDB(username: "testUser", password: "config2"){
+                        (result) in
+                        print("working in pull is: \(result.count)")
+                        manager.addToAvg(newData: (result))
+                        
+                        print("-------------------------------------")
+                        print("The current data count is: \(manager.tempAvgValues.count)")
+                        print("-------------------------------------")
+                        print("First data point. x: \(manager.tempAvgValues[1].x) + y: \(manager.tempAvgValues[1].y) ")
+                    }
+                }) {
+                    Text("Pull Past Values")
+                        .foregroundColor(.white)
+                }
+                .buttonStyle(.bordered)
+                .cornerRadius(8)
+                .background(Color.blue)
             }
             .padding()
             .navigationBarBackButtonHidden(true)

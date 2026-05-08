@@ -8,6 +8,21 @@ import Foundation
 import Alamofire
 import SwiftUI
 
+struct pushRequest: Encodable, Sendable{
+    let a_user_id : Int
+    let b_record_date : String
+    let c_temp_avg : String
+    let d_temp_1 : String
+    let e_temp_2 : String
+    let f_temp_3 : String
+}
+
+nonisolated struct pullRequest: Decodable, Sendable{
+    let record_date : String
+    let temperature_avg : String
+}
+
+
 class HttpHandler: NSObject{
     
     
@@ -19,11 +34,7 @@ class HttpHandler: NSObject{
     
     var loginResults = false
     var registerResults = false
-    
     private var baseAPI: String = "https://senior-t-fd5496756068.herokuapp.com/api/"
-    
-    
-    
     
     
     
@@ -37,7 +48,6 @@ class HttpHandler: NSObject{
             "username": username,
             "password": password
         ]
-        print("attempting request")
         AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { (response) in
             var working = Bool()
             switch response.result {
@@ -65,25 +75,24 @@ class HttpHandler: NSObject{
         if registerAttempt == true {
             return
         }
-        print("Starting Register")
+        
         registerAttempt = true
         let url = baseAPI + "register"
         let currentLogin : Parameters = [
             "username": username,
             "password": password
         ]
-        print("Register 1, username is \(username) and password is \(password)")
+        
         
         AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { response in
             var working = Bool()
             switch response.result {
             case .success(_):
-                print("Register 2")
+            
                 self.registerResults = true
                 working = true
                 
             case .failure(let error):
-                print("Register 3")
                 print(error)
                 self.registerResults = false
                 working = false
@@ -95,59 +104,72 @@ class HttpHandler: NSObject{
     }
     
     
-    func pullFromDB(username:String, password:String, completion: @escaping (Bool) -> Void){
+    
+    
+    func pullFromDB(username:String, password:String, completion: @escaping ([ChartData]) -> Void){
         let url = baseAPI + "data-init"
         let currentLogin: Parameters = [
             "username": username,
             "password": password
         ]
-        AF.request(url, method: .get, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { (response) in
-            var working = Bool()
-            switch response.result {
-            case .success(_):
-                if(response.response?.statusCode == 200){
-                    print()
-                    working = true
-                }
-                else{
-                    
-                    working = false
-                }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        //let date = dateFormatter.date(from:isoDate)!
+        AF.request(url, method:.get).responseDecodable(of: [pullRequest].self){ response in
                 
-            case .failure(_):
-                print("pull from DB failed")
-                working = false
+                var result : [ChartData] = []
+                
+                switch response.result{
+                case .success(_):
+                    for i in 0...(response.value!.count - 1){
+                        print(response.value![i].record_date)
+                        let date = formatter.date(from:response.value![i].record_date)!
+                        result.append(ChartData(sensor: "all", x: date, y: Float(response.value![i].temperature_avg)!))
+                    }
+                case.failure(let error):
+                    
+                    print(error)
+                }
+                completion(result)
+                
             }
-            completion(working)
-        }
         return
+        
     }
     
-    func pushToDB(username:String, password:String, dataToPush: [ChartData], completion: @escaping (Bool) -> Void){
+    func pushToDB(username:String, password:String, dataToPush: [ChartData], averageData: ChartData, completion: @escaping (Bool) -> Void){
         let url = baseAPI + "data"
-        let currentLogin: Parameters = [
-            "username": username,
-            "password": password
+        
+        let currentTime = DateFormatter()
+        currentTime.dateFormat = "yyyy-MM-dd hh:mm:ss"
+    
+        let parameters : Parameters = [
+            "user" : 1,
+            "time": currentTime.string(from:dataToPush[dataToPush.count-3].x),
+            "temp_avg": averageData.y,
+            "temp_1" : dataToPush[dataToPush.count-3].y,
+            "temp_2" : dataToPush[dataToPush.count-2].y,
+            "temp_3" : dataToPush[dataToPush.count-1].y
         ]
         
-        
-        AF.request(url, method: .post, parameters: currentLogin, encoding: JSONEncoding.default, headers:nil).responseData { (response) in
-            var working = Bool()
-            switch response.result {
-            case .success(_):
-                if(response.response?.statusCode == 200){
+        AF.request(
+            url,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding(options: .sortedKeys),
+            headers: nil
+        ).response {response in
+                var working = Bool()
+                switch response.result {
+                case .success(_):
                     working = true
-                }
-                else{
+                    
+                case .failure(let error):
                     working = false
                 }
-                
-            case .failure(_):
-                print("pull from DB failed")
-                working = false
+                completion(working)
             }
-            completion(working)
-        }
         return
     }
     

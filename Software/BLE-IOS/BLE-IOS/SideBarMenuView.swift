@@ -28,10 +28,13 @@ struct SideBarMenuView: View {
                             Text("VitalVest")
                                 .padding()
                                 .font(.subheadline)
-                            Text("UI testing")
-                                .padding()
-                                .font(.footnote)
-                                .tint(.gray)
+                                .overlay {
+                                    LinearGradient(colors: [.red, .blue], startPoint: .leading, endPoint: .trailing)
+                                        .mask(
+                                            Text("VitalVest")
+                                                .font(.subheadline)
+                                        )
+                                }
                         }
                         VStack{
                             ForEach(SideBarMenuItems.allCases){ option in
@@ -44,6 +47,8 @@ struct SideBarMenuView: View {
                                 }, label: {
                                     SideBarItemView(item: option)
                                 })
+                                .buttonStyle(.automatic)
+                                .cornerRadius(2)
                             }
                         }
                         
@@ -60,4 +65,3 @@ struct SideBarMenuView: View {
         
     }
 }
-

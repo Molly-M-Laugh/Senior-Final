@@ -18,23 +18,33 @@ struct loginView: View {
     
     var body: some View{
         VStack{
-            
-            
             Text("VitalVest")
                 .font(.largeTitle)
+                .bold()
+                .overlay {
+                    LinearGradient(colors: [.red, .blue], startPoint: .leading, endPoint: .trailing)
+                        .mask(
+                            Text("VitalVest")
+                                .font(.largeTitle)
+                                .bold()
+                        )
+                }
             Text("")
-            Text("")
-            Text("Please login:")
+            Text("Welcome Back")
                 .font(.title)
+                .bold()
+                .foregroundColor(.blue)
             TextField("Username:", text: $username)
                 .padding()
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
-            TextField("Password", text: $password)
+                .textFieldStyle(.roundedBorder)
+            SecureField("Password", text: $password)
                 .padding()
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
-            Button("Login", action:{
+                .textFieldStyle(.roundedBorder)
+            Button(action:{
                 httpManager.login(username: username, password: password){
                     (working) in
                     print("working is \(working)")
@@ -45,9 +55,12 @@ struct loginView: View {
                 }
                 router.setPath([.home])
                 
-            })
+            }){
+                Text("Login")
+                    .foregroundColor(.white)
+            }
             .buttonStyle(.bordered)
-            .bold()
+            .background(Color.blue)
             
             Button("Register New User", action:{
                 httpManager.loginResults = false

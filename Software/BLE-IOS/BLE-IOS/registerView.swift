@@ -18,18 +18,32 @@ struct registerView: View {
         VStack{
             Text("Please Enter Your Information")
                 .font(.largeTitle)
+                .bold()
+                .foregroundColor(.blue)
             TextField("New Username:", text: $username)
                 .padding()
+                .disableAutocorrection(true)
+                .textInputAutocapitalization(.never)
+                .textFieldStyle(.roundedBorder)
             TextField("New Password", text: $password)
                 .padding()
-            Button("Create Account", action:{
+                .disableAutocorrection(true)
+                .textInputAutocapitalization(.never)
+                .textFieldStyle(.roundedBorder)
+            Button(action:{
                 httpManager.register(username: username, password: password){
                     (working) in
                     if((working)){
                         router.setPath([.login])
                     }
                 }
-            }).buttonStyle(.bordered)
+            }){
+                Text("Create New Account")
+                    .foregroundColor(.white)
+            }
+            .buttonStyle(.bordered)
+            .cornerRadius(8)
+            .background(Color.blue)
         }
     }
 }

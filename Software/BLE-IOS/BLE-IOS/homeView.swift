@@ -18,23 +18,25 @@ struct homeView: View{
                 if manager.devices.isEmpty{
                     ProgressView().progressViewStyle(.circular)
                     
-                    Text("Scanning: \(manager.isScanning)")
+                    Text("Scanning for nearby VitalVests")
                 }
                 else if !manager.isConnected{
                     List(manager.devices, id: \.self){ device in
                         Button(action: {
                             manager.connect(to: device)
                         }){
-                            Text(device.name)
+                            Text("VitalVest")
                         }
                     }
-                    Text("Connection Status: \(manager.isConnected)")
                 }
                 else{
-                    //Get current battery reading from CAN on ESP
                     Text("")
-                    Text("Currently connected to VitalVest: \(manager.isConnected)")
-                    Text("Current battery: \(manager.lastDataValue[2])")
+                    Text("Currently connected to VitalVest")
+                        .padding()
+                        .bold()
+                    Text("Current battery monitoring: ")
+                        .padding()
+                        .bold()
                     
                 }
             }

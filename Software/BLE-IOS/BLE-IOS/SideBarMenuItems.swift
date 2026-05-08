@@ -10,7 +10,9 @@ import Foundation
 enum SideBarMenuItems: Int, CaseIterable{
     case home
     case graph
+    case settings
     case logout
+    
     
     var name: String {
         switch self {
@@ -18,6 +20,8 @@ enum SideBarMenuItems: Int, CaseIterable{
             return "Home"
         case .graph:
             return "Graph"
+        case .settings:
+            return "Settings"
         case .logout:
             return "Logout"
         }
@@ -29,6 +33,8 @@ enum SideBarMenuItems: Int, CaseIterable{
             return .home
         case .graph:
             return .graph
+        case .settings:
+            return .settings
         case .logout:
             return .login
         }
